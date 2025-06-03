@@ -22,6 +22,9 @@ Config.options.change_detection.enabled = false
 -- replace the default `cond`
 Config.options.defaults.cond = function(plugin) return vim.tbl_contains(plugins, plugin.name) end
 
+-- fixing vscode-neovim message output
+cmdheight = 3
+
 ---@type LazySpec
 return {
   -- add a few keybindings

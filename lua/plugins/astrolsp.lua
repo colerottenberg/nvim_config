@@ -1,4 +1,4 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- AstroLSP allows you to customize the features in AstroNvim's LSP configuration engine
 -- Configuration documentation can be found with `:h astrolsp`
@@ -14,7 +14,7 @@ return {
     features = {
       autoformat = true, -- enable or disable auto formatting on start
       codelens = true, -- enable/disable codelens refresh on start
-      inlay_hints = false, -- enable/disable inlay hints on start
+      inlay_hints = true, -- enable/disable inlay hints on start
       semantic_tokens = true, -- enable/disable semantic token highlighting
     },
     -- customize lsp formatting options
@@ -23,7 +23,9 @@ return {
       format_on_save = {
         enabled = true, -- enable or disable format on save globally
         allow_filetypes = { -- enable format on save for specified filetypes only
-          -- "go",
+          "go",
+          "python",
+          "lua",
         },
         ignore_filetypes = { -- disable format on save for specified filetypes
           -- "python",
@@ -46,28 +48,28 @@ return {
     ---@diagnostic disable: missing-fields
     config = {
       -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
-      arduino_language_server = {
-        cmd = {
-          "arduino-language-server",
-          "-clangd",
-          "clangd",
-          "-cli",
-          "arduino-cli",
-          "-cli-config",
-          "/home/crott/.arduino15/arduino-cli.yaml",
-          "-fqbn",
-          "teensy:avr:teensy41",
-        },
-        capabilities = {
-          textDocument = {
-            semanticTokens = vim.NIL,
-          },
-          workspace = {
-            semanticTokens = vim.NIL,
-          },
-        },
-        filetypes = { "arduino" },
-      },
+      -- arduino_language_server = {
+      --   cmd = {
+      --     "arduino-language-server",
+      --     "-clangd",
+      --     "clangd",
+      --     "-cli",
+      --     "arduino-cli",
+      --     "-cli-config",
+      --     "/home/crott/.arduino15/arduino-cli.yaml",
+      --     "-fqbn",
+      --     "teensy:avr:teensy41",
+      --   },
+      --   capabilities = {
+      --     textDocument = {
+      --       semanticTokens = vim.NIL,
+      --     },
+      --     workspace = {
+      --       semanticTokens = vim.NIL,
+      --     },
+      --   },
+      --   filetypes = { "arduino" },
+      -- },
     },
     -- customize how language servers are attached
     handlers = {
