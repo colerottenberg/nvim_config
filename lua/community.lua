@@ -9,10 +9,7 @@ return {
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.pack.cpp" },
-  -- { import = "astrocommunity.pack.java" }, -- broken on work machine
-  -- markdown / latex
-  -- { import = "astrocommunity.markdown-and-latex.markdown-preview-nvim" },
-  -- { import = "astrocommunity.markdown-and-latex.vimtex" },
+  { import = "astrocommunity.pack.go" },
   -- cli tool helpers
   { import = "astrocommunity.docker.lazydocker" },
   -- colorschemes
