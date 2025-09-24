@@ -13,12 +13,6 @@ return {
   -- cli tool helpers
   { import = "astrocommunity.docker.lazydocker" },
   -- colorschemes
-  { import = "astrocommunity.colorscheme.oxocarbon-nvim" },
-  { import = "astrocommunity.colorscheme.rose-pine" },
-  { import = "astrocommunity.colorscheme.tokyonight-nvim" },
-  { import = "astrocommunity.colorscheme.nord-nvim" },
-  { import = "astrocommunity.colorscheme.melange-nvim" },
-  { import = "astrocommunity.colorscheme.catppuccin" },
   -- recipes for things such as Neovim VSCode Configuration
   { import = "astrocommunity.recipes.vscode" },
   -- import/override with your plugins folder
