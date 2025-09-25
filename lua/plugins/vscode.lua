@@ -12,8 +12,8 @@ return {
     opts = {
       mappings = {
         n = {
-          L = "<CMD>Tabnext<CR>",
-          H = "<CMD>Tabprevious<CR>",
+          L = { "<Cmd>Tabnext<CR>", desc = "Move to next tab" },
+          H = { "<Cmd>Tabprevious<CR>", desc = "Move to previous tab" },
         },
       },
     },
