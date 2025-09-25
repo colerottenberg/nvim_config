@@ -62,6 +62,10 @@ return {
         ["<Leader>b"] = { desc = "Buffers" },
         -- quick save
         -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
+        ["<Leader>uT"] = {
+          function() require("twilight.view").toggle() end,
+          desc = "Toggle Twilight",
+        },
       },
       t = {
         -- setting a mapping to false will disable it
