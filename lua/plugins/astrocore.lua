@@ -61,10 +61,18 @@ return {
         -- this is useful for naming menus
         ["<Leader>b"] = { desc = "Buffers" },
         -- quick save
-        -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
+        ["<C-s>"] = { ":w!<cr>", desc = "Save File" }, -- change description but the same command
         ["<Leader>uT"] = {
           function() require("twilight.view").toggle() end,
           desc = "Toggle Twilight",
+        },
+        ["<Leader>c"] = {
+          function()
+            local bufs = vim.fn.getbufinfo { buflisted = true }
+            require("astrocore.buffer").close(0)
+            if not bufs[2] then require("snacks").dashboard() end
+          end,
+          desc = "Close buffer",
         },
       },
       t = {
