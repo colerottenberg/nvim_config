@@ -15,6 +15,7 @@ return {
           L = { "<Cmd>Tabnext<CR>", desc = "Move to next tab" },
           H = { "<Cmd>Tabprevious<CR>", desc = "Move to previous tab" },
           ["<Leader>lS"] = { "<Cmd>call VSCodeNotify('outline.focus')<CR>", desc = "Symbol Outline" },
+          ["<Leader>c"] = { "<Cmd>Tabclose<CR>", desc = "Close Tab" },
         },
       },
     },
