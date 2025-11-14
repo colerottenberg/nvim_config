@@ -1,0 +1,107 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // "shift shift": "file_finder::Toggle"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      // "j k": "vim::NormalBefore"
+    }
+  },
+  {
+    "context": "Editor && VimControl && !VimWaiting && !menu",
+    "bindings": {
+      "g shift-r": "editor::FindAllReferences",
+      "g a": "editor::ToggleCodeActions",
+      "g r": "editor::Rename",
+      "ctrl-t": "pane::GoBack",
+      "space c": "pane::CloseActiveItem",
+      "space w": "workspace::Save",
+      "space q": "workspace::CloseWindow",
+      "space /": "vim::ToggleComments",
+      "space n": "workspace::NewFile",
+      // Buffers
+      "space b c": "pane::CloseOtherItems",
+      "space b shift-C": "pane::CloseAllItems",
+      "space b l": "pane::CloseItemsToTheLeft",
+      "space b r": "pane::CloseItemsToTheRight",
+      // Find Options
+      "space f f": "file_finder::Toggle",
+      "space f w": "pane::DeploySearch",
+      "space f t": "theme_selector::Toggle",
+      // Pane Movement Bindings
+      "shift-H": "pane::ActivatePreviousItem",
+      "shift-L": "pane::ActivateNextItem",
+      "shift-alt-H": "pane::SwapItemLeft",
+      "shift-alt-L": "pane::SwapItemRight",
+      // Explorer Tree Movements
+      "space e": "project_panel::ToggleFocus",
+      "space o": "pane::RevealInProjectPanel",
+      "ctrl-b": "workspace::ToggleLeftDock",
+      "ctrl-j": "workspace::ToggleBottomDock",
+      // Git Actions
+      "space g g": "git_panel::ToggleFocus",
+      "space g shift-b": "git::Blame",
+      // Starting Splits
+      "\\": "pane::SplitRight",
+      "|": "pane::SplitDown",
+      // Navigating Splits
+      // "ctrl-h": "workspace::ActivatePaneLeft",
+      // "ctrl-l": "workspace::ActivatePaneRight",
+      // "ctrl-j": "workspace::ActivatePaneDown",
+      // "ctrl-l": "workspace::ActivatePaneUp",
+      // LSP Actions
+      "space l s": "outline::Toggle",
+      "space l shift-S": "outline_panel::ToggleFocus",
+      "space l f": "editor::Format",
+      "ctrl-k ctrl-f": "editor::FormatSelections",
+      "space l w": "editor::SwitchSourceHeader",
+      "space l d": "editor::ToggleInlineDiagnostics",
+      "space l i": "lsp_tool::ToggleMenu",
+
+      // Debugger
+      "space d b": "editor::ToggleBreakpoint",
+      "f9": "editor::ToggleBreakpoint",
+      "space d s": "debugger::RunToCursor",
+      "f5": "debugger::Start",
+      "space d B": "debugger::ClearAllBreakpoints",
+      "space d o": "debugger::StepOver",
+      "f10": "debugger::StepOver",
+      "space d i": "debugger::StepInto",
+      "f11": "debugger::StepInto",
+      "space d O": "debugger::StepOut",
+      "shift-f11": "debugger::StepOut",
+      "space d r": "debugger::Restart",
+      "ctrl-f5": "debugger::Restart",
+      "space d p": "debugger::Pause",
+      // "space d R": "repl",
+      "space d q": "debugger::Stop",
+      // "space d h": "debugger::EvaluateSelectedText",
+      "space d v": "debugger::FocusVariables",
+      "space d u": "debug_panel::ToggleFocus",
+
+      // Layout Changes
+      "ctrl-k ctrl-z": "workspace::ToggleCenteredLayout",
+      // AI Keybindings
+      "space a a": "agent::ToggleFocus",
+      "space a n": "agent::NewThread"
+      // "space a ?": "agent::ToggleModelSelector"
+    }
+  },
+  {
+    "context": "debugger_running",
+    "bindings": {
+      // "ctrl-r": "debugger::RunToCursor"
+    }
+  }
+]
