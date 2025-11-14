@@ -6,9 +6,9 @@
 return {
   "AstroNvim/astrocommunity",
   -- packs
+  { import = "astrocommunity.pack.cpp" },
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.pack.rust" },
-  { import = "astrocommunity.pack.cpp" },
   { import = "astrocommunity.pack.go" },
   -- cli tool helpers
   { import = "astrocommunity.docker.lazydocker" },

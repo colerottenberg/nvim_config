@@ -46,7 +46,8 @@ return {
     },
     -- enable servers that you already have installed without mason
     servers = {
-      -- "pyright"
+      "clangd",
+      "buck2",
     },
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
@@ -74,6 +75,13 @@ return {
       --   },
       --   filetypes = { "arduino" },
       -- },
+      buck2 = {
+        cmd = {
+          "buck2",
+          "lsp",
+        },
+        filetypes = { "starlark", "bzl" },
+      },
     },
     -- customize how language servers are attached
     handlers = {
@@ -124,6 +132,18 @@ return {
         --   desc = "Toggle LSP semantic highlight (buffer)",
         --   cond = function(client) return client.server_capabilities.semanticTokensProvider and vim.lsp.semantic_tokens end,
         -- },
+      },
+    },
+
+    file_operations = {
+      timeout = 5000, -- shorter timeout than default of 10,000
+      operations = { --enable all file ops
+        willCreate = true,
+        didCreate = true,
+        willRename = true,
+        didRename = true,
+        willDelete = true,
+        didDelete = true,
       },
     },
     -- A custom `on_attach` function to be run after the default `on_attach` function
