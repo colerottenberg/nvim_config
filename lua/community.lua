@@ -13,7 +13,14 @@ return {
   -- cli tool helpers
   { import = "astrocommunity.docker.lazydocker" },
   -- colorschemes
+  { import = "astrocommunity.colorscheme.oxocarbon-nvim" },
+  { import = "astrocommunity.colorscheme.bluloco-nvim" },
+  -- icons
+  { import = "astrocommunity.icon.mini-icons" },
   -- recipes for things such as Neovim VSCode Configuration
   { import = "astrocommunity.recipes.vscode" },
+  { import = "astrocommunity.recipes.picker-lsp-mappings" },
+  { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },
+  { import = "astrocommunity.recipes.disable-borders" },
   -- import/override with your plugins folder
 }

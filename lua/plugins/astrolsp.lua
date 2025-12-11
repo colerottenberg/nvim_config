@@ -80,7 +80,7 @@ return {
           "buck2",
           "lsp",
         },
-        filetypes = { "starlark", "bzl" },
+        filetypes = { "starlark", "bzl", "BUCK" },
       },
     },
     -- customize how language servers are attached
