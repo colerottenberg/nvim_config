@@ -23,4 +23,5 @@ return {
   { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },
   { import = "astrocommunity.recipes.disable-borders" },
   -- import/override with your plugins folder
+  { import = "astrocommunity.project.projectmgr-nvim" },
 }

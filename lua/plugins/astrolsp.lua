@@ -46,13 +46,14 @@ return {
     },
     -- enable servers that you already have installed without mason
     servers = {
-      "clangd",
       "buck2",
     },
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
-      -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
+      clangd = {
+        filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "hpp" },
+      },
       -- arduino_language_server = {
       --   cmd = {
       --     "arduino-language-server",
