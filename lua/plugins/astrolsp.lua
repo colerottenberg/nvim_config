@@ -45,9 +45,9 @@ return {
       -- end
     },
     -- enable servers that you already have installed without mason
-    servers = {
-      "buck2",
-    },
+    -- servers = {
+    --   "buck2",
+    -- },
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
@@ -81,7 +81,7 @@ return {
           "buck2",
           "lsp",
         },
-        filetypes = { "starlark", "bzl", "BUCK" },
+        filetypes = { "bzl", "starlark" },
       },
     },
     -- customize how language servers are attached
