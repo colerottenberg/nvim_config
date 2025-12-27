@@ -21,7 +21,9 @@ return {
   { import = "astrocommunity.recipes.vscode" },
   { import = "astrocommunity.recipes.picker-lsp-mappings" },
   { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },
-  { import = "astrocommunity.recipes.disable-borders" },
+  { import = "astrocommunity.recipes.cache-colorscheme" },
   -- import/override with your plugins folder
   { import = "astrocommunity.project.projectmgr-nvim" },
+  -- Adding avante
+  { import = "astrocommunity.completion.avante-nvim" },
 }
