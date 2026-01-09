@@ -1,7 +1,7 @@
 return {
   "AstroNvim/astrolsp",
   ---@param opts AstroLSPOpts
-  opts = function(plugin, opts)
+  opts = function(_, opts)
     opts.servers = opts.servers or {}
     table.insert(opts.servers, "pyrefly")
 
