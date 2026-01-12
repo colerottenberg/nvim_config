@@ -39,11 +39,6 @@ return {
             desc = "Load a session",
           },
           {
-            key = "K",
-            action = function() require("snacks").picker.keymaps() end,
-            desc = "Find a Keymaps",
-          },
-          {
             key = "c",
             action = function()
               require("snacks").picker.files { dirs = { vim.fn.stdpath "config" }, desc = "Config Files" }
@@ -60,6 +55,11 @@ return {
               astro.toggle_term_cmd { cmd = "lazygit " .. flags, direction = "float" }
             end,
             desc = "Open LazyGit",
+          },
+          {
+            key = "t",
+            action = function() require("snacks").picker.colorschemes() end,
+            desc = "Select a colorscheme",
           },
         },
       },
