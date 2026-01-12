@@ -31,7 +31,7 @@ return {
           ["<C-s>"] = { ":w!<cr>", desc = "Save File" }, -- change description but the same command
 
           -- Adding Twilight Toggle
-          ["<Leader>uT"] = {
+          ["<Leader>ux"] = {
             function() require("twilight.view").toggle() end,
             desc = "Toggle Twilight",
           },

@@ -15,6 +15,7 @@ return {
   -- colorschemes
   { import = "astrocommunity.colorscheme.oxocarbon-nvim" },
   { import = "astrocommunity.colorscheme.bluloco-nvim" },
+  { import = "astrocommunity.color.transparent-nvim" },
   -- icons
   { import = "astrocommunity.icon.mini-icons" },
   -- recipes for things such as Neovim VSCode Configuration
