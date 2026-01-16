@@ -72,6 +72,27 @@ return {
             function() require("snacks").picker.gh_pr { state = "all" } end,
             desc = "GitHub Actions Issues (all)",
           },
+
+          -- Markview Commands
+          ["<Leader>P"] = { desc = "Markview" },
+          ["<Leader>Pt"] = {
+            function()
+              local current_buffer = vim.api.nvim_get_current_buf()
+              require("markview.actions").toggle(current_buffer)
+            end,
+            desc = "Markview toggle",
+          },
+          ["<Leader>Ps"] = {
+            function()
+              local current_buffer = vim.api.nvim_get_current_buf()
+              require("markview.actions").splitToggle()
+            end,
+            desc = "Markview Split",
+          },
+          ["<Leader>Ph"] = {
+            function() require("markview.health").view() end,
+            desc = "View Markview health",
+          },
         },
         -- first key is the mode
         t = {
