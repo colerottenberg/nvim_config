@@ -79,6 +79,12 @@ return {
         },
         ["<C-0>"] = { reset_scale_factor, desc = "Reset Neovide scale factor" },
       },
+      i = {
+        ["<C-v>"] = {
+          "<C-r>*",
+          desc = "Paste",
+        },
+      },
     },
   },
 }
