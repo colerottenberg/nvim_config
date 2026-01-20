@@ -54,6 +54,27 @@ return {
             desc = "View Lazy Plugins",
           },
 
+          -- Git log group
+          ["<Leader>gm"] = { desc = "Git log commands" },
+
+          -- View Git Log
+          ["<Leader>gmL"] = {
+            function() require("snacks").lazygit.log() end,
+            desc = "Git log",
+          },
+
+          -- View Git Log of file
+          ["<Leader>gmf"] = {
+            function() require("snacks.lazygit").log_file() end,
+            desc = "Git log file",
+          },
+
+          -- View Git log of line
+          ["<Leader>gml"] = {
+            function() require("snacks.picker").git_log_line() end,
+            desc = "Git log line",
+          },
+
           -- Snacks Github CLI Keymaps
           ["<Leader>gh"] = { desc = "GitHub Commands" },
           ["<Leader>ghi"] = {
