@@ -83,15 +83,23 @@ return {
             desc = "Markview toggle",
           },
           ["<Leader>Ps"] = {
-            function()
-              local current_buffer = vim.api.nvim_get_current_buf()
-              require("markview.actions").splitToggle()
-            end,
+            function() require("markview.actions").splitToggle() end,
             desc = "Markview Split",
           },
           ["<Leader>Ph"] = {
             function() require("markview.health").view() end,
             desc = "View Markview health",
+          },
+
+          -- DAP Python Mappings
+          ["<Leader>dP"] = { desc = "Debug Python" },
+          ["<Leader>dPm"] = {
+            function() require("dap-python").test_method() end,
+            desc = "Debug Python Test Method",
+          },
+          ["<Leader>dPc"] = {
+            function() require("dap-python").test_class() end,
+            desc = "Debug Python Test Class",
           },
         },
         -- first key is the mode
