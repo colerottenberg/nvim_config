@@ -45,9 +45,9 @@ return {
       -- end
     },
     -- enable servers that you already have installed without mason
-    -- servers = {
-    --   "buck2",
-    -- },
+    servers = {
+      "buck2",
+    },
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
@@ -76,6 +76,14 @@ return {
       --   },
       --   filetypes = { "arduino" },
       -- },
+      buck2 = {
+        filetypes = { "star", "bzl" },
+        cmd = {
+          "buck2",
+          "lsp",
+        },
+        root_dir = require("lspconfig.util").root_pattern ".buckroot",
+      },
     },
     -- customize how language servers are attached
     handlers = {
