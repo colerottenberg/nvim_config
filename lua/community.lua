@@ -9,6 +9,8 @@ return {
   { import = "astrocommunity.pack.cpp" },
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.pack.rust" },
+  { import = "astrocommunity.pack.zig" },
+  { import = "astrocommunity.pack.markdown" },
   { import = "astrocommunity.pack.go" },
   -- cli tool helpers
   { import = "astrocommunity.docker.lazydocker" },
@@ -23,5 +25,5 @@ return {
   { import = "astrocommunity.recipes.picker-lsp-mappings" },
   { import = "astrocommunity.recipes.cache-colorscheme" },
   -- Adding avante
-  { import = "astrocommunity.completion.avante-nvim" },
+  -- { import = "astrocommunity.completion.avante-nvim" },
 }

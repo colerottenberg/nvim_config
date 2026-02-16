@@ -122,7 +122,22 @@ return {
             function() require("dap-python").test_class() end,
             desc = "Debug Python Test Class",
           },
+          -- Go to Commands
+          -- Go to Code Actions
+          ["ga"] = {
+            function() vim.lsp.buf.code_action() end,
+            desc = "Code Actions",
+          },
+          ["gi"] = {
+            function() require("snacks").picker.lsp_implementations() end,
+            desc = "View implementations",
+          },
+          ["gR"] = {
+            function() require("snacks.picker").lsp_references() end,
+            desc = "View references",
+          },
         },
+
         -- first key is the mode
         t = {
           -- setting a mapping to false will disable it
