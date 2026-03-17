@@ -8,6 +8,7 @@ return {
   -- packs
   { import = "astrocommunity.pack.cpp" },
   { import = "astrocommunity.pack.lua" },
+  { import = "astrocommunity.pack.python" },
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.pack.zig" },
   { import = "astrocommunity.pack.markdown" },
@@ -17,7 +18,7 @@ return {
   -- colorschemes
   { import = "astrocommunity.colorscheme.oxocarbon-nvim" },
   { import = "astrocommunity.colorscheme.bluloco-nvim" },
-  { import = "astrocommunity.color.transparent-nvim" },
+  -- { import = "astrocommunity.color.transparent-nvim" },
   -- icons
   { import = "astrocommunity.icon.mini-icons" },
   -- recipes for things such as Neovim VSCode Configuration
