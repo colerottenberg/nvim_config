@@ -111,6 +111,14 @@ return {
             function() require("markview.health").view() end,
             desc = "View Markview health",
           },
+          ["<Leader>Pc"] = {
+            function()
+              local bufnr = vim.api.nvim_get_current_buf()
+
+              require("csvview").toggle(bufnr)
+            end,
+            desc = "Toggle CSV View",
+          },
 
           -- DAP Python Mappings
           ["<Leader>dP"] = { desc = "Debug Python" },
