@@ -13,6 +13,7 @@ return {
   { import = "astrocommunity.pack.zig" },
   { import = "astrocommunity.pack.markdown" },
   { import = "astrocommunity.pack.go" },
+  { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
   { import = "astrocommunity.bars-and-lines.bufferline-nvim" },
   -- cli tool helpers
   { import = "astrocommunity.docker.lazydocker" },

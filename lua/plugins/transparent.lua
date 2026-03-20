@@ -14,6 +14,7 @@ return {
       "NormalFloat",
       "FloatBorder",
       "FloatTitle",
+      "RenderMarkdownCode",
     },
   },
   config = function(_, opts)
