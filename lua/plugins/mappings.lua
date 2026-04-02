@@ -95,22 +95,7 @@ return {
           },
 
           -- Markview Commands
-          ["<Leader>P"] = { desc = "Markview" },
-          ["<Leader>Pt"] = {
-            function()
-              local current_buffer = vim.api.nvim_get_current_buf()
-              require("markview.actions").toggle(current_buffer)
-            end,
-            desc = "Markview toggle",
-          },
-          ["<Leader>Ps"] = {
-            function() require("markview.actions").splitToggle() end,
-            desc = "Markview Split",
-          },
-          ["<Leader>Ph"] = {
-            function() require("markview.health").view() end,
-            desc = "View Markview health",
-          },
+          ["<Leader>P"] = { desc = "Preview" },
           ["<Leader>Pc"] = {
             function()
               local bufnr = vim.api.nvim_get_current_buf()
@@ -143,6 +128,12 @@ return {
           ["gR"] = {
             function() require("snacks.picker").lsp_references() end,
             desc = "View references",
+          },
+
+          -- Toggleterm Rebind
+          ["C-\\"] = {
+            function() require("toggleterm").toggle() end,
+            desc = "Toggle Term",
           },
         },
 

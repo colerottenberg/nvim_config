@@ -34,4 +34,11 @@ return {
     opts = {},
   },
   { "rose-pine/neovim", name = "rose-pine" },
+  { "rebelot/kanagawa.nvim", lazy = true },
+  {
+    "thesimonho/kanagawa-paper.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
 }
