@@ -28,5 +28,5 @@ return {
   { import = "astrocommunity.recipes.picker-lsp-mappings" },
   { import = "astrocommunity.recipes.cache-colorscheme" },
   -- Adding avante
-  -- { import = "astrocommunity.completion.avante-nvim" },
+  { import = "astrocommunity.ai.avante-nvim" },
 }
