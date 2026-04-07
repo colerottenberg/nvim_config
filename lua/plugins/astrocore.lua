@@ -69,6 +69,11 @@ return {
           desc = "Git log file",
         },
 
+        ["gR"] = {
+          function() require("snacks.picker").lsp_references() end,
+          desc = "Lsp References",
+        },
+
         -- mappings seen under group name "Buffer"
         -- ["<Leader>bd"] = {
         --   function()
