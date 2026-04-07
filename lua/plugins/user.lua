@@ -1,4 +1,4 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- You can also add or configure plugins by creating files in this `plugins/` folder
 -- PLEASE REMOVE THE EXAMPLES YOU HAVE NO INTEREST IN BEFORE ENABLING THIS FILE
@@ -16,6 +16,121 @@ return {
     config = function() require("lsp_signature").setup() end,
   },
 
+  -- Transparent
+  {
+    "xiyaowong/transparent.nvim",
+    lazy = false,
+    opts = {
+      extra_groups = {
+        "NormalFloat",
+        "NvimTreeNormal",
+        "LspInlayHint",
+        "WinBar",
+        "WinBarNC",
+        "TabLine",
+        "TabLineFill",
+        "TabLineSel",
+        "NormalFloat",
+        "FloatBorder",
+        "FloatTitle",
+        "RenderMarkdownCode",
+      },
+    },
+    config = function(_, opts)
+      local transparent = require "transparent"
+      transparent.setup(opts)
+      transparent.clear_prefix "BufferLine"
+      transparent.clear_prefix "NeoTree"
+      transparent.clear_prefix "lualine"
+    end,
+    dependencies = {
+      {
+        "AstroNvim/astrocore",
+        opts = function(_, opts)
+          opts.mappings.n["<Leader>uT"] = { "<Cmd>TransparentToggle<CR>", desc = "Toggle transparency" }
+          if vim.tbl_get(opts, "autocmds", "heirline_colors") then
+            table.insert(opts.autocmds.heirline_colors, {
+              event = "User",
+              pattern = "TransparentClear",
+              desc = "Refresh heirline colors",
+              callback = function()
+                if package.loaded["heirline"] then require("astroui.status.heirline").refresh_colors() end
+              end,
+            })
+          end
+        end,
+      },
+    },
+  },
+
+  -- Colorschemes
+  { "zootedb0t/citruszest.nvim" },
+  { "catppuccin/nvim", name = "catppuccin" },
+  {
+    "EdenEast/nightfox.nvim",
+    opts = {
+      options = {
+        module_default = false,
+        modules = {
+          aerial = true,
+          cmp = true,
+          ["dap-ui"] = true,
+          dashboard = true,
+          diagnostic = true,
+          gitsigns = true,
+          native_lsp = true,
+          neotree = true,
+          notify = true,
+          symbol_outline = true,
+          telescope = true,
+          treesitter = true,
+          whichkey = true,
+        },
+      },
+      groups = { all = { NormalFloat = { link = "Normal" } } },
+    },
+  },
+  { "nyoom-engineering/oxocarbon" },
+  { "savq/melange-nvim" },
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
+  { "rose-pine/neovim", name = "rose-pine" },
+  { "rebelot/kanagawa.nvim", lazy = true },
+  {
+    "thesimonho/kanagawa-paper.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
+
+  -- Adding Git Blame
+  {
+    "FabijanZulj/blame.nvim",
+    cmd = "BlameToggle",
+    opts = {},
+    dependencies = {
+      {
+        "AstroNvim/astrocore",
+        ---@type AstroCoreOpts
+        opts = {
+          mappings = {
+            n = {
+              ["<Leader>gB"] = {
+                "<cmd>BlameToggle<cr>",
+                desc = "Toggle git blame",
+              },
+            },
+          },
+        },
+      },
+      { "AstroNvim/astroui", opts = { status = { winbar = { enabled = { filetype = { "blame" } } } } } },
+    },
+  },
+
   -- == Examples of Overriding Plugins ==
 
   -- customize dashboard options
@@ -25,17 +140,14 @@ return {
       dashboard = {
         preset = {
           header = table.concat({
-            " █████  ███████ ████████ ██████   ██████ ",
-            "██   ██ ██         ██    ██   ██ ██    ██",
-            "███████ ███████    ██    ██████  ██    ██",
-            "██   ██      ██    ██    ██   ██ ██    ██",
-            "██   ██ ███████    ██    ██   ██  ██████ ",
-            "",
-            "███    ██ ██    ██ ██ ███    ███",
-            "████   ██ ██    ██ ██ ████  ████",
-            "██ ██  ██ ██    ██ ██ ██ ████ ██",
-            "██  ██ ██  ██  ██  ██ ██  ██  ██",
-            "██   ████   ████   ██ ██      ██",
+            "██████   █████                   █████   █████  ███                 ",
+            "▒▒██████ ▒▒███                   ▒▒███   ▒▒███  ▒▒▒                  ",
+            " ▒███▒███ ▒███   ██████   ██████  ▒███    ▒███  ████  █████████████  ",
+            " ▒███▒▒███▒███  ███▒▒███ ███▒▒███ ▒███    ▒███ ▒▒███ ▒▒███▒▒███▒▒███ ",
+            " ▒███ ▒▒██████ ▒███████ ▒███ ▒███ ▒▒███   ███   ▒███  ▒███ ▒███ ▒███ ",
+            " ▒███  ▒▒█████ ▒███▒▒▒  ▒███ ▒███  ▒▒▒█████▒    ▒███  ▒███ ▒███ ▒███ ",
+            " █████  ▒▒█████▒▒██████ ▒▒██████     ▒▒███      █████ █████▒███ █████",
+            "▒▒▒▒▒    ▒▒▒▒▒  ▒▒▒▒▒▒   ▒▒▒▒▒▒       ▒▒▒      ▒▒▒▒▒ ▒▒▒▒▒ ▒▒▒ ▒▒▒▒▒",
           }, "\n"),
         },
       },
