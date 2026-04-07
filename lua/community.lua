@@ -17,6 +17,7 @@ return {
   { import = "astrocommunity.bars-and-lines.bufferline-nvim" },
   -- cli tool helpers
   { import = "astrocommunity.docker.lazydocker" },
+  { import = "astrocommunity.code-runner.overseer-nvim" },
   -- colorschemes
   { import = "astrocommunity.colorscheme.oxocarbon-nvim" },
   { import = "astrocommunity.colorscheme.bluloco-nvim" },
