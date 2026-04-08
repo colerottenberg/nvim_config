@@ -61,8 +61,11 @@ return {
         -- second key is the lefthand side of the map
 
         -- navigate buffer tabs
-        ["L"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
-        ["H"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+        -- ["L"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
+        -- ["H"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+
+        ["L"] = { function() require("bufferline.commands").cycle(vim.v.count1) end, desc = "Next buffer" },
+        ["H"] = { function() require("bufferline.commands").cycle(-vim.v.count1) end, desc = "Previous buffer" },
 
         ["<Leader>gmf"] = {
           function() require("snacks.lazygit").log_file() end,
