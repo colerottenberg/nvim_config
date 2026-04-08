@@ -14,6 +14,8 @@ return {
     features = {
       codelens = true, -- enable/disable codelens refresh on start
       inlay_hints = true, -- enable/disable inlay hints on start
+      inline_completion = true, -- enable inline_completion for ghost text
+      linked_editing_range = true, -- enable linked_editing_range for realtime updates to documents
       semantic_tokens = true, -- enable/disable semantic token highlighting
     },
     -- customize lsp formatting options
