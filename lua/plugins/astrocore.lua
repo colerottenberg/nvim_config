@@ -77,6 +77,46 @@ return {
           desc = "Lsp References",
         },
 
+        ["ga"] = {
+          function() vim.lsp.buf.code_action() end,
+          desc = "Code Actions",
+        },
+
+        ["gw"] = {
+          function()
+            require("snacks.picker").projects {
+              confirm = function(picker, item)
+                picker:close()
+                if item and item.path then
+                  vim.lsp.buf.add_workspace_folder(item.path)
+                  require("snacks.notify").info("Added workspace folder: " .. item.path, { title = "LSP Workspace" })
+                end
+              end,
+            }
+          end,
+          desc = "Add Workspace Folder",
+        },
+
+        ["<Space>lW"] = {
+          function()
+            require("snacks.picker").projects {
+              confirm = function(picker, item)
+                picker:close()
+                if item and item.path then
+                  vim.lsp.buf.add_workspace_folder(item.path)
+                  require("snacks.notify").info("Added workspace folder: " .. item.path, { title = "LSP Workspace" })
+                end
+              end,
+            }
+          end,
+          desc = "Add Workspace Folder",
+        },
+
+        ["<Space>lc"] = {
+          function() require("snacks.picker").lsp_config() end,
+          desc = "LSP Config",
+        },
+
         -- mappings seen under group name "Buffer"
         -- ["<Leader>bd"] = {
         --   function()
