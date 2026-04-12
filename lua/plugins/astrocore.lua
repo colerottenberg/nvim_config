@@ -46,6 +46,7 @@ return {
         spell = false, -- sets vim.opt.spell
         signcolumn = "yes", -- sets vim.opt.signcolumn to yes
         wrap = true, -- sets vim.opt.wrap
+        exrc = true, -- enabling excr to read .nvim.lua
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
@@ -78,8 +79,16 @@ return {
         },
 
         ["ga"] = {
-          function() vim.lsp.buf.code_action() end,
-          desc = "Code Actions",
+          desc = "View Calls",
+        },
+
+        ["gai"] = {
+          function() require("snacks.picker").lsp_incoming_calls() end,
+          desc = "Incoming Calls",
+        },
+        ["gao"] = {
+          function() require("snacks.picker").lsp_outgoing_calls() end,
+          desc = "Outgoing Calls",
         },
 
         ["gw"] = {
