@@ -74,11 +74,6 @@ return {
           desc = "Git log file",
         },
 
-        ["gR"] = {
-          function() require("snacks.picker").lsp_references() end,
-          desc = "Lsp References",
-        },
-
         ["ga"] = {
           desc = "View Calls",
         },
@@ -107,6 +102,17 @@ return {
           desc = "Add Workspace Folder",
         },
 
+        ["gR"] = {
+          function()
+            ---@type snacks.picker.lsp.references.Config
+            local ref_config = {
+              focus = "list",
+            }
+            require("snacks.picker").lsp_references(ref_config)
+          end,
+          desc = "Lsp References",
+        },
+
         -- Change LSP Symbols view to enter normal mode to aid navigation speed
         ["<Leader>ls"] = {
           function()
@@ -117,6 +123,17 @@ return {
             require("snacks.picker").lsp_symbols(ws_config)
           end,
           desc = "Search Workspace Symbols",
+        },
+
+        ["<Leader>lR"] = {
+          function()
+            ---@type snacks.picker.lsp.references.Config
+            local ref_config = {
+              focus = "list",
+            }
+            require("snacks.picker").lsp_references(ref_config)
+          end,
+          desc = "Lsp References",
         },
 
         ["<Leader>lW"] = {
