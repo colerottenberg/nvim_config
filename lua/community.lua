@@ -8,11 +8,8 @@ return {
   -- packs
   { import = "astrocommunity.pack.cpp" },
   { import = "astrocommunity.pack.lua" },
-  { import = "astrocommunity.pack.python" },
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.pack.markdown" },
-  { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
-  { import = "astrocommunity.bars-and-lines.bufferline-nvim" },
   -- cli tool helpers
   { import = "astrocommunity.docker.lazydocker" },
   { import = "astrocommunity.code-runner.overseer-nvim" },
@@ -28,4 +25,9 @@ return {
   { import = "astrocommunity.recipes.cache-colorscheme" },
   -- Adding avante
   { import = "astrocommunity.ai.avante-nvim" },
+  -- Cosmetic
+  { import = "astrocommunity.bars-and-lines.bufferline-nvim" },
+  -- Rendering
+  { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
+  { import = "astrocommunity.programming-language-support.csv-vim" },
 }

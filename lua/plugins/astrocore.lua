@@ -65,6 +65,7 @@ return {
         -- ["L"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
         -- ["H"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
 
+        -- Adding New Navigation Due to Change from AstroCore Bufferline to Bufferline
         ["L"] = { function() require("bufferline.commands").cycle(vim.v.count1) end, desc = "Next buffer" },
         ["H"] = { function() require("bufferline.commands").cycle(-vim.v.count1) end, desc = "Previous buffer" },
 
@@ -106,7 +107,19 @@ return {
           desc = "Add Workspace Folder",
         },
 
-        ["<Space>lW"] = {
+        -- Change LSP Symbols view to enter normal mode to aid navigation speed
+        ["<Leader>ls"] = {
+          function()
+            ---@type snacks.picker.lsp.symbols.Config
+            local ws_config = {
+              focus = "list",
+            }
+            require("snacks.picker").lsp_symbols(ws_config)
+          end,
+          desc = "Search Workspace Symbols",
+        },
+
+        ["<Leader>lW"] = {
           function()
             require("snacks.picker").projects {
               confirm = function(picker, item)
@@ -121,9 +134,21 @@ return {
           desc = "Add Workspace Folder",
         },
 
-        ["<Space>lc"] = {
+        ["<Leader>lc"] = {
           function() require("snacks.picker").lsp_config() end,
           desc = "LSP Config",
+        },
+
+        ["<Leader>ft"] = {
+          function()
+            ---@type snacks.picker.Config
+            local cs_config = {
+              focus = "list",
+              layout = "ivy",
+            }
+            require("snacks.picker").colorschemes(cs_config)
+          end,
+          desc = "Find themese",
         },
 
         -- mappings seen under group name "Buffer"
