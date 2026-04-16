@@ -79,11 +79,23 @@ return {
         },
 
         ["gai"] = {
-          function() require("snacks.picker").lsp_incoming_calls() end,
+          function()
+            ---@type snacks.picker.lsp.Config
+            local lsp_config = {
+              focus = "list",
+            }
+            require("snacks.picker").lsp_incoming_calls(lsp_config)
+          end,
           desc = "Incoming Calls",
         },
         ["gao"] = {
-          function() require("snacks.picker").lsp_outgoing_calls() end,
+          function()
+            ---@type snacks.picker.lsp.Config
+            local lsp_config = {
+              focus = "list",
+            }
+            require("snacks.picker").lsp_outgoing_calls(lsp_config)
+          end,
           desc = "Outgoing Calls",
         },
 
@@ -155,6 +167,13 @@ return {
           function() require("snacks.picker").lsp_config() end,
           desc = "LSP Config",
         },
+
+        ["<Leader>lg"] = {
+          function() require("snacks.picker").lsp_workspace_symbols() end,
+          desc = "Search workspace symbols",
+        },
+
+        ["<Leader>lG"] = false,
 
         ["<Leader>ft"] = {
           function()
