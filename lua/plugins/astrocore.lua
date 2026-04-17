@@ -187,6 +187,27 @@ return {
           desc = "Find themese",
         },
 
+        -- Changin Zen Mode to just center
+        ["<Leader>uZ"] = {
+          function()
+            ---@type snacks.zen.Config
+            local zen_config = {
+              toggles = {},
+              show = {
+                tabline = true,
+                statusline = true,
+              },
+              ---@type snacks.win.Config
+              win = {
+                -- backdrop = false,
+                width = 150,
+              },
+              center = true,
+            }
+            require("snacks.zen").zen(zen_config)
+          end,
+        },
+
         -- mappings seen under group name "Buffer"
         -- ["<Leader>bd"] = {
         --   function()
