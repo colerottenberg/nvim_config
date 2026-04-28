@@ -28,5 +28,4 @@ return {
   { import = "astrocommunity.bars-and-lines.bufferline-nvim" },
   -- Rendering
   { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
-  { import = "astrocommunity.programming-language-support.csv-vim" },
 }
