@@ -6,6 +6,9 @@ if not vim.g.vscode then return {} end
 
 local vscode = require "vscode"
 
+-- Suppress "N lines yanked" etc. from reaching VSCodium output
+vim.opt.report = 9999
+
 ---@type LazySpec
 return {
   {
@@ -26,13 +29,31 @@ return {
 
           -- Call hierarchy (ga group)
           ["ga"] = { desc = "View Calls" },
+          -- Opens call hierarchy peek (incoming by default);
+          -- use gat to toggle direction once open
           ["gai"] = {
-            function() vscode.action "references-view.showCallHierarchy" end,
-            desc = "Incoming Calls",
+            function() vscode.action "editor.showCallHierarchy" end,
+            desc = "Call Hierarchy (incoming)",
           },
           ["gao"] = {
-            function() vscode.action "editor.showOutgoingCalls" end,
-            desc = "Outgoing Calls",
+            function()
+              -- Open hierarchy first (incoming), then immediately switch to outgoing
+              vscode.action "editor.showCallHierarchy"
+              vim.defer_fn(function()
+                vscode.action "editor.showOutgoingCalls"
+              end, 200)
+            end,
+            desc = "Call Hierarchy (outgoing)",
+          },
+
+          -- Call hierarchy in sidebar tree
+          ["gaI"] = {
+            function() vscode.action "references-view.showCallHierarchy" end,
+            desc = "Incoming Calls (tree)",
+          },
+          ["gaO"] = {
+            function() vscode.action "references-view.showOutgoingCalls" end,
+            desc = "Outgoing Calls (tree)",
           },
 
           -- Workspace folder management
@@ -56,9 +77,29 @@ return {
             function() vscode.action "workbench.action.openSettings" end,
             desc = "Open Settings (LSP Config)",
           },
+          ["<Leader>ls"] = {
+            function() vscode.action "workbench.action.gotoSymbol" end,
+            desc = "Document Symbols",
+          },
+          -- Keymaps viewer (VSCodium keyboard shortcuts)
+          ["<Leader>fk"] = {
+            function() vscode.action "workbench.action.openGlobalKeybindings" end,
+            desc = "Keymaps (VSCodium)",
+          },
+
           ["<Leader>lg"] = {
             function() vscode.action "workbench.action.showAllSymbols" end,
             desc = "Search Workspace Symbols",
+          },
+
+          -- Git hunk navigation
+          ["]g"] = {
+            function() vscode.action "workbench.action.editor.nextChange" end,
+            desc = "Next git hunk",
+          },
+          ["[g"] = {
+            function() vscode.action "workbench.action.editor.previousChange" end,
+            desc = "Previous git hunk",
           },
 
           -- Git operations
@@ -77,6 +118,50 @@ return {
           ["<Leader>gB"] = {
             function() vscode.action "gitlens.toggleFileBlame" end,
             desc = "Toggle git blame",
+          },
+          ["<Leader>gd"] = {
+            function() vscode.action "git.openChange" end,
+            desc = "Git diff (file)",
+          },
+          ["<Leader>gs"] = {
+            function() vscode.action "workbench.view.scm" end,
+            desc = "Git status",
+          },
+          ["<Leader>gS"] = {
+            function() vscode.action "git.stageAll" end,
+            desc = "Stage all changes",
+          },
+          ["<Leader>gu"] = {
+            function() vscode.action "git.unstageAll" end,
+            desc = "Unstage all changes",
+          },
+          ["<Leader>gr"] = {
+            function() vscode.action "git.revertChange" end,
+            desc = "Revert hunk",
+          },
+          ["<Leader>gp"] = {
+            function() vscode.action "git.pull" end,
+            desc = "Git pull",
+          },
+          ["<Leader>gP"] = {
+            function() vscode.action "git.push" end,
+            desc = "Git push",
+          },
+
+          -- Explorer / sidebar toggle (replaces neo-tree <Leader>e)
+          ["<Leader>e"] = {
+            function() vscode.action "workbench.action.toggleSidebarVisibility" end,
+            desc = "Toggle Sidebar",
+          },
+          ["<Leader>o"] = {
+            function() vscode.action "workbench.action.focusSideBar" end,
+            desc = "Focus Sidebar",
+          },
+
+          -- Toggle inlay hints
+          ["<Leader>uh"] = {
+            function() vscode.action "clangd.inlayHints.toggle" end,
+            desc = "Toggle Inlay Hints",
           },
 
           -- Zen mode

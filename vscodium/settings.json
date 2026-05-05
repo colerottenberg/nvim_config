@@ -9,6 +9,7 @@
   "vscode-neovim.neovimInitVimPaths.darwin": "~/.config/nvim/init.lua",
   "vscode-neovim.useCtrlKeysForNormalMode": true,
   "vscode-neovim.useCtrlKeysForInsertMode": false,
+  "vscode-neovim.logLevel": "none",
   // ============================================================
   // clangd (C++ — replaces mason + astrolsp clangd config)
   // ============================================================
