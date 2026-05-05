@@ -1,0 +1,98 @@
+// VSCodium keybindings for vscode-neovim integration
+// Copy to ~/Library/Application Support/VSCodium/User/keybindings.json
+// or manage via nix-darwin home-manager programs.vscode.keybindings
+//
+// These handle bindings that must live on the VSCodium side:
+// - Debugger controls (DAP replacement)
+// - Panel/sidebar toggles
+// - Terminal management
+// - Bindings that need `when` clauses to avoid insert-mode conflicts
+[
+  // ============================================================
+  // Terminal (replaces <F7> / toggleterm)
+  // ============================================================
+  {
+    "key": "ctrl+`",
+    "command": "workbench.action.terminal.toggleTerminal"
+  },
+
+  // ============================================================
+  // Debugger — mirrors AstroNvim <Leader>d* group
+  // These fire only when the debug session is active so they
+  // don't shadow normal Neovim keys.
+  // ============================================================
+  {
+    "key": "f5",
+    "command": "workbench.action.debug.start",
+    "when": "!inDebugMode"
+  },
+  {
+    "key": "f5",
+    "command": "workbench.action.debug.continue",
+    "when": "inDebugMode"
+  },
+  {
+    "key": "shift+f5",
+    "command": "workbench.action.debug.stop",
+    "when": "inDebugMode"
+  },
+  {
+    "key": "ctrl+shift+f5",
+    "command": "workbench.action.debug.restart",
+    "when": "inDebugMode"
+  },
+  {
+    "key": "f10",
+    "command": "workbench.action.debug.stepOver",
+    "when": "inDebugMode"
+  },
+  {
+    "key": "f11",
+    "command": "workbench.action.debug.stepInto",
+    "when": "inDebugMode"
+  },
+  {
+    "key": "shift+f11",
+    "command": "workbench.action.debug.stepOut",
+    "when": "inDebugMode"
+  },
+  {
+    "key": "f9",
+    "command": "editor.debug.action.toggleBreakpoint",
+    "when": "editorTextFocus"
+  },
+
+  // ============================================================
+  // Panel / sidebar — mirrors AstroNvim <Leader>e, <Leader>o
+  // These are handled in Lua via vscode.action, but adding
+  // fallback chord bindings on the VSCodium side for discoverability
+  // ============================================================
+  {
+    "key": "ctrl+shift+e",
+    "command": "workbench.action.toggleSidebarVisibility"
+  },
+
+  // ============================================================
+  // Call hierarchy — C++ workflow critical
+  // Accessible from Lua via gai/gao, but also bindable here
+  // ============================================================
+  {
+    "key": "alt+shift+h",
+    "command": "references-view.showCallHierarchy",
+    "when": "editorTextFocus"
+  },
+
+  // ============================================================
+  // Prevent vscode-neovim from capturing keys that should
+  // stay with VSCodium in certain contexts
+  // ============================================================
+  {
+    "key": "ctrl+p",
+    "command": "workbench.action.quickOpen",
+    "when": "!editorTextFocus || neovim.mode == 'insert'"
+  },
+  {
+    "key": "ctrl+shift+p",
+    "command": "workbench.action.showCommands"
+  }
+]
