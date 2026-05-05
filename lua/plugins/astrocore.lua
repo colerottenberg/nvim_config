@@ -69,11 +69,6 @@ return {
         ["L"] = { function() require("bufferline.commands").cycle(vim.v.count1) end, desc = "Next buffer" },
         ["H"] = { function() require("bufferline.commands").cycle(-vim.v.count1) end, desc = "Previous buffer" },
 
-        ["<Leader>gmf"] = {
-          function() require("snacks.lazygit").log_file() end,
-          desc = "Git log file",
-        },
-
         ["ga"] = {
           desc = "View Calls",
         },
@@ -206,6 +201,41 @@ return {
             }
             require("snacks.zen").zen(zen_config)
           end,
+        },
+
+        ["<Leader>gc"] = {
+          function()
+            ---@type snacks.picker.git.log.Config
+            local git_log_config = {
+              focus = "list",
+            }
+            require("snacks.picker").git_log(git_log_config)
+          end,
+          desc = "Git commits (repository)",
+        },
+
+        ["<Leader>gC"] = {
+          function()
+            ---@type snacks.picker.git.log.Config
+            local git_log_config = {
+              focus = "list",
+              current_file = true,
+              follow = true,
+            }
+            require("snacks.picker").git_log(git_log_config)
+          end,
+          desc = "Git commits (file)",
+        },
+
+        ["<Leader>gb"] = {
+          function()
+            ---@type snacks.picker.git.branches.Config
+            local config = {
+              focus = "list",
+            }
+            require("snacks.picker").git_branches(config)
+          end,
+          desc = "Git log",
         },
 
         -- mappings seen under group name "Buffer"
