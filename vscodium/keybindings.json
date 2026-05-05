@@ -12,7 +12,7 @@
   // Terminal (replaces <F7> / toggleterm)
   // ============================================================
   {
-    "key": "ctrl+`",
+    "key": "ctrl+'",
     "command": "workbench.action.terminal.toggleTerminal"
   },
 
