@@ -43,7 +43,7 @@ return {
     },
     -- enable servers that you already have installed without mason
     servers = {
-      -- "pyright"
+      "ccls",
     },
     -- customize language server configuration passed to `vim.lsp.config`
     -- client specific configuration can also go in `lsp/` in your configuration root (see `:h lsp-config`)
@@ -56,7 +56,7 @@ return {
       -- ["*"] = function(server) vim.lsp.enable(server) end
 
       -- the key is the server that is being setup with `vim.lsp.config`
-      -- rust_analyzer = false, -- setting a handler to false will disable the set up of that language server
+      clangd = false, -- disable clangd in favor of ccls
     },
     -- Configure buffer local auto commands to add when attaching a language server
     autocmds = {
