@@ -2,14 +2,12 @@
 
 ---@type LazySpec
 return {
-
   "andweeb/presence.nvim",
-  {
-    "ray-x/lsp_signature.nvim",
-    event = "BufRead",
-    config = function() require("lsp_signature").setup() end,
-  },
-
+  -- {
+  --   "ray-x/lsp_signature.nvim",
+  --   event = "BufRead",
+  --   config = function() require("lsp_signature").setup() end,
+  -- },
   -- Transparent
   {
     "xiyaowong/transparent.nvim",
@@ -56,7 +54,6 @@ return {
       },
     },
   },
-
   -- Colorschemes
   { "zootedb0t/citruszest.nvim" },
   { "catppuccin/nvim", name = "catppuccin" },
@@ -84,6 +81,7 @@ return {
       groups = { all = { NormalFloat = { link = "Normal" } } },
     },
   },
+  { "ellisonleao/gruvbox.nvim", lazy = true },
   { "nyoom-engineering/oxocarbon" },
   { "savq/melange-nvim" },
   {
@@ -100,7 +98,6 @@ return {
     priority = 1000,
     opts = {},
   },
-
   -- Adding Git Blame
   {
     "FabijanZulj/blame.nvim",
@@ -124,9 +121,7 @@ return {
       { "AstroNvim/astroui", opts = { status = { winbar = { enabled = { filetype = { "blame" } } } } } },
     },
   },
-
   -- == Examples of Overriding Plugins ==
-
   -- customize dashboard options
   {
     "folke/snacks.nvim",
@@ -147,10 +142,8 @@ return {
       },
     },
   },
-
   -- You can disable default plugins as follows:
   { "max397574/better-escape.nvim", enabled = false },
-
   -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
   {
     "L3MON4D3/LuaSnip",
@@ -163,7 +156,6 @@ return {
       require "astronvim.plugins.configs.luasnip"(plugin, opts)
     end,
   },
-
   {
     "windwp/nvim-autopairs",
     config = function(plugin, opts)
@@ -191,6 +183,14 @@ return {
         -- disable for .vim files, but it work for another filetypes
         Rule("a", "a", "-vim")
       )
+    end,
+  },
+  -- Adding nvim-java
+  {
+    "nvim-java/nvim-java",
+    config = function()
+      require("java").setup()
+      vim.lsp.enable "jdtls"
     end,
   },
 }

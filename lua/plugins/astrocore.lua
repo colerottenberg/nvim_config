@@ -3,7 +3,7 @@
 -- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
 -- Configuration documentation can be found with `:h astrocore`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
---       as this provides autocomplete and documentation while editing
+-- as this provides autocomplete and documentation while editing
 
 ---@type LazySpec
 return {
@@ -60,25 +60,25 @@ return {
       -- first key is the mode
       n = {
         -- second key is the lefthand side of the map
-
         -- navigate buffer tabs
         -- ["L"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
         -- ["H"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
-
         -- Adding New Navigation Due to Change from AstroCore Bufferline to Bufferline
-        ["L"] = { function() require("bufferline.commands").cycle(vim.v.count1) end, desc = "Next buffer" },
-        ["H"] = { function() require("bufferline.commands").cycle(-vim.v.count1) end, desc = "Previous buffer" },
-
+        ["L"] = {
+          function() require("bufferline.commands").cycle(vim.v.count1) end,
+          desc = "Next buffer",
+        },
+        ["H"] = {
+          function() require("bufferline.commands").cycle(-vim.v.count1) end,
+          desc = "Previous buffer",
+        },
         ["ga"] = {
           desc = "View Calls",
         },
-
         ["gai"] = {
           function()
             ---@type snacks.picker.lsp.Config
-            local lsp_config = {
-              focus = "list",
-            }
+            local lsp_config = { focus = "list" }
             require("snacks.picker").lsp_incoming_calls(lsp_config)
           end,
           desc = "Incoming Calls",
@@ -86,14 +86,11 @@ return {
         ["gao"] = {
           function()
             ---@type snacks.picker.lsp.Config
-            local lsp_config = {
-              focus = "list",
-            }
+            local lsp_config = { focus = "list" }
             require("snacks.picker").lsp_outgoing_calls(lsp_config)
           end,
           desc = "Outgoing Calls",
         },
-
         ["gw"] = {
           function()
             require("snacks.picker").projects {
@@ -108,41 +105,31 @@ return {
           end,
           desc = "Add Workspace Folder",
         },
-
         ["gR"] = {
           function()
             ---@type snacks.picker.lsp.references.Config
-            local ref_config = {
-              focus = "list",
-            }
+            local ref_config = { focus = "list" }
             require("snacks.picker").lsp_references(ref_config)
           end,
           desc = "Lsp References",
         },
-
         -- Change LSP Symbols view to enter normal mode to aid navigation speed
         ["<Leader>ls"] = {
           function()
             ---@type snacks.picker.lsp.symbols.Config
-            local ws_config = {
-              focus = "list",
-            }
+            local ws_config = { focus = "list" }
             require("snacks.picker").lsp_symbols(ws_config)
           end,
-          desc = "Search Workspace Symbols",
+          desc = "Search Symbols",
         },
-
         ["<Leader>lR"] = {
           function()
             ---@type snacks.picker.lsp.references.Config
-            local ref_config = {
-              focus = "list",
-            }
+            local ref_config = { focus = "list" }
             require("snacks.picker").lsp_references(ref_config)
           end,
           desc = "Lsp References",
         },
-
         ["<Leader>lW"] = {
           function()
             require("snacks.picker").projects {
@@ -157,31 +144,31 @@ return {
           end,
           desc = "Add Workspace Folder",
         },
-
         ["<Leader>lc"] = {
           function() require("snacks.picker").lsp_config() end,
           desc = "LSP Config",
         },
-
         ["<Leader>lg"] = {
           function() require("snacks.picker").lsp_workspace_symbols() end,
           desc = "Search workspace symbols",
         },
-
+        ["<Leader>lD"] = {
+          function()
+            ---@type snacks.picker.Config
+            local config = { focus = "list" }
+            require("snacks.picker").diagnostics(config)
+          end,
+          desc = "Search Diagnostics",
+        },
         ["<Leader>lG"] = false,
-
         ["<Leader>ft"] = {
           function()
             ---@type snacks.picker.Config
-            local cs_config = {
-              focus = "list",
-              layout = "ivy",
-            }
+            local cs_config = { focus = "list", layout = "ivy" }
             require("snacks.picker").colorschemes(cs_config)
           end,
           desc = "Find themese",
         },
-
         -- Changin Zen Mode to just center
         ["<Leader>uZ"] = {
           function()
@@ -202,42 +189,47 @@ return {
             require("snacks.zen").zen(zen_config)
           end,
         },
-
         ["<Leader>gc"] = {
           function()
             ---@type snacks.picker.git.log.Config
-            local git_log_config = {
-              focus = "list",
-            }
+            local git_log_config = { focus = "list" }
             require("snacks.picker").git_log(git_log_config)
           end,
           desc = "Git commits (repository)",
         },
-
         ["<Leader>gC"] = {
           function()
             ---@type snacks.picker.git.log.Config
-            local git_log_config = {
-              focus = "list",
-              current_file = true,
-              follow = true,
-            }
+            local git_log_config = { focus = "list", current_file = true, follow = true }
             require("snacks.picker").git_log(git_log_config)
           end,
           desc = "Git commits (file)",
         },
-
         ["<Leader>gb"] = {
           function()
             ---@type snacks.picker.git.branches.Config
-            local config = {
-              focus = "list",
-            }
+            local config = { focus = "list" }
             require("snacks.picker").git_branches(config)
           end,
           desc = "Git log",
         },
-
+        ["<Leader>gM"] = {
+          function()
+            ---@type snacks.picker.git.log.Config
+            local config = { focus = "list" }
+            require("snacks.picker").git_log_line(config)
+          end,
+          desc = "Git Log Line",
+        },
+        ["<Leader>gP"] = {
+          function() require("gitsigns").preview_hunk() end,
+          desc = "Git Preview Hunks",
+        },
+        -- plugin manager
+        ["<Leader>pr"] = {
+          function() require("astrocore").reload() end,
+          desc = "Reload neovim",
+        },
         -- mappings seen under group name "Buffer"
         -- ["<Leader>bd"] = {
         --   function()
@@ -247,11 +239,9 @@ return {
         --   end,
         --   desc = "Close buffer from tabline",
         -- },
-
         -- tables with just a `desc` key will be registered with which-key if it's installed
         -- this is useful for naming menus
         -- ["<Leader>b"] = { desc = "Buffers" },
-
         -- setting a mapping to false will disable it
         -- ["<C-S>"] = false,
       },
