@@ -169,6 +169,16 @@ return {
           end,
           desc = "Find themese",
         },
+
+        ["<Leader>fb"] = {
+          function()
+            ---@type snacks.picker.buffers.Config
+            local config = {
+              focus = "list",
+            }
+            require("snacks").picker.buffers(config)
+          end,
+        },
         -- Changin Zen Mode to just center
         ["<Leader>uZ"] = {
           function()
