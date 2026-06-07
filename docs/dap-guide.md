@@ -32,6 +32,7 @@ Leader is `<Space>`, local-leader is `,`.
 | `dl` | run last configuration |
 | `dq` | terminate session |
 | `du` | toggle dap-ui |
+| `<Leader>uI` | toggle inline variable values (virtual text) |
 | `de` | eval expression under cursor / visual selection |
 | `dF` | debug current Python file (via `dap_uv`) |
 | `dt` / `dT` | pytest current file / whole suite (via `dap_uv`) |
@@ -39,6 +40,16 @@ Leader is `<Space>`, local-leader is `,`.
 Function keys (VS Code-style): `<F5>` continue/start · `<S-F5>` terminate ·
 `<F6>` pause · `<F9>` toggle breakpoint · `<F10>` step over · `<F11>` step into ·
 `<S-F11>` step out.
+
+> **Where the function keys are defined — and a terminal gotcha.** They live in
+> `lua/plugins/astrocore.lua` under `mappings.n`, **not** in the nvim-dap `keys`
+> field. AstroNvim core (`astronvim.plugins.dap`) already binds these through
+> astrocore, so a lazy `keys` mapping for the same key gets shadowed — astrocore
+> mappings are the source of truth. Also, most terminals send **Shift+F5 as
+> `<F17>`** and **Shift+F11 as `<F23>`** (legacy xterm F13–F24 encoding); newer
+> terminals (kitty/CSI-u protocol) send `<S-F5>`/`<S-F11>`. We bind *both*
+> encodings so the shifted keys work regardless of terminal. To see what your
+> terminal actually sends, run `nvim -V3log +q` and grep the log for the key.
 
 `<leader>dc` is the workhorse: it lists every configuration registered for the
 current buffer's filetype and lets you pick one.

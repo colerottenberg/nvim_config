@@ -72,6 +72,25 @@ return {
           function() require("bufferline.commands").cycle(-vim.v.count1) end,
           desc = "Previous buffer",
         },
+
+        -- ── DAP function keys (VS Code-style) ────────────────────────────
+        -- These must live here (astrocore mappings), not in the nvim-dap
+        -- `keys` field: AstroNvim core (astronvim.plugins.dap) already binds
+        -- these via astrocore, so a lazy `keys` mapping gets shadowed.
+        -- Terminal keycode note: most terminals send Shift+F5 as <F17> and
+        -- Shift+F11 as <F23> (legacy xterm F13–F24 encoding); newer terminals
+        -- with the kitty/CSI-u protocol send <S-F5>/<S-F11>. Bind both so it
+        -- works either way. (`:h terminal-info`, or `nvim -V3log +q` to inspect.)
+        ["<F5>"] = { function() require("dap").continue() end, desc = "Debugger: continue / start" },
+        ["<F6>"] = { function() require("dap").pause() end, desc = "Debugger: pause" },
+        ["<F9>"] = { function() require("dap").toggle_breakpoint() end, desc = "Debugger: toggle breakpoint" },
+        ["<F10>"] = { function() require("dap").step_over() end, desc = "Debugger: step over" },
+        ["<F11>"] = { function() require("dap").step_into() end, desc = "Debugger: step into" },
+        ["<F17>"] = { function() require("dap").terminate() end, desc = "Debugger: terminate (Shift+F5)" },
+        ["<S-F5>"] = { function() require("dap").terminate() end, desc = "Debugger: terminate" },
+        ["<F23>"] = { function() require("dap").step_out() end, desc = "Debugger: step out (Shift+F11)" },
+        ["<S-F11>"] = { function() require("dap").step_out() end, desc = "Debugger: step out" },
+
         ["ga"] = {
           desc = "View Calls",
         },

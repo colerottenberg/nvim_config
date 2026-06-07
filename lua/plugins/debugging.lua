@@ -3,6 +3,7 @@ return {
   dependencies = {
     "rcarriga/nvim-dap-ui",
     "nvim-neotest/nvim-nio",
+    "theHamsta/nvim-dap-virtual-text", -- inline variable values during a session
   },
   keys = {
     { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "DAP: toggle breakpoint" },
@@ -16,18 +17,14 @@ return {
     { "<leader>do", function() require("dap").step_over() end, desc = "DAP: step over" },
     { "<leader>dO", function() require("dap").step_out() end, desc = "DAP: step out" },
     { "<leader>dr", function() require("dap").repl.toggle() end, desc = "DAP: toggle REPL" },
-
-    -- Function keys (VS Code-style)
-    { "<F5>", function() require("dap").continue() end, desc = "DAP: continue / start" },
-    { "<S-F5>", function() require("dap").terminate() end, desc = "DAP: terminate" },
-    { "<F6>", function() require("dap").pause() end, desc = "DAP: pause" },
-    { "<F9>", function() require("dap").toggle_breakpoint() end, desc = "DAP: toggle breakpoint" },
-    { "<F10>", function() require("dap").step_over() end, desc = "DAP: step over" },
-    { "<F11>", function() require("dap").step_into() end, desc = "DAP: step into" },
-    { "<S-F11>", function() require("dap").step_out() end, desc = "DAP: step out" },
+    -- Function keys (F5/F9/F10/F11 + shifted) live in lua/plugins/astrocore.lua
+    -- `mappings` — they must be set there, not via lazy `keys`, or AstroNvim's
+    -- own astrocore DAP mappings shadow them (and <S-F5>/<S-F11> need the F17/F23
+    -- terminal keycodes). See docs/dap-guide.md.
     { "<leader>dl", function() require("dap").run_last() end, desc = "DAP: run last" },
     { "<leader>dq", function() require("dap").terminate() end, desc = "DAP: terminate" },
     { "<leader>du", function() require("dapui").toggle() end, desc = "DAP: toggle UI" },
+    { "<Leader>uI", "<Cmd>DapVirtualTextToggle<CR>", desc = "Toggle DAP inline values" },
     {
       "<leader>de",
       function() require("dapui").eval() end,
@@ -35,7 +32,11 @@ return {
       desc = "DAP: eval expression",
     },
     -- Python via uv (see lua/dap_uv.lua). Everything else is in the <leader>dc picker.
-    { "<leader>dF", function() require("dap_uv").run "file: current" end, desc = "DAP: debug current Python file" },
+    {
+      "<leader>dF",
+      function() require("dap_uv").run "file: current" end,
+      desc = "DAP: debug current Python file",
+    },
     { "<leader>dt", function() require("dap_uv").run "pytest: current file" end, desc = "DAP: pytest current file" },
     { "<leader>dT", function() require("dap_uv").run "pytest: whole suite" end, desc = "DAP: pytest suite" },
   },
@@ -55,6 +56,16 @@ return {
     local ESP_GDB = vim.env.ESP_GDB or "xtensa-esp-elf-gdb"
 
     require("dap_uv").setup()
+
+    -- Inline variable values (virtual text) during a debug session.
+    -- On by default; only renders while a session is live. Toggle with <Leader>uI.
+    require("nvim-dap-virtual-text").setup {
+      enabled = true,
+      enabled_commands = true, -- :DapVirtualText{Enable,Disable,Toggle,ForceRefresh}
+      highlight_changed_variables = true,
+      show_stop_reason = true,
+      commented = true, -- prefix values with the comment string, e.g. `# x = 3`
+    }
 
     local dap = require "dap"
     local utils = require "dap.utils"
@@ -149,12 +160,8 @@ return {
         name = "gdb: attach embedded Linux (gdbserver)",
         type = "gdb_embedded",
         request = "attach",
-        program = function()
-          return vim.fn.input("Local ELF (with symbols): ", vim.fn.getcwd() .. "/", "file")
-        end,
-        target = function()
-          return vim.fn.input("gdbserver target (host:port): ", "192.168.1.50:3333")
-        end,
+        program = function() return vim.fn.input("Local ELF (with symbols): ", vim.fn.getcwd() .. "/", "file") end,
+        target = function() return vim.fn.input("gdbserver target (host:port): ", "192.168.1.50:3333") end,
         cwd = "${workspaceFolder}",
       },
 
@@ -168,9 +175,7 @@ return {
         name = "gdb: attach ESP32 (OpenOCD :3333)",
         type = "gdb_esp",
         request = "attach",
-        program = function()
-          return vim.fn.input("App ELF: ", vim.fn.getcwd() .. "/build/", "file")
-        end,
+        program = function() return vim.fn.input("App ELF: ", vim.fn.getcwd() .. "/build/", "file") end,
         target = "localhost:3333",
         cwd = "${workspaceFolder}",
       },
