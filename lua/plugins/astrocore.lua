@@ -91,6 +91,22 @@ return {
         ["<F23>"] = { function() require("dap").step_out() end, desc = "Debugger: step out (Shift+F11)" },
         ["<S-F11>"] = { function() require("dap").step_out() end, desc = "Debugger: step out" },
 
+        -- K shows the value under the cursor while debugging, else normal LSP
+        -- hover. Mapping K ourselves stops Neovim's default LSP `K` from taking
+        -- over (it only auto-binds K when it isn't already mapped). Guarding on
+        -- `package.loaded.dap` avoids loading nvim-dap just by pressing K.
+        ["K"] = {
+          function()
+            local dap = package.loaded.dap
+            if dap and dap.session() then
+              require("dapui").eval(nil, { enter = false })
+            else
+              vim.lsp.buf.hover()
+            end
+          end,
+          desc = "Hover symbol (value while debugging)",
+        },
+
         ["ga"] = {
           desc = "View Calls",
         },
