@@ -60,7 +60,11 @@ M.configs = {
     name = "cli: entry point",
     program = function()
       local name = vim.fn.input "Entry point (console_script name): "
-      return vim.fn.getcwd() .. "/.venv/bin/" .. name
+      if vim.fn.has "win32" then
+        return vim.fn.getcwd() .. "/.venv/Scripts/" .. name .. ".exe"
+      else
+        return vim.fn.getcwd() .. "/.venv/bin/" .. name
+      end
     end,
     args = prompt "CLI args: ",
   },
