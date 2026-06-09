@@ -12,19 +12,19 @@ return {
       function() require("dap").set_breakpoint(vim.fn.input "Breakpoint condition: ") end,
       desc = "DAP: conditional breakpoint",
     },
-    { "<leader>dc", function() require("dap").continue() end, desc = "DAP: continue / start" },
-    { "<leader>di", function() require("dap").step_into() end, desc = "DAP: step into" },
-    { "<leader>do", function() require("dap").step_over() end, desc = "DAP: step over" },
-    { "<leader>dO", function() require("dap").step_out() end, desc = "DAP: step out" },
-    { "<leader>dr", function() require("dap").repl.toggle() end, desc = "DAP: toggle REPL" },
+    { "<leader>dc", function() require("dap").continue() end,          desc = "DAP: continue / start" },
+    { "<leader>di", function() require("dap").step_into() end,         desc = "DAP: step into" },
+    { "<leader>do", function() require("dap").step_over() end,         desc = "DAP: step over" },
+    { "<leader>dO", function() require("dap").step_out() end,          desc = "DAP: step out" },
+    { "<leader>dr", function() require("dap").repl.toggle() end,       desc = "DAP: toggle REPL" },
     -- Function keys (F5/F9/F10/F11 + shifted) live in lua/plugins/astrocore.lua
     -- `mappings` — they must be set there, not via lazy `keys`, or AstroNvim's
     -- own astrocore DAP mappings shadow them (and <S-F5>/<S-F11> need the F17/F23
     -- terminal keycodes). See docs/dap-guide.md.
-    { "<leader>dl", function() require("dap").run_last() end, desc = "DAP: run last" },
-    { "<leader>dq", function() require("dap").terminate() end, desc = "DAP: terminate" },
-    { "<leader>du", function() require("dapui").toggle() end, desc = "DAP: toggle UI" },
-    { "<Leader>uI", "<Cmd>DapVirtualTextToggle<CR>", desc = "Toggle DAP inline values" },
+    { "<leader>dl", function() require("dap").run_last() end,          desc = "DAP: run last" },
+    { "<leader>dq", function() require("dap").terminate() end,         desc = "DAP: terminate" },
+    { "<leader>du", function() require("dapui").toggle() end,          desc = "DAP: toggle UI" },
+    { "<Leader>uI", "<Cmd>DapVirtualTextToggle<CR>",                   desc = "Toggle DAP inline values" },
     {
       "<leader>de",
       function() require("dapui").eval() end,
@@ -38,7 +38,7 @@ return {
       desc = "DAP: debug current Python file",
     },
     { "<leader>dt", function() require("dap_uv").run "pytest: current file" end, desc = "DAP: pytest current file" },
-    { "<leader>dT", function() require("dap_uv").run "pytest: whole suite" end, desc = "DAP: pytest suite" },
+    { "<leader>dT", function() require("dap_uv").run "pytest: whole suite" end,  desc = "DAP: pytest suite" },
   },
   config = function()
     -- ── Toolchain paths ──────────────────────────────────────────────────

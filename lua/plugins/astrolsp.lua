@@ -12,17 +12,17 @@ return {
   opts = {
     -- Configuration table of features provided by AstroLSP
     features = {
-      codelens = true, -- enable/disable codelens refresh on start
-      inlay_hints = true, -- enable/disable inlay hints on start
-      inline_completion = true, -- enable inline_completion for ghost text
+      codelens = true,             -- enable/disable codelens refresh on start
+      inlay_hints = true,          -- enable/disable inlay hints on start
+      inline_completion = true,    -- enable inline_completion for ghost text
       linked_editing_range = true, -- enable linked_editing_range for realtime updates to documents
-      semantic_tokens = true, -- enable/disable semantic token highlighting
+      semantic_tokens = true,      -- enable/disable semantic token highlighting
     },
     -- customize lsp formatting options
     formatting = {
       -- control auto formatting on save
       format_on_save = {
-        enabled = true, -- enable or disable format on save globally
+        enabled = true,     -- enable or disable format on save globally
         allow_filetypes = { -- enable format on save for specified filetypes only
           -- "go",
         },
@@ -44,6 +44,7 @@ return {
     -- enable servers that you already have installed without mason
     servers = {
       -- "pyright"
+      "ruff",
     },
     -- customize language server configuration passed to `vim.lsp.config`
     -- client specific configuration can also go in `lsp/` in your configuration root (see `:h lsp-config`)
