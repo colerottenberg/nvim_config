@@ -26,10 +26,17 @@ local function launch(extra)
   }, extra)
 end
 
-local function prompt(label, default)
+-- Build an args prompt. `completion` is a `vim.fn.input` completion type
+-- ("file" by default) so you can <Tab>-complete paths while typing args —
+-- handy for finding the script/data files you want to pass to the debuggee.
+local function prompt(label, default, completion)
   return function()
     -- split on spaces so the user can type multiple args at the prompt
-    local answer = vim.fn.input(label, default or "")
+    local answer = vim.fn.input {
+      prompt = label,
+      default = default or "",
+      completion = completion or "file",
+    }
     if answer == "" then return {} end
     return vim.split(answer, "%s+", { trimempty = true })
   end
