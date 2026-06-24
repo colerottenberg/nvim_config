@@ -181,8 +181,8 @@ return {
       },
     }
 
-    dap.configurations.cpp = cpp
-    dap.configurations.c = cpp
+    dap.configurations.cpp = vim.list_extend(dap.configurations.cpp or {}, cpp)
+    dap.configurations.c = vim.list_extend(dap.configurations.c or {}, cpp)
 
     -- ── dap-ui ───────────────────────────────────────────────────────────
     -- Drop this block if your config already wires dap-ui elsewhere.

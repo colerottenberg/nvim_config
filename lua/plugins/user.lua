@@ -56,7 +56,7 @@ return {
   },
   -- Colorschemes
   { "zootedb0t/citruszest.nvim" },
-  { "catppuccin/nvim", name = "catppuccin" },
+  { "catppuccin/nvim",          name = "catppuccin" },
   {
     "EdenEast/nightfox.nvim",
     opts = {
@@ -81,7 +81,7 @@ return {
       groups = { all = { NormalFloat = { link = "Normal" } } },
     },
   },
-  { "ellisonleao/gruvbox.nvim", lazy = true },
+  { "ellisonleao/gruvbox.nvim",   lazy = true },
   { "nyoom-engineering/oxocarbon" },
   { "savq/melange-nvim" },
   {
@@ -90,7 +90,7 @@ return {
     priority = 1000,
     opts = {},
   },
-  { "rose-pine/neovim", name = "rose-pine" },
+  { "rose-pine/neovim",      name = "rose-pine" },
   { "rebelot/kanagawa.nvim", lazy = true },
   {
     "thesimonho/kanagawa-paper.nvim",
@@ -153,13 +153,13 @@ return {
       luasnip.filetype_extend("javascript", { "javascriptreact" })
 
       -- include the default astronvim config that calls the setup call
-      require "astronvim.plugins.configs.luasnip"(plugin, opts)
+      require "astronvim.plugins.configs.luasnip" (plugin, opts)
     end,
   },
   {
     "windwp/nvim-autopairs",
     config = function(plugin, opts)
-      require "astronvim.plugins.configs.nvim-autopairs"(plugin, opts) -- include the default astronvim config that calls the setup call
+      require "astronvim.plugins.configs.nvim-autopairs" (plugin, opts) -- include the default astronvim config that calls the setup call
       -- add more custom autopairs configuration such as custom rules
       local npairs = require "nvim-autopairs"
       local Rule = require "nvim-autopairs.rule"
@@ -167,18 +167,18 @@ return {
       npairs.add_rules(
         {
           Rule("$", "$", { "tex", "latex" })
-            -- don't add a pair if the next character is %
-            :with_pair(cond.not_after_regex "%%")
-            -- don't add a pair if  the previous character is xxx
-            :with_pair(
-              cond.not_before_regex("xxx", 3)
-            )
-            -- don't move right when repeat character
-            :with_move(cond.none())
-            -- don't delete if the next character is xx
-            :with_del(cond.not_after_regex "xx")
-            -- disable adding a newline when you press <cr>
-            :with_cr(cond.none()),
+          -- don't add a pair if the next character is %
+              :with_pair(cond.not_after_regex "%%")
+          -- don't add a pair if  the previous character is xxx
+              :with_pair(
+                cond.not_before_regex("xxx", 3)
+              )
+          -- don't move right when repeat character
+              :with_move(cond.none())
+          -- don't delete if the next character is xx
+              :with_del(cond.not_after_regex "xx")
+          -- disable adding a newline when you press <cr>
+              :with_cr(cond.none()),
         },
         -- disable for .vim files, but it work for another filetypes
         Rule("a", "a", "-vim")
@@ -192,5 +192,60 @@ return {
       require("java").setup()
       vim.lsp.enable "jdtls"
     end,
+  },
+  {
+    "nicolasgb/jj.nvim",
+    version = "*", -- Use latest stable release
+    -- Or from the main branch (uncomment the branch line and comment the version line)
+    -- branch = "main",
+    config = function() require("jj").setup {} end,
+    keys = {
+      { "<leader>jd", "<cmd>Jdiff<cr>", desc = "Jujutsu Diff" },
+      {
+        "<leader>jl",
+        function()
+          ---@type jj.cmd.log_opts
+          local config = {}
+          require("jj.cmd").log()
+        end,
+        desc = "Jujutsu Log",
+      },
+      {
+        "<leader>jD",
+        function()
+          ---@type jj.cmd.log_opts
+          local config = {}
+          require("jj.cmd").describe()
+        end,
+        desc = "Jujutsu Describe",
+      },
+      {
+        "<leader>je",
+        function()
+          ---@type jj.cmd.log_opts
+          local config = {}
+          require("jj.cmd").edit()
+        end,
+        desc = "Jujutsu edit",
+      },
+      {
+        "<leader>js",
+        function()
+          ---@type jj.cmd.log_opts
+          local config = {}
+          require("jj.cmd").status()
+        end,
+        desc = "Jujutsu status",
+      },
+      {
+        "<leader>jf",
+        function()
+          ---@type jj.cmd.log_opts
+          local config = {}
+          require("jj.cmd").split()
+        end,
+        desc = "Jujutsu float",
+      },
+    },
   },
 }
