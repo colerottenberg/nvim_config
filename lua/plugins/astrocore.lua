@@ -116,6 +116,26 @@ return {
           desc = "Hover symbol (value while debugging)",
         },
 
+        ["<Leader>ly"] = {
+          desc = "View Type Heirarchy",
+        },
+
+        ["<Leader>lyi"] = {
+          function()
+            local config = {}
+            vim.lsp.buf.typehierarchy "subtypes"
+          end,
+          desc = "View subtypes",
+        },
+
+        ["<Leader>lyo"] = {
+          function()
+            local config = {}
+            vim.lsp.buf.typehierarchy "supertypes"
+          end,
+          desc = "View supertypes",
+        },
+
         ["ga"] = {
           desc = "View Calls",
         },
