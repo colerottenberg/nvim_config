@@ -49,11 +49,16 @@ return {
     --   EMBEDDED_GDB : the GDB that understands your target's architecture,
     --                  e.g. from a Yocto/Buildroot SDK ("aarch64-poky-linux-gdb")
     --                  or a multiarch host gdb. Requires GDB >= 14.1 (DAP).
-    --   ESP_GDB      : the Espressif GDB for your chip family.
-    --                  Xtensa (ESP32/S2/S3): xtensa-esp-elf-gdb
+    --   ESP_GDB      : the Espressif GDB for your chip family. The IDF toolchain
+    --                  ships per-chip binaries (there is no generic
+    --                  `xtensa-esp-elf-gdb` on PATH), so name the chip:
+    --                  ESP32-S3: xtensa-esp32s3-elf-gdb
+    --                  ESP32/S2: xtensa-esp32-elf-gdb / xtensa-esp32s2-elf-gdb
     --                  RISC-V (C3/C6/H2/P4): riscv32-esp-elf-gdb
+    --                  Needs the IDF env active in the shell that launched nvim
+    --                  (`. ~/esp/esp-idf/export.sh`), or set an absolute path.
     local EMBEDDED_GDB = vim.env.CROSS_GDB or "aarch64-linux-gnu-gdb"
-    local ESP_GDB = vim.env.ESP_GDB or "xtensa-esp-elf-gdb"
+    local ESP_GDB = vim.env.ESP_GDB or "xtensa-esp32s3-elf-gdb"
 
     require("dap_uv").setup()
 
