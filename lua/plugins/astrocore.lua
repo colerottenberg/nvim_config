@@ -216,7 +216,10 @@ return {
           function() require("snacks.picker").lsp_workspace_symbols() end,
           desc = "Search workspace symbols",
         },
-        ["<Leader>lD"] = {
+
+        -- remapping ld to search project diagnostics
+        ["<Leader>lD"] = false,
+        ["<Leader>ld"] = {
           function()
             ---@type snacks.picker.Config
             local config = { focus = "list" }
