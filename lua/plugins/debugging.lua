@@ -65,11 +65,11 @@ return {
     -- Inline variable values (virtual text) during a debug session.
     -- On by default; only renders while a session is live. Toggle with <Leader>uI.
     require("nvim-dap-virtual-text").setup {
-      enabled = true,
+      enabled = false,
       enabled_commands = true, -- :DapVirtualText{Enable,Disable,Toggle,ForceRefresh}
       highlight_changed_variables = true,
       show_stop_reason = true,
-      commented = true, -- prefix values with the comment string, e.g. `# x = 3`
+      commented = false, -- prefix values with the comment string, e.g. `# x = 3`
     }
 
     local dap = require "dap"
