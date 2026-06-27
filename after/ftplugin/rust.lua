@@ -6,9 +6,7 @@
 -- call the working `:RustLsp` commands instead. `:RustLsp` is buffer-local and
 -- only exists after rust-analyzer attaches; these bodies run lazily on keypress.
 
-local function map(lhs, rhs, desc)
-  vim.keymap.set("n", lhs, rhs, { buffer = true, silent = true, desc = desc })
-end
+local function map(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { buffer = true, silent = true, desc = desc }) end
 
 -- Prompt for extra executable args, then run the given :RustLsp subcommand.
 -- Args must be passed as a list so each token becomes a separate argument;
@@ -23,10 +21,6 @@ local function with_args(subcmd)
     end)
   end
 end
-
--- gr family: repurpose the (broken-for-rust) codelens-run key + a debug sibling.
-map("grx", function() vim.cmd.RustLsp "run" end, "Rust: run target at cursor")
-map("grX", function() vim.cmd.RustLsp "debug" end, "Rust: debug target at cursor")
 
 -- LocalLeader (`,`) menu for everything else.
 map("<LocalLeader>R", function() vim.cmd.RustLsp "runnables" end, "Rust: pick a runnable")
