@@ -27,6 +27,7 @@ map("<LocalLeader>R", function() vim.cmd.RustLsp "runnables" end, "Rust: pick a 
 map("<LocalLeader>D", function() vim.cmd.RustLsp "debuggables" end, "Rust: pick a debuggable")
 map("<LocalLeader>t", function() vim.cmd.RustLsp "testables" end, "Rust: pick a testable")
 map("<LocalLeader>l", function() vim.cmd.RustLsp { "run", bang = true } end, "Rust: re-run last target")
+map("<LocalLeader>j", function() vim.cmd.RustLsp { "debug", bang = true } end, "Rust: re-debug last target")
 map("<LocalLeader>a", with_args "run", "Rust: run with args")
 map("<LocalLeader>A", with_args "debug", "Rust: debug with args")
 map("<LocalLeader>k", function() vim.cmd.RustLsp { "hover", "actions" } end, "Rust: hover actions")
