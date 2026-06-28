@@ -21,12 +21,12 @@ return {
   opts = {
     -- Configure core features of AstroNvim
     features = {
-      large_buf = { size = 1024 * 256, lines = 10000 },             -- set global limits for large files for disabling features like treesitter
-      autopairs = true,                                             -- enable autopairs at start
-      cmp = true,                                                   -- enable completion at start
+      large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
+      autopairs = true, -- enable autopairs at start
+      cmp = true, -- enable completion at start
       diagnostics = { virtual_text = true, virtual_lines = false }, -- diagnostic settings on startup
-      highlighturl = true,                                          -- highlight URLs at start
-      notifications = true,                                         -- enable notifications at start
+      highlighturl = true, -- highlight URLs at start
+      notifications = true, -- enable notifications at start
     },
     -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
     diagnostics = {
@@ -49,15 +49,15 @@ return {
     -- },
     -- vim options can be configured here
     options = {
-      opt = {                   -- vim.opt.<key>
+      opt = { -- vim.opt.<key>
         relativenumber = false, -- sets vim.opt.relativenumber
-        number = true,          -- sets vim.opt.number
-        spell = false,          -- sets vim.opt.spell
-        signcolumn = "yes",     -- sets vim.opt.signcolumn to yes
-        wrap = true,            -- sets vim.opt.wrap
-        exrc = true,            -- enabling excr to read .nvim.lua
+        number = true, -- sets vim.opt.number
+        spell = false, -- sets vim.opt.spell
+        signcolumn = "yes", -- sets vim.opt.signcolumn to yes
+        wrap = true, -- sets vim.opt.wrap
+        exrc = true, -- enabling excr to read .nvim.lua
       },
-      g = {                     -- vim.g.<key>
+      g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
         -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
         -- This can be found in the `lua/lazy_setup.lua` file
@@ -249,6 +249,13 @@ return {
         -- Changin Zen Mode to just center
         ["<Leader>uZ"] = {
           function()
+            -- Calculate dynamic width based on terminal size
+            -- Use 70% of available columns, but cap at 150 and minimum of 80
+            local columns = vim.o.columns
+            local dynamic_width = math.floor(columns * 0.70)
+            dynamic_width = math.min(dynamic_width, 150) -- cap at 150
+            dynamic_width = math.max(dynamic_width, 80) -- minimum of 80
+
             ---@type snacks.zen.Config
             local zen_config = {
               toggles = {},
@@ -259,7 +266,7 @@ return {
               ---@type snacks.win.Config
               win = {
                 -- backdrop = false,
-                width = 150,
+                width = dynamic_width,
               },
               center = true,
             }
