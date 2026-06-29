@@ -3,11 +3,19 @@
 ---@type LazySpec
 return {
   "andweeb/presence.nvim",
-  -- {
-  --   "ray-x/lsp_signature.nvim",
-  --   event = "BufRead",
-  --   config = function() require("lsp_signature").setup() end,
-  -- },
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "VeryLazy",
+    opts = {
+      bind = true, -- Mandate the plugin to attach to your active buffers
+      handler_opts = {
+        border = "rounded", -- Smooth visual styling matches modern themes
+      },
+      hint_enable = true, -- Adds low-profile virtual text prompts
+      hint_prefix = "🐼 ", -- Custom visual anchor for Pigweed environments
+    },
+    config = function(_, opts) require("lsp_signature").setup(opts) end,
+  },
   -- Transparent
   {
     "xiyaowong/transparent.nvim",
@@ -56,7 +64,7 @@ return {
   },
   -- Colorschemes
   { "zootedb0t/citruszest.nvim" },
-  { "catppuccin/nvim",          name = "catppuccin" },
+  { "catppuccin/nvim", name = "catppuccin" },
   {
     "EdenEast/nightfox.nvim",
     opts = {
@@ -81,7 +89,7 @@ return {
       groups = { all = { NormalFloat = { link = "Normal" } } },
     },
   },
-  { "ellisonleao/gruvbox.nvim",   lazy = true },
+  { "ellisonleao/gruvbox.nvim", lazy = true },
   { "nyoom-engineering/oxocarbon" },
   { "savq/melange-nvim" },
   {
@@ -90,7 +98,7 @@ return {
     priority = 1000,
     opts = {},
   },
-  { "rose-pine/neovim",      name = "rose-pine" },
+  { "rose-pine/neovim", name = "rose-pine" },
   { "rebelot/kanagawa.nvim", lazy = true },
   {
     "thesimonho/kanagawa-paper.nvim",
@@ -153,13 +161,13 @@ return {
       luasnip.filetype_extend("javascript", { "javascriptreact" })
 
       -- include the default astronvim config that calls the setup call
-      require "astronvim.plugins.configs.luasnip" (plugin, opts)
+      require "astronvim.plugins.configs.luasnip"(plugin, opts)
     end,
   },
   {
     "windwp/nvim-autopairs",
     config = function(plugin, opts)
-      require "astronvim.plugins.configs.nvim-autopairs" (plugin, opts) -- include the default astronvim config that calls the setup call
+      require "astronvim.plugins.configs.nvim-autopairs"(plugin, opts) -- include the default astronvim config that calls the setup call
       -- add more custom autopairs configuration such as custom rules
       local npairs = require "nvim-autopairs"
       local Rule = require "nvim-autopairs.rule"
@@ -167,18 +175,18 @@ return {
       npairs.add_rules(
         {
           Rule("$", "$", { "tex", "latex" })
-          -- don't add a pair if the next character is %
-              :with_pair(cond.not_after_regex "%%")
-          -- don't add a pair if  the previous character is xxx
-              :with_pair(
-                cond.not_before_regex("xxx", 3)
-              )
-          -- don't move right when repeat character
-              :with_move(cond.none())
-          -- don't delete if the next character is xx
-              :with_del(cond.not_after_regex "xx")
-          -- disable adding a newline when you press <cr>
-              :with_cr(cond.none()),
+            -- don't add a pair if the next character is %
+            :with_pair(cond.not_after_regex "%%")
+            -- don't add a pair if  the previous character is xxx
+            :with_pair(
+              cond.not_before_regex("xxx", 3)
+            )
+            -- don't move right when repeat character
+            :with_move(cond.none())
+            -- don't delete if the next character is xx
+            :with_del(cond.not_after_regex "xx")
+            -- disable adding a newline when you press <cr>
+            :with_cr(cond.none()),
         },
         -- disable for .vim files, but it work for another filetypes
         Rule("a", "a", "-vim")
