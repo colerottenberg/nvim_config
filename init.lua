@@ -5,6 +5,9 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
+-- Startup timestamp, used by the snacks dashboard's "loaded in Nms" line.
+vim.g.start_time = (vim.uv or vim.loop).hrtime()
+
 -- Install and register every plugin (blocks on first-run install).
 require "bootstrap"
 

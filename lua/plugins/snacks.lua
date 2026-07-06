@@ -44,7 +44,23 @@ require("snacks").setup {
     sections = {
       { section = "header", padding = 5 },
       { section = "keys", gap = 1, padding = 3 },
-      { section = "startup" },
+      -- Custom "startup" section: the built-in one requires lazy.nvim's stats,
+      -- which this vim.pack config does not have. Report vim.pack plugin count
+      -- and time since init.lua started instead.
+      function()
+        local start = vim.g.start_time
+        local ms = start and math.floor(((vim.uv or vim.loop).hrtime() - start) / 1e5 + 0.5) / 10 or 0
+        local count = #vim.pack.get()
+        return {
+          align = "center",
+          text = {
+            { "⚡ Neovim loaded ", hl = "footer" },
+            { tostring(count), hl = "special" },
+            { " plugins in ", hl = "footer" },
+            { ms .. "ms", hl = "special" },
+          },
+        }
+      end,
     },
   },
   indent = {
