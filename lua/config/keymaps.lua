@@ -207,6 +207,9 @@ map("n", "K", function()
 end, { desc = "Hover symbol (value while debugging)" })
 
 -- ── LSP pickers / hierarchy (snacks) ──────────────────────────────────────
+
+---@param name string
+---@param cfg? snacks.picker.Config
 local function snacks_picker(name, cfg)
   return function() require("snacks.picker")[name](cfg or { focus = "input" }) end
 end
@@ -221,7 +224,7 @@ map("n", "<Leader>ly", "", { desc = "View Type Hierarchy" })
 map("n", "<Leader>lyi", function() vim.lsp.buf.typehierarchy "subtypes" end, { desc = "View subtypes" })
 map("n", "<Leader>lyo", function() vim.lsp.buf.typehierarchy "supertypes" end, { desc = "View supertypes" })
 map("n", "ga", "", { desc = "View Calls" })
-map("n", "gai", snacks_picker "lsp_incoming_calls", { desc = "Incoming calls" })
+map("n", "gai", snacks_picker("lsp_incoming_calls", { focus = "list" }), { desc = "Incoming calls" })
 map("n", "gao", snacks_picker "lsp_outgoing_calls", { desc = "Outgoing calls" })
 map(
   "n",
