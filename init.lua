@@ -57,7 +57,6 @@ for _, module in ipairs {
   -- git / vcs
   "gitsigns",
   "blame",
-  "jj",
   -- language tooling
   "mason",
   "lang.rust",

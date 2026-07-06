@@ -293,15 +293,5 @@ map("n", "<Leader>uZ", function()
   }
 end, { desc = "Zen mode (centered)" })
 
--- ── Reload / jj ───────────────────────────────────────────────────────────
+---── Reload ───────────────────────────────────────────────────────────
 map("n", "<Leader>pr", function() vim.cmd "restart" end, { desc = "Restart Neovim" })
-
-local lazyjj_term
-local function lazyjj()
-  if not lazyjj_term then
-    lazyjj_term = require("toggleterm.terminal").Terminal:new { cmd = "lazyjj", direction = "float", hidden = true }
-  end
-  lazyjj_term:toggle()
-end
-map("n", "<Leader>jj", lazyjj, { desc = "ToggleTerm lazyjj" })
-map("n", "<Leader>tj", lazyjj, { desc = "ToggleTerm lazyjj" })
