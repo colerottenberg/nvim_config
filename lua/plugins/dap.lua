@@ -25,6 +25,26 @@ local dap = require "dap"
 local dapui = require "dapui"
 local utils = require "dap.utils"
 
+-- Breakpoint / stopped signs (Nerd Font). Without these, nvim-dap falls back
+-- to plain "B"/"●" text in the sign column. Icons are built from codepoints
+-- (Font Awesome range, present in every Nerd Font) via nr2char so the glyphs
+-- don't depend on this file's byte encoding.
+local dap_signs = {
+  DapBreakpoint = { cp = 0xf111, hl = "DiagnosticError" }, -- circle
+  DapBreakpointCondition = { cp = 0xf192, hl = "DiagnosticError" }, -- dot-circle
+  DapBreakpointRejected = { cp = 0xf05e, hl = "DiagnosticError" }, -- ban
+  DapLogPoint = { cp = 0xf0eb, hl = "DiagnosticInfo" }, -- lightbulb
+  DapStopped = { cp = 0xf061, hl = "DiagnosticWarn" }, -- arrow-right
+}
+for name, o in pairs(dap_signs) do
+  vim.fn.sign_define(name, {
+    text = vim.fn.nr2char(o.cp),
+    texthl = o.hl,
+    linehl = name == "DapStopped" and "Visual" or nil,
+    numhl = name == "DapStopped" and o.hl or nil,
+  })
+end
+
 -- Allow comments in .vscode/launch.json.
 do
   local vscode = require "dap.ext.vscode"
