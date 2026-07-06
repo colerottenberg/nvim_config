@@ -71,11 +71,7 @@ local toggles = {
   end,
   codelens = function()
     features.codelens = not features.codelens
-    if features.codelens then
-      vim.lsp.codelens.refresh { bufnr = 0 }
-    else
-      vim.lsp.codelens.clear(nil, 0)
-    end
+    vim.lsp.codelens.enable(features.codelens, { bufnr = 0 })
     notify("CodeLens", features.codelens)
   end,
   buffer_semantic_tokens = function()
@@ -108,7 +104,7 @@ local mappings = {
       cond = "textDocument/codeAction",
     },
     ["<Leader>ll"] = {
-      function() vim.lsp.codelens.refresh { bufnr = 0 } end,
+      function() vim.lsp.codelens.enable(true, { bufnr = 0 }) end,
       desc = "LSP CodeLens refresh",
       cond = "textDocument/codeLens",
     },
@@ -224,9 +220,9 @@ local function on_attach(client, bufnr)
     end
   end
 
-  -- CodeLens: refresh on attach if enabled.
+  -- CodeLens: enable auto-refresh on attach if enabled.
   if features.codelens and client:supports_method("textDocument/codeLens", bufnr) then
-    vim.lsp.codelens.refresh { bufnr = bufnr }
+    vim.lsp.codelens.enable(true, { bufnr = bufnr })
   end
 end
 
@@ -261,7 +257,7 @@ vim.api.nvim_create_autocmd({ "InsertLeave", "BufEnter" }, {
     if not features.codelens then return end
     for _, client in ipairs(vim.lsp.get_clients { bufnr = args.buf }) do
       if client:supports_method "textDocument/codeLens" then
-        vim.lsp.codelens.refresh { bufnr = args.buf }
+        vim.lsp.codelens.enable(true, { bufnr = args.buf })
         return
       end
     end
