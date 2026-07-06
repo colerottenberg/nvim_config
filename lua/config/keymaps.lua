@@ -44,6 +44,12 @@ map("n", "<Leader>ps", function()
 end, { desc = "Plugins status" })
 map("n", "<Leader>pm", "<Cmd>Mason<CR>", { desc = "Mason" })
 
+---@param name string
+---@param cfg? snacks.picker.Config
+local function snacks_picker(name, cfg)
+  return function() require("snacks.picker")[name](cfg or { focus = "input" }) end
+end
+
 -- ── Buffers ───────────────────────────────────────────────────────────────
 -- Bufferline cycling (H/L and ]b/[b), matching the old astrocore overrides.
 map("n", "L", function() require("bufferline.commands").cycle(vim.v.count1) end, { desc = "Next buffer" })
@@ -83,7 +89,8 @@ map("n", "]d", diag_jump(1), { desc = "Next diagnostic" })
 map("n", "[d", diag_jump(-1), { desc = "Previous diagnostic" })
 map("n", "gl", vim.diagnostic.open_float, { desc = "Hover diagnostics" })
 map("n", "<Leader>li", function() vim.cmd.checkhealth "vim.lsp" end, { desc = "LSP information" })
-map("n", "<Leader>x", "", { desc = "Quickfix/Lists" })
+map("n", "<Leader>x", snacks_picker("qflist", { focus = "list" }), { desc = "Quickfix/Lists" })
+map("n", "<C-q>", snacks_picker("qflist", { focus = "list" }), { desc = "Quickfix/Lists" })
 map("n", "<Leader>xq", "<Cmd>copen<CR>", { desc = "Quickfix list" })
 map("n", "<Leader>xl", "<Cmd>lopen<CR>", { desc = "Location list" })
 
@@ -208,11 +215,6 @@ end, { desc = "Hover symbol (value while debugging)" })
 
 -- ── LSP pickers / hierarchy (snacks) ──────────────────────────────────────
 
----@param name string
----@param cfg? snacks.picker.Config
-local function snacks_picker(name, cfg)
-  return function() require("snacks.picker")[name](cfg or { focus = "input" }) end
-end
 local function add_workspace_folder(picker, item)
   picker:close()
   if item and item.path then
