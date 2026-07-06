@@ -8,6 +8,12 @@ local function not_large(bufnr)
   return not (ok and stats and stats.size > 1024 * 256)
 end
 
+local edit_config = function()
+  local init = vim.fn.stdpath "config" .. "/init.lua"
+  vim.cmd.cd(vim.fn.fnamemodify(init, ":h"))
+  vim.cmd.edit(init)
+end
+
 require("snacks").setup {
   bigfile = { enabled = true },
   quickfile = { enabled = true },
@@ -22,13 +28,13 @@ require("snacks").setup {
     enabled = true,
     preset = {
       keys = {
-        { icon = " ", key = "n", desc = "New File", action = "<Leader>n" },
-        { icon = " ", key = "f", desc = "Find File", action = "<Leader>ff" },
-        { icon = " ", key = "o", desc = "Recents", action = "<Leader>fo" },
-        { icon = " ", key = "w", desc = "Find Word", action = "<Leader>fw" },
+        { icon = " ", key = "n", desc = "New File",     action = "<Leader>n" },
+        { icon = " ", key = "f", desc = "Find File",    action = "<Leader>ff" },
+        { icon = " ", key = "o", desc = "Recents",      action = "<Leader>fo" },
+        { icon = " ", key = "w", desc = "Find Word",    action = "<Leader>fw" },
         { icon = " ", key = "s", desc = "Last Session", action = function() require("resession").load "last" end },
-        { icon = " ", key = "c", desc = "Config", action = "<Cmd>edit $MYVIMRC<CR>" },
-        { icon = " ", key = "q", desc = "Quit", action = "<Cmd>qa<CR>" },
+        { icon = " ", key = "c", desc = "Config",       action = edit_config },
+        { icon = " ", key = "q", desc = "Quit",         action = "<Cmd>qa<CR>" },
       },
       header = table.concat({
         "██████   █████                   █████   █████  ███                 ",
@@ -43,7 +49,7 @@ require("snacks").setup {
     },
     sections = {
       { section = "header", padding = 5 },
-      { section = "keys", gap = 1, padding = 3 },
+      { section = "keys",   gap = 1,    padding = 3 },
       -- Custom "startup" section: the built-in one requires lazy.nvim's stats,
       -- which this vim.pack config does not have. Report vim.pack plugin count
       -- and time since init.lua started instead.
