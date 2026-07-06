@@ -1,34 +1,56 @@
-# AstroNvim Template
+# Neovim configuration
 
-**NOTE:** This is for AstroNvim v6+
+A standalone Neovim configuration managed with the built-in plugin manager
+[`vim.pack`](https://neovim.io/doc/user/pack.html). Migrated from an AstroNvim
+(lazy.nvim) setup — the framework was removed and its behavior reimplemented
+directly, so there are no framework abstractions between you and the plugins.
 
-A template for getting started with [AstroNvim](https://github.com/AstroNvim/AstroNvim)
+## Requirements
 
-## 🛠️ Installation
+- **Neovim ≥ 0.12** (uses `vim.pack`, `vim.lsp.config`/`vim.lsp.enable`, and the
+  nvim-treesitter `main` branch).
+- `git`, a C compiler (for treesitter parsers), and a Nerd Font.
+- Optional per-feature tools: `ripgrep`, `lazygit`, `lazydocker`, `uv` (Python
+  debugging), `jj`, cross/embedded GDB toolchains (DAP).
 
-#### Make a backup of your current nvim and shared folder
+## Layout
 
-```shell
-mv ~/.config/nvim ~/.config/nvim.bak
-mv ~/.local/share/nvim ~/.local/share/nvim.bak
-mv ~/.local/state/nvim ~/.local/state/nvim.bak
-mv ~/.cache/nvim ~/.cache/nvim.bak
+```
+init.lua                 leader keys, then require the modules below
+lua/bootstrap.lua        vim.pack.add for every plugin + PackChanged build hooks
+lua/config/
+  options.lua            editor options
+  diagnostics.lua        vim.diagnostic.config
+  autocmds.lua           yank highlight, cursor restore, auto-mkdir, q-to-close…
+  keymaps.lua            global (non-LSP) mappings
+  lsp.lua                native LSP engine (attach maps, format-on-save, features)
+  vscode.lua             vscode-neovim mappings (no-op outside VS Code)
+lua/plugins/*.lua        one module per plugin (or small group); each setup()s it
+lua/plugins/lang/*.lua   rust / cpp / java language tooling
+lua/dap_uv.lua           Python DAP via uv
+after/ftplugin/*.lua     buffer-local rust/cpp keymaps
 ```
 
-#### Create a new user repository from this template
+## Managing plugins
 
-Press the "Use this template" button above to create a new repository to store your user configuration.
+Plugins are declared in `lua/bootstrap.lua`. Common commands:
 
-You can also just clone this repository directly if you do not want to track your user configuration in GitHub.
+- `:lua vim.pack.update()` — update plugins (review in the confirm buffer, `:w`
+  to apply). Also on `<Leader>pu`.
+- `<Leader>ps` — list installed plugins.
+- `:lua vim.pack.del({ "name" })` — remove a plugin (after deleting its spec).
+- `nvim-pack-lock.json` pins revisions and is tracked in git for reproducibility.
 
-#### Clone the repository
+Build steps (`LuaSnip`, `avante.nvim`) run automatically via a `PackChanged`
+autocommand after install/update. On a brand-new machine, run `nvim` once to let
+everything install/build, then restart.
 
-```shell
-git clone https://github.com/<your_user>/<your_repository> ~/.config/nvim
-```
+Language servers, formatters and debuggers are installed with Mason
+(`:Mason`, or `<Leader>pm`).
 
-#### Start Neovim
+## Notes
 
-```shell
-nvim
-```
+- Leader is `<Space>`, local leader is `,`.
+- Statusline is lualine; file tree is neo-tree (`<Leader>e`); fuzzy finding is
+  snacks picker (`<Leader>f…`).
+- Debugging is nvim-dap with VS Code-style function keys; see `docs/dap-guide.md`.
