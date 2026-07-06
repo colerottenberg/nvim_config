@@ -1,28 +1,30 @@
--- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- Mason: LSP/DAP/tool installer.
+--
+-- mason-lspconfig `automatic_enable` calls vim.lsp.enable for every installed
+-- server (server-specific settings come from vim.lsp.config, see config/lsp.lua
+-- and the lang modules). rust_analyzer and jdtls are excluded because
+-- rustaceanvim and nvim-java own them.
 
--- Customize Mason
+require("mason").setup {}
 
----@type LazySpec
-return {
-  -- use mason-tool-installer for automatically installing Mason packages
-  {
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-    -- overrides `require("mason-tool-installer").setup(...)`
-    opts = {
-      -- Make sure to use the names found in `:Mason`
-      ensure_installed = {
-        -- install language servers
-        -- "lua-language-server",
+require("mason-lspconfig").setup {
+  automatic_enable = {
+    exclude = { "rust_analyzer", "jdtls" },
+  },
+}
 
-        -- install formatters
-        -- "stylua",
-
-        -- install debuggers
-        -- "debugpy",
-
-        -- install any other package
-        "tree-sitter-cli",
-      },
-    },
+require("mason-tool-installer").setup {
+  ensure_installed = {
+    -- language servers
+    "lua-language-server",
+    "clangd",
+    "taplo",
+    "marksman",
+    -- formatters / linters
+    "stylua",
+    -- debuggers
+    "codelldb",
+    -- misc tooling
+    "tree-sitter-cli",
   },
 }

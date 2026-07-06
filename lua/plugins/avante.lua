@@ -1,64 +1,48 @@
-return {
-  "yetone/avante.nvim",
-  -- Disable on Windows systems
-  cond = function() return vim.fn.has "win32" == 0 end,
-  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-  -- ⚠️ must add this setting! ! !
-  build = vim.fn.has "win32" ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
-    or "make",
-  event = "VeryLazy",
-  version = false, -- Never set this value to "*"! Never!
-  ---@module 'avante'
-  ---@type avante.Config
-  opts = {
-    -- add any opts here
-    -- this file can contain specific instructions for your project
-    instructions_file = "avante.md",
-    -- for example
-    provider = "claude",
-    mode = "agentic",
-    providers = {
-      claude = {
-        model = "claude-opus-4-8",
+-- Avante (AI assistant). Native binary is built via the PackChanged hook in
+-- bootstrap.lua (`make`); on a brand-new install a restart may be needed once
+-- the build finishes. Disabled on Windows (matches the old config).
+
+if vim.fn.has "win32" == 1 then return end
+
+-- copilot.lua as a provider only -- suggestions/panel off so it doesn't fight
+-- blink.cmp for inline completion.
+pcall(
+  function()
+    require("copilot").setup {
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+    }
+  end
+)
+
+pcall(
+  function()
+    require("img-clip").setup {
+      default = {
+        embed_image_as_base64 = false,
+        prompt_for_file_name = false,
+        drag_and_drop = { insert_mode = true },
+        use_absolute_path = true,
       },
-    },
-  },
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-    "MunifTanjim/nui.nvim",
-    --- The below dependencies are optional,
-    "nvim-mini/mini.pick", -- for file_selector provider mini.pick
-    "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-    "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-    "ibhagwan/fzf-lua", -- for file_selector provider fzf
-    "stevearc/dressing.nvim", -- for input provider dressing
-    "folke/snacks.nvim", -- for input provider snacks
-    "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-    "zbirenbaum/copilot.lua", -- for providers='copilot'
-    {
-      -- support for image pasting
-      "HakonHarnes/img-clip.nvim",
-      event = "VeryLazy",
-      opts = {
-        -- recommended settings
-        default = {
-          embed_image_as_base64 = false,
-          prompt_for_file_name = false,
-          drag_and_drop = {
-            insert_mode = true,
-          },
-          -- required for Windows users
-          use_absolute_path = true,
-        },
-      },
-    },
-    {
-      -- Make sure to set this up properly if you have lazy=true
-      "MeanderingProgrammer/render-markdown.nvim",
-      opts = {
-        file_types = { "markdown", "Avante" },
-      },
-      ft = { "markdown", "Avante" },
-    },
+    }
+  end
+)
+
+local ok, avante = pcall(require, "avante")
+if not ok then
+  vim.schedule(
+    function()
+      vim.notify("avante not available yet (native build may still be running; restart Neovim)", vim.log.levels.WARN)
+    end
+  )
+  return
+end
+
+avante.setup {
+  instructions_file = "avante.md",
+  provider = "claude",
+  mode = "agentic",
+  providers = {
+    claude = { model = "claude-opus-4-8" },
   },
 }

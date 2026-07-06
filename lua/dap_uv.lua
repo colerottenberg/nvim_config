@@ -22,7 +22,7 @@ local function launch(extra)
     request = "launch",
     console = "integratedTerminal", -- gives the debuggee a real TTY via runInTerminal
     cwd = "${workspaceFolder}",
-    justMyCode = false,             -- step into library code too; flip to true to stay in your code
+    justMyCode = false, -- step into library code too; flip to true to stay in your code
   }, extra)
 end
 
@@ -184,9 +184,9 @@ local function adapter(callback, config)
   else
     -- Fallback: an active venv, a local .venv, or python3 on PATH.
     local py = (vim.env.VIRTUAL_ENV and vim.env.VIRTUAL_ENV .. "/bin/python")
-        or (vim.fn.executable(vim.fn.getcwd() .. "/.venv/bin/python") == 1 and vim.fn.getcwd() .. "/.venv/bin/python")
-        or (vim.fn.exepath "python3" ~= "" and vim.fn.exepath "python3")
-        or "python"
+      or (vim.fn.executable(vim.fn.getcwd() .. "/.venv/bin/python") == 1 and vim.fn.getcwd() .. "/.venv/bin/python")
+      or (vim.fn.exepath "python3" ~= "" and vim.fn.exepath "python3")
+      or "python"
     callback { type = "executable", command = py, args = { "-m", "debugpy.adapter" } }
   end
 end
