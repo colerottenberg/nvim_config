@@ -17,13 +17,13 @@ require("mason-tool-installer").setup {
   ensure_installed = {
     -- language servers
     "lua-language-server",
-    "clangd",
-    "taplo",
-    "marksman",
+    -- "clangd",
+    -- "taplo",
+    -- "marksman",
     -- formatters / linters
     "stylua",
     -- debuggers
-    "codelldb",
+    -- "codelldb",
     -- misc tooling
     "tree-sitter-cli",
   },
