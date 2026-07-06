@@ -227,14 +227,14 @@ map("n", "<Leader>lyi", function() vim.lsp.buf.typehierarchy "subtypes" end, { d
 map("n", "<Leader>lyo", function() vim.lsp.buf.typehierarchy "supertypes" end, { desc = "View supertypes" })
 map("n", "ga", "", { desc = "View Calls" })
 map("n", "gai", snacks_picker("lsp_incoming_calls", { focus = "list" }), { desc = "Incoming calls" })
-map("n", "gao", snacks_picker "lsp_outgoing_calls", { desc = "Outgoing calls" })
+map("n", "gao", snacks_picker("lsp_outgoing_calls", { layout = "list" }), { desc = "Outgoing calls" })
 map(
   "n",
   "gw",
   function() require("snacks.picker").projects { confirm = add_workspace_folder } end,
   { desc = "Add workspace folder" }
 )
-map("n", "gR", snacks_picker "lsp_references", { desc = "LSP references" })
+map("n", "gR", snacks_picker("lsp_references", { focus = "list" }), { desc = "LSP references" })
 map("n", "<Leader>ls", snacks_picker "lsp_symbols", { desc = "Search symbols" })
 map("n", "<Leader>lR", snacks_picker "lsp_references", { desc = "LSP references" })
 map(

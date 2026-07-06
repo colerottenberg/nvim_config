@@ -20,16 +20,16 @@ require("lualine").setup {
     lualine_a = { "mode" },
     lualine_b = {
       "branch",
-      { "diff", source = diff_source },
+      { "diff",        source = diff_source },
       { "diagnostics", sources = { "nvim_diagnostic" } },
     },
     lualine_c = {
       { "filename", path = 1 },
-      { "aerial", sep = " ) " },
+      { "aerial",   sep = " ) " },
     },
     lualine_x = {
       { "overseer" },
-      { "encoding" },
+      { "lsp_status" },
       { "fileformat" },
       { "filetype" },
     },
