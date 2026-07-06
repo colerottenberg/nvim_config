@@ -208,7 +208,7 @@ end, { desc = "Hover symbol (value while debugging)" })
 
 -- ── LSP pickers / hierarchy (snacks) ──────────────────────────────────────
 local function snacks_picker(name, cfg)
-  return function() require("snacks.picker")[name](cfg or { focus = "list" }) end
+  return function() require("snacks.picker")[name](cfg or { focus = "input" }) end
 end
 local function add_workspace_folder(picker, item)
   picker:close()
@@ -245,7 +245,7 @@ map(
   function() require("snacks.picker").lsp_workspace_symbols() end,
   { desc = "Search workspace symbols" }
 )
-map("n", "<Leader>ld", snacks_picker "diagnostics", { desc = "Search diagnostics" })
+map("n", "<Leader>ld", snacks_picker("diagnostics", { focus = "list" }), { desc = "Search diagnostics" })
 
 -- ── Find (snacks pickers) ─────────────────────────────────────────────────
 map("n", "<Leader>ft", snacks_picker("colorschemes", { focus = "list", layout = "ivy" }), { desc = "Find themes" })
@@ -254,6 +254,7 @@ map("n", "<Leader>ff", snacks_picker "files", { desc = "Find files" })
 map("n", "<Leader>fF", snacks_picker("files", { hidden = true, ignored = true }), { desc = "Find all files" })
 map("n", "<Leader>fg", snacks_picker "git_files", { desc = "Find git files" })
 map("n", "<Leader>fw", snacks_picker "grep", { desc = "Find words" })
+map("n", "<Leader>fl", snacks_picker "lines", { desc = "Find lines" })
 map("n", "<Leader>fc", snacks_picker "grep_word", { desc = "Find word under cursor" })
 map("n", "<Leader>fo", snacks_picker "recent", { desc = "Find recent files" })
 map("n", "<Leader>fh", snacks_picker "help", { desc = "Find help" })
