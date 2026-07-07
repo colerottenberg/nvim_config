@@ -26,19 +26,19 @@ require("csvview").setup {
   },
   keymaps = {
     jump_next_field_start = {
-      "<Tab>",
+      "w",
       mode = { "n", "v" },
     },
     jump_prev_field_start = {
-      "<S-Tab>",
+      "b",
       mode = { "n", "v" },
     },
     jump_next_row = {
-      "<CR>",
+      "j",
       mode = { "n", "v" },
     },
     jump_prev_row = {
-      "<S-CR>",
+      "k",
       mode = { "n", "v" },
     },
 
