@@ -62,6 +62,7 @@ for _, module in ipairs {
   "lang.rust",
   "lang.cpp",
   "lang.java",
+  "lang.csv",
   -- debugging
   "dap",
   -- tasks / tools

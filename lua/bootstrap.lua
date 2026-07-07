@@ -17,11 +17,11 @@ local specs = {
   { src = "https://github.com/nvim-mini/mini.icons" },
 
   -- ── Colorschemes ────────────────────────────────────────────────────────
-  { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
+  { src = "https://github.com/catppuccin/nvim",                             name = "catppuccin" },
   { src = "https://github.com/folke/tokyonight.nvim" },
   { src = "https://github.com/rebelot/kanagawa.nvim" },
   { src = "https://github.com/thesimonho/kanagawa-paper.nvim" },
-  { src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
+  { src = "https://github.com/rose-pine/neovim",                            name = "rose-pine" },
   { src = "https://github.com/ellisonleao/gruvbox.nvim" },
   { src = "https://github.com/EdenEast/nightfox.nvim" },
   { src = "https://github.com/nyoom-engineering/oxocarbon.nvim" },
@@ -52,12 +52,12 @@ local specs = {
   -- ── Completion / snippets ───────────────────────────────────────────────
   { src = "https://github.com/L3MON4D3/LuaSnip" },
   { src = "https://github.com/rafamadriz/friendly-snippets" },
-  { src = "https://github.com/saghen/blink.cmp", version = range "1" },
+  { src = "https://github.com/saghen/blink.cmp",                            version = range "1" },
   { src = "https://github.com/saghen/blink.compat" },
   { src = "https://github.com/folke/lazydev.nvim" },
 
   -- ── Treesitter (main branch) ────────────────────────────────────────────
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter",             version = "main" },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
   { src = "https://github.com/windwp/nvim-ts-autotag" },
 
@@ -77,15 +77,15 @@ local specs = {
   -- ── Language packs ──────────────────────────────────────────────────────
   { src = "https://github.com/p00f/clangd_extensions.nvim" },
   { src = "https://github.com/Civitasv/cmake-tools.nvim" },
-  { src = "https://github.com/mrcjkb/rustaceanvim", version = range "9" },
+  { src = "https://github.com/mrcjkb/rustaceanvim",                         version = range "^9" },
   { src = "https://github.com/Saecki/crates.nvim" },
   { src = "https://github.com/nvim-java/nvim-java" },
   { src = "https://github.com/JavaHello/spring-boot.nvim" },
+  { src = "https://github.com/hat0uma/csvview.nvim" },
 
   -- ── Git / VCS ───────────────────────────────────────────────────────────
   { src = "https://github.com/lewis6991/gitsigns.nvim" },
   { src = "https://github.com/FabijanZulj/blame.nvim" },
-  { src = "https://github.com/nicolasgb/jj.nvim" },
 
   -- ── Tasks / tools ───────────────────────────────────────────────────────
   { src = "https://github.com/stevearc/overseer.nvim" },
