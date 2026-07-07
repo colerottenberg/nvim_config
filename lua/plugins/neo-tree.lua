@@ -114,6 +114,56 @@ require("neo-tree").setup {
       Y = "copy_selector",
       h = "parent_or_close",
       l = "child_or_open",
+      p = {
+        "toggle_preview",
+        config = {
+          use_float = false,
+        },
+      },
+      ["T"] = "none",
+      ["t"] = function(state)
+        local node = state.tree:get_node()
+        local path = node.path
+        if node.type ~= "directory" then path = vim.fn.fnamemodify(path, ":h") end
+
+        local Terminal = require("toggleterm.terminal").Terminal
+
+        local dir_term = Terminal:new {
+          dir = path,
+          direction = "float",
+          close_on_exit = true,
+        }
+
+        dir_term:toggle()
+      end,
+
+      ["f"] = "none",
+      ["ff"] = function(state)
+        local node = state.tree:get_node()
+        local path = node.path
+
+        if node.type ~= "directory" then path = vim.fn.fnamemodify(path, ":h") end
+
+        require("snacks.picker").files {
+          cwd = path,
+          title = "Files: " .. vim.fn.fnamemodify(path, ":t"),
+          hidden = true,
+          ignored = true,
+        }
+      end,
+      ["fw"] = function(state)
+        local node = state.tree:get_node()
+        local path = node.path
+
+        if node.type ~= "directory" then path = vim.fn.fnamemodify(path, ":h") end
+
+        require("snacks.picker").grep {
+          cwd = path,
+          title = "Grep: " .. vim.fn.fnamemodify(path, ":t"),
+          hidden = true,
+          ignored = true,
+        }
+      end,
     },
     fuzzy_finder_mappings = {
       ["<C-J>"] = "move_cursor_down",
