@@ -164,4 +164,21 @@ return {
       toggles = { dim = false, diagnostics = false, inlay_hints = false },
     },
   },
+  config = function(_, opts)
+    require("snacks").setup(opts)
+
+    -- The dashboard hides the tabline/statusline, but bufferline and lualine
+    -- load on VeryLazy (after the dashboard opened) and turn them back on.
+    -- Re-hide once VeryLazy plugins are done; snacks restores them on close.
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "VeryLazy",
+      once = true,
+      callback = function()
+        if vim.bo.filetype == "snacks_dashboard" then
+          vim.o.showtabline = 0
+          vim.o.laststatus = 0
+        end
+      end,
+    })
+  end,
 }
