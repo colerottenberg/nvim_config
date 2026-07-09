@@ -1,13 +1,14 @@
 # Neovim configuration
 
-A standalone Neovim configuration managed with the built-in plugin manager
-[`vim.pack`](https://neovim.io/doc/user/pack.html). Migrated from an AstroNvim
-(lazy.nvim) setup — the framework was removed and its behavior reimplemented
-directly, so there are no framework abstractions between you and the plugins.
+A standalone Neovim configuration managed with
+[lazy.nvim](https://github.com/folke/lazy.nvim). Originally an AstroNvim setup;
+the framework was removed and its behavior reimplemented directly, so there are
+no framework abstractions between you and the plugins. Each plugin has its own
+spec file with lazy-load triggers and its keymaps isolated in `keys`.
 
 ## Requirements
 
-- **Neovim ≥ 0.12** (uses `vim.pack`, `vim.lsp.config`/`vim.lsp.enable`, and the
+- **Neovim ≥ 0.12** (uses `vim.lsp.config`/`vim.lsp.enable` and the
   nvim-treesitter `main` branch).
 - `git`, a C compiler (for treesitter parsers), and a Nerd Font.
 - Optional per-feature tools: `ripgrep`, `lazygit`, `lazydocker`, `uv` (Python
@@ -16,34 +17,32 @@ directly, so there are no framework abstractions between you and the plugins.
 ## Layout
 
 ```
-init.lua                 leader keys, then require the modules below
-lua/bootstrap.lua        vim.pack.add for every plugin + PackChanged build hooks
+init.lua                 leader keys, config modules, then the lazy bootstrap
 lua/config/
+  lazy.lua               lazy.nvim clone + setup (imports plugins/ and plugins/lang/)
   options.lua            editor options
   diagnostics.lua        vim.diagnostic.config
   autocmds.lua           yank highlight, cursor restore, auto-mkdir, q-to-close…
-  keymaps.lua            global (non-LSP) mappings
+  keymaps.lua            plugin-independent editor mappings
   lsp.lua                native LSP engine (attach maps, format-on-save, features)
   vscode.lua             vscode-neovim mappings (no-op outside VS Code)
-lua/plugins/*.lua        one module per plugin (or small group); each setup()s it
-lua/plugins/lang/*.lua   rust / cpp / java language tooling
+lua/plugins/*.lua        one lazy spec per plugin: trigger (event/cmd/ft/keys),
+                         opts, and that plugin's keymaps in `keys`
+lua/plugins/lang/*.lua   rust / cpp / java / csv language tooling
 lua/dap_uv.lua           Python DAP via uv
-after/ftplugin/*.lua     buffer-local rust/cpp keymaps
+after/ftplugin/*.lua     buffer-local rust/cpp/csv keymaps
 ```
 
 ## Managing plugins
 
-Plugins are declared in `lua/bootstrap.lua`. Common commands:
+Specs live in `lua/plugins/`. The `:Lazy` UI does the rest:
 
-- `:lua vim.pack.update()` — update plugins (review in the confirm buffer, `:w`
-  to apply). Also on `<Leader>pu`.
-- `<Leader>ps` — list installed plugins.
-- `:lua vim.pack.del({ "name" })` — remove a plugin (after deleting its spec).
-- `nvim-pack-lock.json` pins revisions and is tracked in git for reproducibility.
-
-Build steps (`LuaSnip`, `avante.nvim`) run automatically via a `PackChanged`
-autocommand after install/update. On a brand-new machine, run `nvim` once to let
-everything install/build, then restart.
+- `<Leader>ps` — Lazy home (status UI), `<Leader>pi` install, `<Leader>pS` sync,
+  `<Leader>pu` check for updates, `<Leader>pU` update.
+- `lazy-lock.json` pins revisions and is tracked in git for reproducibility;
+  `:Lazy restore` returns to the locked versions.
+- Build steps (`LuaSnip`, `avante.nvim`, `:TSUpdate`) run automatically on
+  install/update. On a brand-new machine, run `nvim` once and let it sync.
 
 Language servers, formatters and debuggers are installed with Mason
 (`:Mason`, or `<Leader>pm`).

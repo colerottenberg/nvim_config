@@ -1,18 +1,19 @@
 -- Split navigation + resizing (seamless with tmux/wezterm/kitty).
 
-local ss = require "smart-splits"
-
-ss.setup {
-  ignored_filetypes = { "nofile", "quickfix", "qf", "prompt" },
-  ignored_buftypes = { "nofile" },
+return {
+  "mrjones2014/smart-splits.nvim",
+  keys = {
+    { "<C-H>", function() require("smart-splits").move_cursor_left() end, desc = "Move to left split" },
+    { "<C-J>", function() require("smart-splits").move_cursor_down() end, desc = "Move to below split" },
+    { "<C-K>", function() require("smart-splits").move_cursor_up() end, desc = "Move to above split" },
+    { "<C-L>", function() require("smart-splits").move_cursor_right() end, desc = "Move to right split" },
+    { "<C-Up>", function() require("smart-splits").resize_up() end, desc = "Resize split up" },
+    { "<C-Down>", function() require("smart-splits").resize_down() end, desc = "Resize split down" },
+    { "<C-Left>", function() require("smart-splits").resize_left() end, desc = "Resize split left" },
+    { "<C-Right>", function() require("smart-splits").resize_right() end, desc = "Resize split right" },
+  },
+  opts = {
+    ignored_filetypes = { "nofile", "quickfix", "qf", "prompt" },
+    ignored_buftypes = { "nofile" },
+  },
 }
-
-local map = vim.keymap.set
-map("n", "<C-H>", ss.move_cursor_left, { desc = "Move to left split" })
-map("n", "<C-J>", ss.move_cursor_down, { desc = "Move to below split" })
-map("n", "<C-K>", ss.move_cursor_up, { desc = "Move to above split" })
-map("n", "<C-L>", ss.move_cursor_right, { desc = "Move to right split" })
-map("n", "<C-Up>", ss.resize_up, { desc = "Resize split up" })
-map("n", "<C-Down>", ss.resize_down, { desc = "Resize split down" })
-map("n", "<C-Left>", ss.resize_left, { desc = "Resize split left" })
-map("n", "<C-Right>", ss.resize_right, { desc = "Resize split right" })

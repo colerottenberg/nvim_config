@@ -1,8 +1,13 @@
 -- Signature help as you type.
 
-require("lsp_signature").setup {
-  bind = true,
-  handler_opts = { border = "rounded" },
-  hint_enable = true,
-  hint_prefix = "🐼 ",
+return {
+  "ray-x/lsp_signature.nvim",
+  event = "VeryLazy",
+  cond = not vim.g.vscode,
+  opts = {
+    bind = true,
+    handler_opts = { border = "rounded" },
+    hint_enable = true,
+    hint_prefix = "🐼 ",
+  },
 }

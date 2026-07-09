@@ -1,7 +1,14 @@
 -- Highlight and navigate TODO/FIXME/etc. comments.
 
-require("todo-comments").setup {}
-
-vim.keymap.set("n", "]T", function() require("todo-comments").jump_next() end, { desc = "Next TODO comment" })
-vim.keymap.set("n", "[T", function() require("todo-comments").jump_prev() end, { desc = "Previous TODO comment" })
-vim.keymap.set("n", "<Leader>fT", "<Cmd>TodoTelescope<CR>", { desc = "Find TODOs" })
+return {
+  "folke/todo-comments.nvim",
+  event = { "BufReadPost", "BufNewFile" },
+  cmd = { "TodoQuickFix", "TodoLocList", "TodoTelescope" },
+  dependencies = { "nvim-lua/plenary.nvim" },
+  keys = {
+    { "]T", function() require("todo-comments").jump_next() end, desc = "Next TODO comment" },
+    { "[T", function() require("todo-comments").jump_prev() end, desc = "Previous TODO comment" },
+    { "<Leader>fT", "<Cmd>TodoTelescope<CR>", desc = "Find TODOs" },
+  },
+  opts = {},
+}

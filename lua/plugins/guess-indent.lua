@@ -1,2 +1,8 @@
 -- Detect and apply buffer indentation automatically on open.
-require("guess-indent").setup {}
+
+return {
+  "NMAC427/guess-indent.nvim",
+  event = { "BufReadPost", "BufNewFile" },
+  cmd = "GuessIndent",
+  opts = {},
+}
