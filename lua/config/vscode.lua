@@ -3,11 +3,25 @@
 -- Ported from the old `lua/plugins/vscode.lua`. When running embedded in
 -- VS Code / VSCodium, `vim.g.vscode` is set and the `vscode` Lua module is
 -- available; these map the config's keymap surface onto VS Code commands.
+--
+-- Command-ID completion comes from the `vscode.Action` alias in
+-- `vscode-actions.lua` (a ---@meta file generated from keybindings.json).
+-- Any string typed inside `action(...)` or `act(...)` gets literal
+-- completion from that alias.
 
 if not vim.g.vscode then return end
 
 local vscode = require "vscode"
 local map = vim.keymap.set
+
+--- Fire a VS Code command immediately.
+---@param name vscode.Action
+---@param opts? table Options forwarded to vscode.action (args, range, callback, ...)
+local function act(name, opts) vscode.action(name, opts) end
+
+--- Return a closure that fires a VS Code command (for use as a keymap RHS).
+---@param name vscode.Action
+---@return function
 local function action(name)
   return function() vscode.action(name) end
 end
@@ -34,11 +48,12 @@ map("n", "[d", action "editor.action.marker.prevInFiles", { desc = "Previous dia
 -- Call hierarchy.
 map("n", "gai", action "editor.showCallHierarchy", { desc = "Call hierarchy (incoming)" })
 map("n", "gao", function()
-  vscode.action "editor.showCallHierarchy"
-  vim.defer_fn(function() vscode.action "editor.showOutgoingCalls" end, 200)
+  act "editor.showCallHierarchy"
+  vim.defer_fn(function() act "editor.showOutgoingCalls" end, 200)
 end, { desc = "Call hierarchy (outgoing)" })
-map("n", "gaI", action "references-view.showCallHierarchy", { desc = "Incoming calls (tree)" })
-map("n", "gaO", action "references-view.showOutgoingCalls", { desc = "Outgoing calls (tree)" })
+map("n", "gai", action "references-view.showCallHierarchy", { desc = "Incoming calls (tree)" })
+map("n", "gao", action "references-view.showOutgoingCalls", { desc = "Outgoing calls (tree)" })
+map("n", "gy", action "editor.action.goToTypeDefinition", { desc = "Go to type definition" })
 
 -- Workspace / LSP.
 map("n", "gw", action "workbench.action.addRootFolder", { desc = "Add workspace folder" })
@@ -65,12 +80,20 @@ map("n", "<Leader>gu", action "git.unstageAll", { desc = "Unstage all changes" }
 map("n", "<Leader>gr", action "git.revertChange", { desc = "Revert hunk" })
 map("n", "<Leader>gp", action "git.pull", { desc = "Git pull" })
 map("n", "<Leader>gP", action "git.push", { desc = "Git push" })
+map("n", "<Leader>gr", action "git.revertSelectedRanges", { desc = "Reset hunk" })
+map("n", "<Leader>gR", action "git.clean", { desc = "Reset file" })
 
 -- Explorer / UI.
-map("n", "<Leader>e", action "workbench.action.toggleSidebarVisibility", { desc = "Toggle sidebar" })
-map("n", "<Leader>o", action "workbench.action.focusSideBar", { desc = "Focus sidebar" })
+map("n", "<Leader>e", action "workbench.action.toggleSidebarVisibility", { desc = "Toggle File Explorer" })
+map("n", "<Leader>o", action "workbench.files.action.showActiveFileInExplorer", { desc = "Focus sidebar" })
+map("n", "<Leader>c", action "workbench.action.closeActiveEditor", { desc = "Close buffer" })
+map("n", "<Leader>q", action "workbench.action.closeWindow", { desc = "Close editor" })
+map("n", "<Leader>w", action "workbench.action.files.save", { desc = "Save file" })
 map("n", "<Leader>uh", action "clangd.inlayHints.toggle", { desc = "Toggle inlay hints" })
 map("n", "<Leader>uZ", action "workbench.action.toggleZenMode", { desc = "Toggle zen mode" })
+
+-- Buffer
+map("n", "<Leader>bc", action "workbench.action.closeOtherEditors", { desc = "Close other buffers except current" })
 
 -- Debug.
 map("n", "<Leader>db", action "editor.debug.action.toggleBreakpoint", { desc = "Toggle breakpoint" })
