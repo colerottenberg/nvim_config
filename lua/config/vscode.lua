@@ -12,6 +12,11 @@
 if not vim.g.vscode then return end
 
 local vscode = require "vscode"
+
+-- set clipboard
+vim.g.clipboard = vim.g.vscode_clipboard
+
+-- remapping
 local map = vim.keymap.set
 
 --- Fire a VS Code command immediately.
@@ -62,13 +67,13 @@ map("n", "<Leader>lr", action "editor.action.rename", { desc = "Rename symbol" }
 map("n", "<Leader>lh", action "editor.action.triggerParameterHints", { desc = "Signature help" })
 
 -- Call hierarchy.
-map("n", "gai", action "editor.showCallHierarchy", { desc = "Call hierarchy (incoming)" })
+map("n", "gai", action "editor.showIncomingCalls", { desc = "Call hierarchy (incoming)" })
 map("n", "gao", function()
   act "editor.showCallHierarchy"
   vim.defer_fn(function() act "editor.showOutgoingCalls" end, 200)
 end, { desc = "Call hierarchy (outgoing)" })
-map("n", "gai", action "references-view.showCallHierarchy", { desc = "Incoming calls (tree)" })
-map("n", "gao", action "references-view.showOutgoingCalls", { desc = "Outgoing calls (tree)" })
+map("n", "gaI", action "references-view.showCallHierarchy", { desc = "Incoming calls (tree)" })
+map("n", "gaO", action "references-view.showOutgoingCalls", { desc = "Outgoing calls (tree)" })
 map("n", "gy", action "editor.action.goToTypeDefinition", { desc = "Go to type definition" })
 
 -- Workspace / LSP.
@@ -117,6 +122,7 @@ map("n", "<Leader>q", action "workbench.action.closeWindow", { desc = "Close edi
 map("n", "<Leader>w", action "workbench.action.files.save", { desc = "Save file" })
 map("n", "<Leader>uh", action "clangd.inlayHints.toggle", { desc = "Toggle inlay hints" })
 map("n", "<Leader>uz", action "workbench.action.toggleZenMode", { desc = "Toggle zen mode" })
+map("n", "<Leader>t", action "workbench.action.terminal.focus", { desc = "Toggle terminal" })
 
 -- Buffer
 map("n", "<Leader>bc", action "workbench.action.closeOtherEditors", { desc = "Close other buffers except current" })
