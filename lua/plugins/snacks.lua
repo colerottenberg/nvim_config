@@ -44,7 +44,7 @@ return {
     { "<Leader>fg", picker "git_files", desc = "Find git files" },
     { "<Leader>fw", picker "grep", desc = "Find words" },
     { "<Leader>fW", picker("grep", { hidden = true, ignored = true }), desc = "Find all words" },
-    { "<Leader>fl", picker("lines", { layout = layouts.right }), desc = "Find lines" },
+    { "<Leader>fl", picker("lines", { layout = layouts.select }), desc = "Find lines" },
     {
       "<Leader>fc",
       picker "grep_word",

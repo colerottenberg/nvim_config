@@ -1,10 +1,19 @@
 -- Buffer tabs (shown in the tabline).
-
 local function cycle(count)
   return function() require("bufferline.commands").cycle(count > 0 and vim.v.count1 or -vim.v.count1) end
 end
 local function move(count)
   return function() require("bufferline.commands").move(count > 0 and vim.v.count1 or -vim.v.count1) end
+end
+
+-- Theme-aware highlights: catppuccin integration when available,
+-- otherwise just fix the fill to match the editor background.
+local function build_highlights()
+  local ok, ctp = pcall(require, "catppuccin.groups.integrations.bufferline")
+  if ok then
+    return ctp.get() -- newer catppuccin renamed this; use get_theme() if get() errors
+  end
+  return { fill = { bg = Snacks.util.color("Normal", "bg") } }
 end
 
 return {
@@ -18,23 +27,27 @@ return {
     { "[b", cycle(-1), desc = "Previous buffer" },
     { ">b", move(1), desc = "Move buffer right" },
     { "<b", move(-1), desc = "Move buffer left" },
-    { "<Leader>bc", "<Cmd>BufferLineCloseOthers<CR>", desc = "Close all buffers except current" },
-    { "<Leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Close buffers to the left" },
-    { "<Leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Close buffers to the right" },
-    { "<Leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle pin buffer" },
-    { "<Leader>bb", "<Cmd>BufferLinePick<CR>", desc = "Pick buffer" },
-    { "<Leader>bd", "<Cmd>BufferLinePickClose<CR>", desc = "Pick buffer to close" },
-    { "<Leader>bse", "<Cmd>BufferLineSortByExtension<CR>", desc = "Sort by extension" },
-    { "<Leader>bsr", "<Cmd>BufferLineSortByRelativeDirectory<CR>", desc = "Sort by relative path" },
-    { "<Leader>bsp", "<Cmd>BufferLineSortByDirectory<CR>", desc = "Sort by full path" },
-    { "<Leader>bsi", "<Cmd>BufferLineSortByTabs<CR>", desc = "Sort by tab" },
+    { "<Leader>bc", vim.cmd.BufferLineCloseOthers, desc = "Close all buffers except current" },
+    { "<Leader>bl", vim.cmd.BufferLineCloseLeft, desc = "Close buffers to the left" },
+    { "<Leader>br", vim.cmd.BufferLineCloseRight, desc = "Close buffers to the right" },
+    { "<Leader>bp", vim.cmd.BufferLineTogglePin, desc = "Toggle pin buffer" },
+    { "<Leader>bb", vim.cmd.BufferLinePick, desc = "Pick buffer" },
+    { "<Leader>bd", vim.cmd.BufferLinePickClose, desc = "Pick buffer to close" },
+    { "<Leader>bse", vim.cmd.BufferLineSortByExtension, desc = "Sort by extension" },
+    { "<Leader>bsr", vim.cmd.BufferLineSortByRelativeDirectory, desc = "Sort by relative path" },
+    { "<Leader>bsp", vim.cmd.BufferLineSortByDirectory, desc = "Sort by full path" },
+    { "<Leader>bsi", vim.cmd.BufferLineSortByTabs, desc = "Sort by tab" },
   },
-  opts = {
-    options = {
-      offsets = {
-        { filetype = "neo-tree", text = "Neo-tree", highlight = "Directory", text_align = "left" },
+  opts = function()
+    return {
+      highlights = build_highlights(),
+      options = {
+        offsets = {
+          { filetype = "neo-tree", text = "Neo-tree", highlight = "Directory", text_align = "left" },
+        },
+        diagnostics = "nvim_lsp",
       },
-      diagnostics = "nvim_lsp",
-    },
-  },
+    }
+  end,
+  config = function(_, opts) require("bufferline").setup(opts) end,
 }
