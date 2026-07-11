@@ -5,7 +5,7 @@ return {
   event = { "BufReadPost", "InsertEnter" },
   cmd = "HighlightColors",
   keys = {
-    { "<Leader>uz", "<Cmd>HighlightColors Toggle<CR>", desc = "Toggle color highlight" },
+    { "<Leader>uZ", "<Cmd>HighlightColors Toggle<CR>", desc = "Toggle color highlight" },
   },
   opts = {
     enable_named_colors = false,

@@ -4,7 +4,7 @@ return {
   "stevearc/aerial.nvim",
   cmd = { "AerialToggle", "AerialOpen", "AerialNavToggle" },
   keys = {
-    { "<Leader>lS", "<Cmd>AerialToggle<CR>", desc = "Symbols outline" },
+    { "<Leader>ln", vim.cmd.AerialNavToggle, desc = "Symbols outline" },
   },
   opts = {
     attach_mode = "global",

@@ -5,7 +5,7 @@ return {
   lazy = false,
   cond = not vim.g.vscode,
   keys = {
-    { "<Leader>uT", "<Cmd>TransparentToggle<CR>", desc = "Toggle transparency" },
+    { "<Leader>ut", "<Cmd>TransparentToggle<CR>", desc = "Toggle transparency" },
   },
   opts = {
     extra_groups = {

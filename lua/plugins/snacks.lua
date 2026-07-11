@@ -29,29 +29,43 @@ local function add_workspace_folder(p, item)
   end
 end
 
+local layouts = require "snacks.picker.config.layouts"
+
 return {
   "folke/snacks.nvim",
   lazy = false,
   priority = 900,
   keys = {
     -- find
-    { "<Leader>ft", picker("colorschemes", { focus = "list", layout = "ivy" }), desc = "Find themes" },
+    { "<Leader>ft", picker("colorschemes", { focus = "list", layout = layouts.right }), desc = "Find themes" },
     { "<Leader>fb", picker "buffers", desc = "Find buffers" },
     { "<Leader>ff", picker "files", desc = "Find files" },
     { "<Leader>fF", picker("files", { hidden = true, ignored = true }), desc = "Find all files" },
     { "<Leader>fg", picker "git_files", desc = "Find git files" },
     { "<Leader>fw", picker "grep", desc = "Find words" },
     { "<Leader>fW", picker("grep", { hidden = true, ignored = true }), desc = "Find all words" },
-    { "<Leader>fl", picker "lines", desc = "Find lines" },
-    { "<Leader>fc", picker "grep_word", desc = "Find word under cursor" },
+    { "<Leader>fl", picker("lines", { layout = layouts.right }), desc = "Find lines" },
+    {
+      "<Leader>fc",
+      picker "grep_word",
+      desc = "Find word under cursor",
+    },
     { "<Leader>fo", picker "recent", desc = "Find recent files" },
     { "<Leader>fh", picker "help", desc = "Find help" },
     { "<Leader>fk", picker "keymaps", desc = "Find keymaps" },
     { "<Leader>fm", picker "man", desc = "Find man pages" },
     { "<Leader>fr", picker "registers", desc = "Find registers" },
     { "<Leader>fC", picker "commands", desc = "Find commands" },
-    { "<Leader>fn", picker "notifications", desc = "Find notifications" },
-    { "<Leader>f<CR>", picker "resume", desc = "Resume last picker" },
+    {
+      "<Leader>fn",
+      picker "notifications",
+      desc = "Find notifications",
+    },
+    {
+      "<Leader>f<CR>",
+      picker "resume",
+      desc = "Resume last picker",
+    },
     -- lists
     { "<Leader>x", picker("qflist", { focus = "list" }), desc = "Quickfix/Lists" },
     { "<C-q>", picker("qflist", { focus = "list" }), desc = "Quickfix/Lists" },
@@ -63,9 +77,34 @@ return {
       function() require("snacks.picker").projects { confirm = add_workspace_folder } end,
       desc = "Add workspace folder",
     },
-    { "gR", picker("lsp_references", { focus = "list" }), desc = "LSP references" },
-    { "<Leader>ls", picker "lsp_symbols", desc = "Search symbols" },
-    { "<Leader>lR", picker "lsp_references", desc = "LSP references" },
+    {
+      "gR",
+      picker("lsp_references", { focus = "list", formatters = { file = { filename_only = true } } }),
+      desc = "LSP references",
+    },
+    {
+      "<Leader>ls",
+      picker "lsp_symbols",
+      desc = "Search symbols",
+    },
+    {
+      "<Leader>lS",
+      picker("lsp_symbols", {
+        focus = "list",
+        tree = true,
+        layout = layouts.right,
+        auto_close = false,
+        jump = {
+          close = false,
+        },
+      }),
+      desc = "Search symbols",
+    },
+    {
+      "<Leader>lR",
+      picker "lsp_references",
+      desc = "LSP references",
+    },
     {
       "<Leader>lW",
       function() require("snacks.picker").projects { confirm = add_workspace_folder } end,
@@ -99,17 +138,8 @@ return {
     { "]r", function() require("snacks").words.jump(vim.v.count1) end, desc = "Next reference" },
     { "[r", function() require("snacks").words.jump(-vim.v.count1) end, desc = "Previous reference" },
     {
-      "<Leader>uZ",
-      function()
-        local dynamic_width = math.floor(vim.o.columns * 0.7)
-        dynamic_width = math.max(80, math.min(dynamic_width, 150))
-        require("snacks.zen").zen {
-          toggles = {},
-          show = { tabline = true, statusline = true },
-          win = { width = dynamic_width },
-          center = true,
-        }
-      end,
+      "<Leader>uz",
+      function() Snacks.zen() end,
       desc = "Zen mode (centered)",
     },
   },
@@ -127,13 +157,18 @@ return {
       enabled = true,
       preset = {
         keys = {
-          { icon = " ", key = "n", desc = "New File", action = "<Leader>n" },
-          { icon = " ", key = "f", desc = "Find File", action = "<Leader>ff" },
-          { icon = " ", key = "o", desc = "Recents", action = "<Leader>fo" },
-          { icon = " ", key = "w", desc = "Find Word", action = "<Leader>fw" },
-          { icon = " ", key = "s", desc = "Last Session", action = function() require("resession").load "last" end },
-          { icon = " ", key = "c", desc = "Config", action = edit_config },
-          { icon = " ", key = "q", desc = "Quit", action = "<Cmd>qa<CR>" },
+          { icon = "", key = "n", desc = "New File", action = "<Leader>n" },
+          { icon = "󰱼", key = "f", desc = "Find File", action = "<Leader>ff" },
+          { icon = "󱎸", key = "w", desc = "Find Word", action = "<Leader>fw" },
+          { icon = "", key = "s", desc = "Last Session", action = function() require("resession").load "last" end },
+          { icon = "", key = "c", desc = "Config", action = edit_config },
+          {
+            icon = "",
+            key = "t",
+            desc = "Themes",
+            action = function() require("snacks.picker").colorschemes() end,
+          },
+          { icon = "", key = "q", desc = "Quit", action = "<Cmd>qa<CR>" },
         },
         header = table.concat({
           "██████╗  ██████╗ ████████╗████████╗███████╗███╗   ██╗██╗   ██╗██╗███╗   ███╗",
@@ -160,12 +195,16 @@ return {
     },
     scope = { enabled = true, filter = not_large },
     words = { enabled = true, filter = not_large },
-    zen = {
-      toggles = { dim = false, diagnostics = false, inlay_hints = false },
-    },
   },
   config = function(_, opts)
     require("snacks").setup(opts)
+
+    local function backdrop_hl() vim.api.nvim_set_hl(0, "SnacksBackdrop", { bg = Snacks.util.color("Normal", "bg") }) end
+    backdrop_hl()
+    vim.api.nvim_create_autocmd("ColorScheme", {
+      group = vim.api.nvim_create_augroup("snacks_backdrop_hl", { clear = true }),
+      callback = backdrop_hl,
+    })
 
     -- The dashboard hides the tabline/statusline, but bufferline and lualine
     -- load on VeryLazy (after the dashboard opened) and turn them back on.

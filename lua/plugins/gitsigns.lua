@@ -1,6 +1,11 @@
 -- Git signs + per-buffer git hunk mappings.
 
-local sign = { text = "▍" }
+local add_sign = { text = "▍" }
+local change_sign = { text = "▍" }
+local delete_sign = { text = "▍" }
+local top_delete_sign = { text = "▍" }
+local change_delete_sign = { text = "▍" }
+local untracked_sign = { text = "▍" }
 
 return {
   "lewis6991/gitsigns.nvim",
@@ -10,8 +15,22 @@ return {
     { "<Leader>gP", function() require("gitsigns").preview_hunk() end, desc = "Preview hunk" },
   },
   opts = {
-    signs = { add = sign, change = sign, delete = sign, topdelete = sign, changedelete = sign, untracked = sign },
-    signs_staged = { add = sign, change = sign, delete = sign, topdelete = sign, changedelete = sign, untracked = sign },
+    signs = {
+      add = add_sign,
+      change = change_sign,
+      delete = delete_sign,
+      topdelete = top_delete_sign,
+      changedelete = change_delete_sign,
+      untracked = untracked_sign,
+    },
+    signs_staged = {
+      add = add_sign,
+      change = change_sign,
+      delete = delete_sign,
+      topdelete = top_delete_sign,
+      changedelete = change_delete_sign,
+      untracked = untracked_sign,
+    },
     on_attach = function(bufnr)
       local gs = require "gitsigns"
       local function map(mode, lhs, rhs, desc) vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc }) end

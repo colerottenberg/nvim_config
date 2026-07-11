@@ -120,7 +120,7 @@ map("n", "<Leader>uS", function()
   vim.wo.conceallevel = vim.wo.conceallevel == 0 and 2 or 0
   notify_toggle("conceal", vim.wo.conceallevel ~= 0)
 end, { desc = "Toggle conceal" })
-map("n", "<Leader>ut", function()
+map("n", "<Leader>uT", function()
   vim.o.showtabline = vim.o.showtabline == 0 and 2 or 0
   notify_toggle("tabline", vim.o.showtabline ~= 0)
 end, { desc = "Toggle tabline" })

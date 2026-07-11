@@ -12,12 +12,28 @@ return {
   "nvim-lualine/lualine.nvim",
   event = "VeryLazy",
   cond = not vim.g.vscode,
+  ---@class LualineSectionTable
+  ---@field lualine_a? (string|table|fun():string)[]
+  ---@field lualine_b? (string|table|fun():string)[]
+  ---@field lualine_c? (string|table|fun():string)[]
+  ---@field lualine_x? (string|table|fun():string)[]
+  ---@field lualine_y? (string|table|fun():string)[]
+  ---@field lualine_z? (string|table|fun():string)[]
+
+  ---@class LualineConfig
+  ---@field options? {theme?: string|table, icons_enabled?: boolean, globalstatus?: boolean, component_separators?: string|{left:string, right:string}, section_separators?: string|{left:string, right:string}, disabled_filetypes?: table, always_divide_middle?: boolean, refresh?: {statusline?: integer, tabline?: integer, winbar?: integer}}
+  ---@field sections? LualineSectionTable
+  ---@field inactive_sections? LualineSectionTable
+  ---@field tabline? LualineSectionTable
+  ---@field winbar? LualineSectionTable
+  ---@field inactive_winbar? LualineSectionTable
+  ---@field extensions? (string|table)[]
+
+  ---@type LualineConfig
   opts = {
     options = {
       theme = "auto",
       globalstatus = true, -- single statusline (laststatus=3)
-      component_separators = { left = "", right = "" },
-      section_separators = { left = "", right = "" },
       disabled_filetypes = { statusline = { "dashboard", "alpha", "snacks_dashboard" } },
     },
     sections = {
@@ -28,13 +44,12 @@ return {
         { "diagnostics", sources = { "nvim_diagnostic" } },
       },
       lualine_c = {
-        { "filename", path = 1 },
-        { "aerial", sep = " ) " },
+        { "filename", colored = true, icon_only = true, icon = { align = "right" } },
+        { "aerial" },
       },
       lualine_x = {
         { "overseer" },
         { "lsp_status" },
-        { "fileformat" },
         { "filetype" },
       },
       lualine_y = { "progress" },
