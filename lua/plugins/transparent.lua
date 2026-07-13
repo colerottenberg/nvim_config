@@ -20,6 +20,7 @@ return {
       "FloatBorder",
       "FloatTitle",
       "RenderMarkdownCode",
+      "LightBulbVirtualText",
     },
   },
   config = function(_, opts)
