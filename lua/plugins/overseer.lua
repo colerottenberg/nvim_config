@@ -4,11 +4,12 @@ return {
   "stevearc/overseer.nvim",
   cmd = { "OverseerOpen", "OverseerClose", "OverseerToggle", "OverseerShell", "OverseerRun", "OverseerTaskAction" },
   keys = {
-    { "<Leader>Mt", "<Cmd>OverseerToggle<CR>", desc = "Toggle Overseer" },
-    { "<Leader>Mc", "<Cmd>OverseerShell<CR>", desc = "Run command" },
-    { "<Leader>Mr", "<Cmd>OverseerRun<CR>", desc = "Run task" },
-    { "<Leader>Ma", "<Cmd>OverseerTaskAction<CR>", desc = "Task action" },
-    { "<Leader>Mi", function() vim.cmd.checkhealth "overseer" end, desc = "Overseer info" },
+    { "<Leader>mt", "<Cmd>OverseerToggle<CR>", desc = "Toggle Overseer" },
+    { "<Leader>mc", "<Cmd>OverseerShell<CR>", desc = "Run command" },
+    { "<Leader>mr", "<Cmd>OverseerRun<CR>", desc = "Run task" },
+    { "<Leader>M", "<Cmd>OverseerRun<CR>", desc = "Run task" },
+    { "<Leader>ma", "<Cmd>OverseerTaskAction<CR>", desc = "Task action" },
+    { "<Leader>mi", function() vim.cmd.checkhealth "overseer" end, desc = "Overseer info" },
   },
   opts = function()
     return {
