@@ -13,7 +13,6 @@ return {
     "nvim-mini/mini.pick",
     "nvim-telescope/telescope.nvim",
     "ibhagwan/fzf-lua",
-    "stevearc/dressing.nvim",
     "folke/snacks.nvim",
     "MeanderingProgrammer/render-markdown.nvim",
     {

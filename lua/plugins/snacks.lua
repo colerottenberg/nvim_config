@@ -151,7 +151,7 @@ return {
     picker = { enabled = true, ui_select = true },
     notifier = {
       enabled = true,
-      icons = { debug = "", error = "", info = "", trace = "", warn = "" },
+      icons = { debug = "", error = "", info = "", trace = "", warn = "" },
     },
     dashboard = {
       enabled = true,
