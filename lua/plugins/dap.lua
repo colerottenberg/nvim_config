@@ -1,5 +1,10 @@
 -- Debugging (nvim-dap + dap-ui + virtual text). Loads on its keymaps.
--- Python is wired through uv (see lua/dap_uv.lua); see docs/dap-guide.md.
+-- Python is wired through uv (see lua/dap_py.lua), but only set up when
+-- editing Python: after/ftplugin/python.lua calls require("dap_py").setup()
+-- so non-Python buffers never load/register it. See docs/dap-guide.md.
+--
+-- All user-facing prompts here go through `vim.ui.input`/`vim.ui.select`
+-- (never `vim.fn.input`), so they're routed through dressing.nvim's UI.
 
 return {
   "mfussenegger/nvim-dap",
@@ -15,7 +20,11 @@ return {
     { "<Leader>db", function() require("dap").toggle_breakpoint() end, desc = "DAP: toggle breakpoint" },
     {
       "<Leader>dB",
-      function() require("dap").set_breakpoint(vim.fn.input "Breakpoint condition: ") end,
+      function()
+        vim.ui.input({ prompt = "Breakpoint condition: " }, function(condition)
+          if condition then require("dap").set_breakpoint(condition) end
+        end)
+      end,
       desc = "DAP: conditional breakpoint",
     },
     { "<Leader>dc", function() require("dap").continue() end, desc = "DAP: continue / start" },
@@ -24,13 +33,16 @@ return {
     { "<Leader>dO", function() require("dap").step_out() end, desc = "DAP: step out" },
     { "<Leader>dr", function() require("dap").repl.toggle() end, desc = "DAP: toggle REPL" },
     { "<Leader>dl", function() require("dap").run_last() end, desc = "DAP: run last" },
+    { "<Leader>ds", function() require("dap").run_to_cursor() end, desc = "DAP: run to line" },
     { "<Leader>dq", function() require("dap").terminate() end, desc = "DAP: terminate" },
     { "<Leader>du", function() require("dapui").toggle() end, desc = "DAP: toggle UI" },
     { "<Leader>uI", "<Cmd>DapVirtualTextToggle<CR>", desc = "Toggle DAP inline values" },
-    { "<Leader>de", function() require("dapui").eval() end, mode = { "n", "v" }, desc = "DAP: eval expression" },
-    { "<Leader>dF", function() require("dap_uv").run "file: current" end, desc = "DAP: debug current Python file" },
-    { "<Leader>dt", function() require("dap_uv").run "pytest: current file" end, desc = "DAP: pytest current file" },
-    { "<Leader>dT", function() require("dap_uv").run "pytest: whole suite" end, desc = "DAP: pytest suite" },
+    {
+      "<Leader>de",
+      function() require("dapui").eval() end,
+      mode = { "n", "v" },
+      desc = "DAP: eval expression",
+    },
     -- Function keys (VS Code style). Terminals send Shift+F5/F11 either as
     -- <F17>/<F23> (legacy xterm) or <S-F5>/<S-F11> (kitty/CSI-u); bind both.
     { "<F5>", function() require("dap").continue() end, desc = "Debugger: continue / start" },
@@ -38,9 +50,17 @@ return {
     { "<F9>", function() require("dap").toggle_breakpoint() end, desc = "Debugger: toggle breakpoint" },
     { "<F10>", function() require("dap").step_over() end, desc = "Debugger: step over" },
     { "<F11>", function() require("dap").step_into() end, desc = "Debugger: step into" },
-    { "<F17>", function() require("dap").terminate() end, desc = "Debugger: terminate (Shift+F5)" },
+    {
+      "<F17>",
+      function() require("dap").terminate() end,
+      desc = "Debugger: terminate (Shift+F5)",
+    },
     { "<S-F5>", function() require("dap").terminate() end, desc = "Debugger: terminate" },
-    { "<F23>", function() require("dap").step_out() end, desc = "Debugger: step out (Shift+F11)" },
+    {
+      "<F23>",
+      function() require("dap").step_out() end,
+      desc = "Debugger: step out (Shift+F11)",
+    },
     { "<S-F11>", function() require("dap").step_out() end, desc = "Debugger: step out" },
   },
   config = function()
@@ -49,8 +69,6 @@ return {
     -- cross-toolchain never breaks local C/C++/Python debugging.
     local EMBEDDED_GDB = vim.env.CROSS_GDB or "aarch64-linux-gnu-gdb"
     local ESP_GDB = vim.env.ESP_GDB or "xtensa-esp32s3-elf-gdb"
-
-    require("dap_uv").setup()
 
     -- Mason-managed adapter installs (codelldb etc.).
     require("mason-nvim-dap").setup { ensure_installed = {}, automatic_installation = false, handlers = {} }
@@ -119,11 +137,23 @@ return {
     }
 
     -- ── Configurations ───────────────────────────────────────────────────
-    local function pick_executable()
+    -- Async text prompt via `vim.ui.input` (routed through dressing.nvim's
+    -- UI, unlike `vim.fn.input`). Returns a coroutine, which is how nvim-dap
+    -- expects config fields to resolve asynchronously -- see
+    -- `:h dap-configuration`. `transform` maps the raw answer (never nil) to
+    -- the field's final value.
+    local function ui_input(opts, transform)
+      transform = transform or function(answer) return answer end
       return coroutine.create(function(dap_run_co)
-        local path = vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/build/", "file")
-        coroutine.resume(dap_run_co, (path ~= "" and path) or dap.ABORT)
+        vim.ui.input(opts, function(answer) coroutine.resume(dap_run_co, transform(answer or "")) end)
       end)
+    end
+
+    local function pick_executable()
+      return ui_input(
+        { prompt = "Path to executable: ", default = vim.fn.getcwd() .. "/build/", completion = "file" },
+        function(path) return (path ~= "" and path) or dap.ABORT end
+      )
     end
 
     local cpp = {
@@ -164,15 +194,21 @@ return {
         name = "gdb: attach embedded Linux (gdbserver)",
         type = "gdb_embedded",
         request = "attach",
-        program = function() return vim.fn.input("Local ELF (with symbols): ", vim.fn.getcwd() .. "/", "file") end,
-        target = function() return vim.fn.input("gdbserver target (host:port): ", "192.168.1.50:3333") end,
+        program = function()
+          return ui_input { prompt = "Local ELF (with symbols): ", default = vim.fn.getcwd() .. "/", completion = "file" }
+        end,
+        target = function()
+          return ui_input { prompt = "gdbserver target (host:port): ", default = "192.168.1.50:3333" }
+        end,
         cwd = "${workspaceFolder}",
       },
       {
         name = "gdb: attach ESP32 (OpenOCD :3333)",
         type = "gdb_esp",
         request = "attach",
-        program = function() return vim.fn.input("App ELF: ", vim.fn.getcwd() .. "/build/", "file") end,
+        program = function()
+          return ui_input { prompt = "App ELF: ", default = vim.fn.getcwd() .. "/build/", completion = "file" }
+        end,
         target = "localhost:3333",
         cwd = "${workspaceFolder}",
       },

@@ -1,7 +1,7 @@
--- dap_uv: Python debugging wired through `uv`-managed project environments.
+-- dap_py: Python debugging wired through `uv`-managed project environments.
 --
--- This is the module that `lua/plugins/debugging.lua` expects via
--- `require("dap_uv")`. It registers a Python adapter that launches
+-- This is the module that `lua/plugins/dap.lua` expects via
+-- `require("dap_py")`. It registers a Python adapter that launches
 -- `debugpy.adapter` inside the project's environment using
 --   uv run --with debugpy -- python -m debugpy.adapter
 -- so the debuggee sees your project's dependencies AND gets debugpy injected
@@ -26,19 +26,27 @@ local function launch(extra)
   }, extra)
 end
 
--- Build an args prompt. `completion` is a `vim.fn.input` completion type
+-- Async text prompt via `vim.ui.input` (routed through dressing.nvim's UI,
+-- unlike `vim.fn.input`). Returns a coroutine, which is how nvim-dap expects
+-- config fields to resolve asynchronously -- see `:h dap-configuration`.
+-- `transform` maps the raw answer (never nil) to the field's final value.
+local function ui_input(opts, transform)
+  transform = transform or function(answer) return answer end
+  return coroutine.create(function(dap_run_co)
+    vim.ui.input(opts, function(answer) coroutine.resume(dap_run_co, transform(answer or "")) end)
+  end)
+end
+
+-- Build an args prompt. `completion` is a `vim.ui.input` completion type
 -- ("file" by default) so you can <Tab>-complete paths while typing args —
 -- handy for finding the script/data files you want to pass to the debuggee.
 local function prompt(label, default, completion)
   return function()
     -- split on spaces so the user can type multiple args at the prompt
-    local answer = vim.fn.input {
-      prompt = label,
-      default = default or "",
-      completion = completion or "file",
-    }
-    if answer == "" then return {} end
-    return vim.split(answer, "%s+", { trimempty = true })
+    return ui_input({ prompt = label, default = default or "", completion = completion or "file" }, function(answer)
+      if answer == "" then return {} end
+      return vim.split(answer, "%s+", { trimempty = true })
+    end)
   end
 end
 
@@ -58,7 +66,7 @@ M.configs = {
   },
   ["module: -m ..."] = launch {
     name = "module: -m ...",
-    module = function() return vim.fn.input "Module (e.g. mypkg.main): " end,
+    module = function() return ui_input { prompt = "Module (e.g. mypkg.main): " } end,
     args = prompt "Args: ",
   },
   -- Packaged CLI (Typer/Click) installed as a console_script entry point.
@@ -66,14 +74,15 @@ M.configs = {
   ["cli: entry point"] = launch {
     name = "cli: entry point",
     program = function()
-      local name = vim.fn.input "Entry point (console_script name): "
-      if vim.fn.has "wsl" == 1 then
-        return vim.fn.getcwd() .. "/.venv/bin/" .. name
-      elseif vim.fn.has "win32" == 1 then
-        return vim.fn.getcwd() .. "/.venv/Scripts/" .. name .. ".exe"
-      else
-        return vim.fn.getcwd() .. "/.venv/bin/" .. name
-      end
+      return ui_input({ prompt = "Entry point (console_script name): " }, function(name)
+        if vim.fn.has "wsl" == 1 then
+          return vim.fn.getcwd() .. "/.venv/bin/" .. name
+        elseif vim.fn.has "win32" == 1 then
+          return vim.fn.getcwd() .. "/.venv/Scripts/" .. name .. ".exe"
+        else
+          return vim.fn.getcwd() .. "/.venv/bin/" .. name
+        end
+      end)
     end,
     args = prompt "CLI args: ",
   },
@@ -104,13 +113,14 @@ M.configs = {
     name = "pytest: current file (filter)",
     module = "pytest",
     args = function()
-      local k = vim.fn.input "pytest -k filter: "
-      local args = { "${file}", "-s", "-vv" }
-      if k ~= "" then
-        table.insert(args, "-k")
-        table.insert(args, k)
-      end
-      return args
+      return ui_input({ prompt = "pytest -k filter: " }, function(k)
+        local args = { "${file}", "-s", "-vv" }
+        if k ~= "" then
+          table.insert(args, "-k")
+          table.insert(args, k)
+        end
+        return args
+      end)
     end,
   },
   ["pytest: whole suite"] = launch {
@@ -136,9 +146,10 @@ M.configs = {
     request = "attach",
     name = "attach: remote (host:port)",
     connect = function()
-      local hostport = vim.fn.input("debugpy listener (host:port): ", "127.0.0.1:5678")
-      local host, port = hostport:match "^(.-):(%d+)$"
-      return { host = host or "127.0.0.1", port = tonumber(port) or 5678 }
+      return ui_input({ prompt = "debugpy listener (host:port): ", default = "127.0.0.1:5678" }, function(hostport)
+        local host, port = hostport:match "^(.-):(%d+)$"
+        return { host = host or "127.0.0.1", port = tonumber(port) or 5678 }
+      end)
     end,
     pathMappings = {
       { localRoot = "${workspaceFolder}", remoteRoot = "." },
@@ -170,7 +181,7 @@ local function adapter(callback, config)
     callback {
       type = "server",
       host = opts.host or "127.0.0.1",
-      port = assert(tonumber(opts.port), "dap_uv: attach configuration requires `connect.port`"),
+      port = assert(tonumber(opts.port), "dap_py: attach configuration requires `connect.port`"),
     }
     return
   end
@@ -191,12 +202,18 @@ local function adapter(callback, config)
   end
 end
 
+-- Guards against re-appending duplicate configurations: setup() is called
+-- from after/ftplugin/python.lua, so it runs once per Python buffer opened.
+local did_setup = false
+
 function M.setup()
+  if did_setup then return end
   local ok, dap = pcall(require, "dap")
   if not ok then
-    vim.notify("dap_uv: nvim-dap is not available", vim.log.levels.WARN)
+    vim.notify("dap_py: nvim-dap is not available", vim.log.levels.WARN)
     return
   end
+  did_setup = true
 
   dap.adapters.python = adapter
 
@@ -210,7 +227,7 @@ end
 function M.run(name)
   local cfg = M.configs[name]
   if not cfg then
-    vim.notify("dap_uv: unknown configuration '" .. tostring(name) .. "'", vim.log.levels.ERROR)
+    vim.notify("dap_py: unknown configuration '" .. tostring(name) .. "'", vim.log.levels.ERROR)
     return
   end
   require("dap").run(vim.deepcopy(cfg))
