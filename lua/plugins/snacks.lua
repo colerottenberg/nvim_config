@@ -143,10 +143,13 @@ return {
       desc = "Zen mode (centered)",
     },
   },
+  ---@type snacks.Config
   opts = {
-    bigfile = { enabled = true },
+    bigfile = { enabled = true, line_length = 5000, notify = true },
     quickfile = { enabled = true },
+    ---@type snacks.input.Config
     input = { enabled = true },
+    ---@type snacks.image.Config
     image = { enabled = true, doc = { enabled = false } },
     picker = { enabled = true, ui_select = true },
     notifier = {
