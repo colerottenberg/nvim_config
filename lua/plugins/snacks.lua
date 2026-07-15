@@ -38,6 +38,7 @@ return {
   keys = {
     -- find
     { "<Leader>ft", picker("colorschemes", { focus = "list", layout = layouts.right }), desc = "Find themes" },
+    { "<Leader>fT", picker("todo_comments", { focus = "list", layout = layouts.right }), desc = "Find TODO comments" },
     { "<Leader>fb", picker "buffers", desc = "Find buffers" },
     { "<Leader>ff", picker "files", desc = "Find files" },
     { "<Leader>fF", picker("files", { hidden = true, ignored = true }), desc = "Find all files" },

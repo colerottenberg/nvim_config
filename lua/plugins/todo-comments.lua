@@ -8,7 +8,6 @@ return {
   keys = {
     { "]T", function() require("todo-comments").jump_next() end, desc = "Next TODO comment" },
     { "[T", function() require("todo-comments").jump_prev() end, desc = "Previous TODO comment" },
-    { "<Leader>fT", "<Cmd>TodoTelescope<CR>", desc = "Find TODOs" },
   },
   opts = {},
 }
