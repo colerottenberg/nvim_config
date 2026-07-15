@@ -17,7 +17,11 @@ return {
     "saghen/blink.compat",
   },
   keys = {
-    { "<Leader>db", function() require("dap").toggle_breakpoint() end, desc = "DAP: toggle breakpoint" },
+    {
+      "<Leader>db",
+      function() require("dap").toggle_breakpoint() end,
+      desc = "DAP: toggle breakpoint",
+    },
     {
       "<Leader>dB",
       function()
@@ -27,16 +31,87 @@ return {
       end,
       desc = "DAP: conditional breakpoint",
     },
-    { "<Leader>dc", function() require("dap").continue() end, desc = "DAP: continue / start" },
-    { "<Leader>di", function() require("dap").step_into() end, desc = "DAP: step into" },
-    { "<Leader>do", function() require("dap").step_over() end, desc = "DAP: step over" },
-    { "<Leader>dO", function() require("dap").step_out() end, desc = "DAP: step out" },
-    { "<Leader>dr", function() require("dap").repl.toggle() end, desc = "DAP: toggle REPL" },
-    { "<Leader>dl", function() require("dap").run_last() end, desc = "DAP: run last" },
-    { "<Leader>ds", function() require("dap").run_to_cursor() end, desc = "DAP: run to line" },
-    { "<Leader>dq", function() require("dap").terminate() end, desc = "DAP: terminate" },
-    { "<Leader>du", function() require("dapui").toggle() end, desc = "DAP: toggle UI" },
-    { "<Leader>uI", "<Cmd>DapVirtualTextToggle<CR>", desc = "Toggle DAP inline values" },
+    {
+      "<Leader>dc",
+      function() require("dap").continue() end,
+      desc = "DAP: continue / start",
+    },
+    {
+      "<Leader>di",
+      function() require("dap").step_into() end,
+      desc = "DAP: step into",
+    },
+    {
+      "<Leader>do",
+      function() require("dap").step_over() end,
+      desc = "DAP: step over",
+    },
+    {
+      "<Leader>dO",
+      function() require("dap").step_out() end,
+      desc = "DAP: step out",
+    },
+    {
+      "<Leader>dr",
+      function()
+        local width = vim.o.columns
+        local height = vim.o.lines
+        local float_width = math.ceil(0.5 * width)
+        local float_height = math.ceil(0.5 * height)
+
+        require("dapui").float_element("repl", {
+          position = "center",
+          enter = true,
+          title = "DAP Repl",
+          width = float_width,
+          height = float_height,
+        })
+      end,
+      desc = "DAP: toggle REPL",
+    },
+    {
+      "<Leader>dC",
+      function()
+        local width = vim.o.columns
+        local height = vim.o.lines
+        local float_width = math.ceil(0.7 * width)
+        local float_height = math.ceil(0.7 * height)
+
+        require("dapui").float_element("console", {
+          position = "center",
+          enter = true,
+          title = "DAP Console",
+          width = float_width,
+          height = float_height,
+        })
+      end,
+      desc = "DAP: toggle Console",
+    },
+    {
+      "<Leader>dl",
+      function() require("dap").run_last() end,
+      desc = "DAP: run last",
+    },
+    {
+      "<Leader>ds",
+      function() require("dap").run_to_cursor() end,
+      desc = "DAP: run to line",
+    },
+    {
+      "<Leader>dq",
+      function() require("dap").terminate() end,
+      desc = "DAP: terminate",
+    },
+    {
+      "<Leader>du",
+      function() require("dapui").toggle() end,
+      desc = "DAP: toggle UI",
+    },
+    {
+      "<Leader>uI",
+      "<Cmd>DapVirtualTextToggle<CR>",
+      desc = "Toggle DAP inline values",
+    },
     {
       "<Leader>de",
       function() require("dapui").eval() end,
