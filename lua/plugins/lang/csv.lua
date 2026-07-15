@@ -32,11 +32,11 @@ return {
     },
     keymaps = {
       jump_next_field_start = {
-        "w",
+        "<Tab>",
         mode = { "n", "v" },
       },
       jump_prev_field_start = {
-        "b",
+        "<S-Tab>",
         mode = { "n", "v" },
       },
       jump_next_row = {

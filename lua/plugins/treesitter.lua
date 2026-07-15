@@ -94,12 +94,47 @@ return {
       end
 
       for lhs, obj in pairs {
+        -- Functions
         ["af"] = "@function.outer",
         ["if"] = "@function.inner",
+
+        -- Classes
         ["ac"] = "@class.outer",
         ["ic"] = "@class.inner",
+
+        -- Arguments/Parameters
         ["aa"] = "@parameter.outer",
         ["ia"] = "@parameter.inner",
+
+        -- Conditionals (if/else)
+        ["ai"] = "@conditional.outer",
+        ["ii"] = "@conditional.inner",
+
+        -- Loops (for/while)
+        ["al"] = "@loop.outer",
+        ["il"] = "@loop.inner",
+
+        -- Blocks/Statements (generic braces/indent blocks)
+        ["ab"] = "@block.outer",
+        ["ib"] = "@block.inner",
+
+        -- Function Calls
+        ["ad"] = "@call.outer",
+        ["id"] = "@call.inner",
+
+        -- Comments
+        ["am"] = "@comment.outer",
+        ["im"] = "@comment.inner",
+
+        -- Assignments (Left and right hand sides)
+        ["as"] = "@assignment.outer",
+        ["is"] = "@assignment.inner",
+        ["lh"] = "@assignment.lhs",
+        ["rh"] = "@assignment.rhs",
+
+        -- Return statements
+        ["ar"] = "@return.outer",
+        ["ir"] = "@return.inner",
       } do
         vim.keymap.set({ "x", "o" }, lhs, sel(obj), { desc = "Select " .. obj })
       end
@@ -127,6 +162,18 @@ return {
         "[c",
         function() move.goto_previous_start("@class.outer", "textobjects") end,
         { desc = "Previous class start" }
+      )
+      vim.keymap.set(
+        { "n", "x", "o" },
+        "]l",
+        function() move.goto_next_start("@loop.outer", "textobjects") end,
+        { desc = "Next loop start" }
+      )
+      vim.keymap.set(
+        { "n", "x", "o" },
+        "[l",
+        function() move.goto_previous_start("@loop.outer", "textobjects") end,
+        { desc = "Previous loop start" }
       )
 
       -- ── Auto-close/rename HTML-like tags ───────────────────────────────
