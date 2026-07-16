@@ -1,4 +1,4 @@
--- Terminal management (plus the lazygit / lazyjj / REPL float terminals).
+-- Terminal management
 
 -- Cached tool terminals so each toggles the same instance.
 local terms = {}
@@ -11,22 +11,27 @@ local function toggle_cmd(key, opts)
 end
 
 local keys = {
-  { "<F7>", "<Cmd>ToggleTerm<CR>", mode = { "n", "t", "i" }, desc = "Toggle terminal" },
-  { "<C-'>", "<Cmd>ToggleTerm<CR>", mode = { "n", "t", "i" }, desc = "Toggle terminal" },
-  { "<Leader>tf", "<Cmd>ToggleTerm direction=float<CR>", desc = "Float terminal" },
+  {
+    "<F7>",
+    "<Cmd>ToggleTerm<CR>",
+    mode = { "n", "t", "i" },
+    desc = "Toggle terminal",
+  },
+  {
+    "<C-'>",
+    "<Cmd>ToggleTerm<CR>",
+    mode = { "n", "t", "i" },
+    desc = "Toggle terminal",
+  },
+  { "<Leader>tf", "<Cmd>ToggleTerm direction=float<CR>",              desc = "Float terminal" },
   { "<Leader>th", "<Cmd>ToggleTerm size=10 direction=horizontal<CR>", desc = "Horizontal terminal" },
-  { "<Leader>tv", "<Cmd>ToggleTerm size=80 direction=vertical<CR>", desc = "Vertical terminal" },
+  { "<Leader>tv", "<Cmd>ToggleTerm size=80 direction=vertical<CR>",   desc = "Vertical terminal" },
 }
 
 if vim.fn.executable "lazygit" == 1 and vim.fn.executable "git" == 1 then
   local lazygit = toggle_cmd("lazygit", { cmd = "lazygit", direction = "float" })
   table.insert(keys, { "<Leader>tl", lazygit, desc = "ToggleTerm lazygit" })
   table.insert(keys, { "<Leader>gg", lazygit, desc = "ToggleTerm lazygit" })
-end
-if vim.fn.executable "lazyjj" == 1 then
-  local lazyjj = toggle_cmd("lazyjj", { cmd = "lazyjj", direction = "float" })
-  table.insert(keys, { "<Leader>jj", lazyjj, desc = "ToggleTerm lazyjj" })
-  table.insert(keys, { "<Leader>tj", lazyjj, desc = "ToggleTerm lazyjj" })
 end
 if vim.fn.executable "node" == 1 then
   table.insert(

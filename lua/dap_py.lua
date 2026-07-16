@@ -26,6 +26,14 @@ local function launch(extra)
   }, extra)
 end
 
+local function launch_dir(extra)
+  return vim.tbl_extend("error", {
+    type = "python",
+    request = "launch",
+    console = "integratedTerminal", -- gives the debuggee a real TTY via runInTerminal
+    justMyCode = false, -- step into library code too; flip to true to stay in your code
+  }, extra)
+end
 -- Async text prompt via `vim.ui.input` (routed through dressing.nvim's UI,
 -- unlike `vim.fn.input`). Returns a coroutine, which is how nvim-dap expects
 -- config fields to resolve asynchronously -- see `:h dap-configuration`.
@@ -50,6 +58,16 @@ local function prompt(label, default, completion)
   end
 end
 
+local function prompt_dir(label, default, completion)
+  return function()
+    -- split on spaces so the user can type multiple args at the prompt
+    return ui_input(
+      { prompt = label, default = default or "", completion = completion or "file" },
+      function(answer) return answer end
+    )
+  end
+end
+
 -- Named configurations. `run(name)` looks them up here; `setup()` also pushes
 -- them onto `dap.configurations.python` so they appear in the
 -- `:lua require('dap').continue()` picker (your `<Leader>dc`).
@@ -59,10 +77,21 @@ M.configs = {
     name = "file: current",
     program = "${file}",
   },
+  ["file: current + dir"] = launch_dir {
+    name = "file: current + dir",
+    program = "${file}",
+    cwd = prompt_dir "Dir: ",
+  },
   ["file: current + args"] = launch {
     name = "file: current + args",
     program = "${file}",
     args = prompt "Args: ",
+  },
+  ["file: current + args + dir"] = launch_dir {
+    name = "file: current + args + dir",
+    program = "${file}",
+    args = prompt "Args: ",
+    cwd = prompt_dir "Dir: ",
   },
   ["module: -m ..."] = launch {
     name = "module: -m ...",
@@ -161,7 +190,9 @@ M.configs = {
 -- Order shown in the `<Leader>dc` picker.
 local ORDER = {
   "file: current",
+  "file: current + dir",
   "file: current + args",
+  "file: current + args + dir",
   "module: -m ...",
   "cli: entry point",
   "cli: list entry points",

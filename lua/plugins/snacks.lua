@@ -10,9 +10,9 @@ local function not_large(bufnr)
 end
 
 local edit_config = function()
-  local init = vim.fn.stdpath "config" .. "/init.lua"
-  vim.cmd.cd(vim.fn.fnamemodify(init, ":h"))
-  vim.cmd.edit(init)
+  local init_dir = vim.fn.stdpath "config"
+  vim.cmd.cd(init_dir)
+  require("snacks.picker").files { cwd = init_dir }
 end
 
 ---@param name string
@@ -43,6 +43,7 @@ return {
     { "<Leader>ff", picker "files", desc = "Find files" },
     { "<Leader>fF", picker("files", { hidden = true, ignored = true }), desc = "Find all files" },
     { "<Leader>fg", picker "git_files", desc = "Find git files" },
+    { "<Leader>fs", picker "git_status", desc = "Find git status" },
     { "<Leader>fw", picker "grep", desc = "Find words" },
     { "<Leader>fW", picker("grep", { hidden = true, ignored = true }), desc = "Find all words" },
     { "<Leader>fl", picker("lines", { layout = layouts.select }), desc = "Find lines" },
@@ -73,6 +74,8 @@ return {
     -- LSP pickers / hierarchy
     { "gai", picker("lsp_incoming_calls", { focus = "list" }), desc = "Incoming calls" },
     { "gao", picker("lsp_outgoing_calls", { focus = "list" }), desc = "Outgoing calls" },
+    { "gaI", function() vim.lsp.buf.typehierarchy "subtypes" end, desc = "Subtypes" },
+    { "gaO", function() vim.lsp.buf.typehierarchy "supertypes" end, desc = "Supertypes" },
     {
       "gw",
       function() require("snacks.picker").projects { confirm = add_workspace_folder } end,
@@ -164,7 +167,7 @@ return {
           { icon = "", key = "n", desc = "New File", action = "<Leader>n" },
           { icon = "󰱼", key = "f", desc = "Find File", action = "<Leader>ff" },
           { icon = "󱎸", key = "w", desc = "Find Word", action = "<Leader>fw" },
-          { icon = "", key = "s", desc = "Last Session", action = function() require("resession").load "last" end },
+          { icon = "", key = "s", desc = "Load Session", action = function() require("resession").load() end },
           { icon = "", key = "c", desc = "Config", action = edit_config },
           {
             icon = "",
