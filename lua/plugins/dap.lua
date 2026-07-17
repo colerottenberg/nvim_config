@@ -23,6 +23,11 @@ return {
       desc = "DAP: toggle breakpoint",
     },
     {
+      "<Leader>dx",
+      function() require("dap").clear_breakpoints() end,
+      desc = "DAP: clear breakpoints",
+    },
+    {
       "<Leader>dB",
       function()
         vim.ui.input({ prompt = "Breakpoint condition: " }, function(condition)
@@ -120,23 +125,23 @@ return {
     },
     -- Function keys (VS Code style). Terminals send Shift+F5/F11 either as
     -- <F17>/<F23> (legacy xterm) or <S-F5>/<S-F11> (kitty/CSI-u); bind both.
-    { "<F5>", function() require("dap").continue() end, desc = "Debugger: continue / start" },
-    { "<F6>", function() require("dap").pause() end, desc = "Debugger: pause" },
-    { "<F9>", function() require("dap").toggle_breakpoint() end, desc = "Debugger: toggle breakpoint" },
-    { "<F10>", function() require("dap").step_over() end, desc = "Debugger: step over" },
-    { "<F11>", function() require("dap").step_into() end, desc = "Debugger: step into" },
+    { "<F5>",  function() require("dap").continue() end,          desc = "Debugger: continue / start" },
+    { "<F6>",  function() require("dap").pause() end,             desc = "Debugger: pause" },
+    { "<F9>",  function() require("dap").toggle_breakpoint() end, desc = "Debugger: toggle breakpoint" },
+    { "<F10>", function() require("dap").step_over() end,         desc = "Debugger: step over" },
+    { "<F11>", function() require("dap").step_into() end,         desc = "Debugger: step into" },
     {
       "<F17>",
       function() require("dap").terminate() end,
       desc = "Debugger: terminate (Shift+F5)",
     },
-    { "<S-F5>", function() require("dap").terminate() end, desc = "Debugger: terminate" },
+    { "<S-F5>",  function() require("dap").terminate() end, desc = "Debugger: terminate" },
     {
       "<F23>",
       function() require("dap").step_out() end,
       desc = "Debugger: step out (Shift+F11)",
     },
-    { "<S-F11>", function() require("dap").step_out() end, desc = "Debugger: step out" },
+    { "<S-F11>", function() require("dap").step_out() end,  desc = "Debugger: step out" },
   },
   config = function()
     -- ── Toolchain paths ──────────────────────────────────────────────────
@@ -166,11 +171,11 @@ return {
     -- codepoints (Font Awesome range, present in every Nerd Font) via nr2char
     -- so the glyphs don't depend on this file's byte encoding.
     local dap_signs = {
-      DapBreakpoint = { cp = 0xf111, hl = "DiagnosticError" }, -- circle
+      DapBreakpoint = { cp = 0xf111, hl = "DiagnosticError" },          -- circle
       DapBreakpointCondition = { cp = 0xf192, hl = "DiagnosticError" }, -- dot-circle
-      DapBreakpointRejected = { cp = 0xf05e, hl = "DiagnosticError" }, -- ban
-      DapLogPoint = { cp = 0xf0eb, hl = "DiagnosticInfo" }, -- lightbulb
-      DapStopped = { cp = 0xf061, hl = "DiagnosticWarn" }, -- arrow-right
+      DapBreakpointRejected = { cp = 0xf05e, hl = "DiagnosticError" },  -- ban
+      DapLogPoint = { cp = 0xf0eb, hl = "DiagnosticInfo" },             -- lightbulb
+      DapStopped = { cp = 0xf061, hl = "DiagnosticWarn" },              -- arrow-right
     }
     for name, o in pairs(dap_signs) do
       vim.fn.sign_define(name, {

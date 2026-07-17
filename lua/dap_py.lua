@@ -22,7 +22,7 @@ local function launch(extra)
     request = "launch",
     console = "integratedTerminal", -- gives the debuggee a real TTY via runInTerminal
     cwd = "${workspaceFolder}",
-    justMyCode = false, -- step into library code too; flip to true to stay in your code
+    justMyCode = false,             -- step into library code too; flip to true to stay in your code
   }, extra)
 end
 
@@ -31,7 +31,7 @@ local function launch_dir(extra)
     type = "python",
     request = "launch",
     console = "integratedTerminal", -- gives the debuggee a real TTY via runInTerminal
-    justMyCode = false, -- step into library code too; flip to true to stay in your code
+    justMyCode = false,             -- step into library code too; flip to true to stay in your code
   }, extra)
 end
 -- Async text prompt via `vim.ui.input` (routed through dressing.nvim's UI,
@@ -115,6 +115,22 @@ M.configs = {
     end,
     args = prompt "CLI args: ",
   },
+  ["cli: entry point + dir"] = launch_dir {
+    name = "cli: entry point + dir",
+    program = function()
+      return ui_input({ prompt = "Entry point (console_script name): " }, function(name)
+        if vim.fn.has "wsl" == 1 then
+          return vim.fn.getcwd() .. "/.venv/bin/" .. name
+        elseif vim.fn.has "win32" == 1 then
+          return vim.fn.getcwd() .. "/.venv/Scripts/" .. name .. ".exe"
+        else
+          return vim.fn.getcwd() .. "/.venv/bin/" .. name
+        end
+      end)
+    end,
+    args = prompt "CLI args: ",
+    cwd = prompt_dir "Dir: ",
+  },
 
   ["cli: list entry points"] = launch {
     name = "cli: list entry points",
@@ -130,6 +146,23 @@ M.configs = {
       end)
     end,
     args = prompt "CLI args:",
+  },
+
+  ["cli: list entry points + dir"] = launch_dir {
+    name = "cli: list entry points + dir",
+
+    program = function()
+      return coroutine.create(function(coro)
+        local dir = vim.fn.has "win32" == 1 and ".venv/Scripts" or ".venv/bin"
+        local entries = vim.fn.readdir(dir)
+
+        vim.ui.select(entries, {
+          prompt = "Select entry point:",
+        }, function(choice) coroutine.resume(coro, vim.fn.getcwd() .. "/" .. dir .. "/" .. choice) end)
+      end)
+    end,
+    args = prompt "CLI args:",
+    cwd = prompt_dir "Dir: ",
   },
 
   -- ── pytest ────────────────────────────────────────────────────────────
@@ -195,7 +228,9 @@ local ORDER = {
   "file: current + args + dir",
   "module: -m ...",
   "cli: entry point",
+  "cli: entry point + dir",
   "cli: list entry points",
+  "cli: list entry points + dir",
   "pytest: current file",
   "pytest: current file (filter)",
   "pytest: whole suite",
@@ -226,9 +261,9 @@ local function adapter(callback, config)
   else
     -- Fallback: an active venv, a local .venv, or python3 on PATH.
     local py = (vim.env.VIRTUAL_ENV and vim.env.VIRTUAL_ENV .. "/bin/python")
-      or (vim.fn.executable(vim.fn.getcwd() .. "/.venv/bin/python") == 1 and vim.fn.getcwd() .. "/.venv/bin/python")
-      or (vim.fn.exepath "python3" ~= "" and vim.fn.exepath "python3")
-      or "python"
+        or (vim.fn.executable(vim.fn.getcwd() .. "/.venv/bin/python") == 1 and vim.fn.getcwd() .. "/.venv/bin/python")
+        or (vim.fn.exepath "python3" ~= "" and vim.fn.exepath "python3")
+        or "python"
     callback { type = "executable", command = py, args = { "-m", "debugpy.adapter" } }
   end
 end
