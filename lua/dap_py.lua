@@ -68,6 +68,53 @@ local function prompt_dir(label, default, completion)
   end
 end
 
+-- Sentinel marking "prompt for args, seeded from the dir the user just
+-- entered" in a `launch_dir_first` config's `args` field (see below).
+local ARGS_FROM_DIR = {}
+
+-- Like `launch_dir`, but guarantees the dir prompt happens *before* `args` is
+-- resolved, and seeds the args prompt's file-completion from that dir.
+--
+-- Why not just put both as fields on the config table? nvim-dap resolves
+-- function/coroutine fields via `for k, v in pairs(config)`, whose order is
+-- unspecified -- `args` could get resolved before `cwd` on any given run.
+-- Instead we exploit dap's support for a config with a `__call` metamethod
+-- (`:h dap-configuration`): dap invokes that once, synchronously, before it
+-- resolves any individual field, and it runs inside the same coroutine dap
+-- uses for `vim.ui.input`-based prompts, so we can yield/resume here too.
+local function launch_dir_first(extra)
+  -- `name` must live on the outer table (not just inside `__call`'s result):
+  -- dap's config picker (`<Leader>dc`) reads `configuration.name` to build
+  -- its label *before* ever invoking `__call`, so a bare `{}` here shows up
+  -- as a nil label and crashes the picker's formatter.
+  return setmetatable({ name = extra.name }, {
+    __call = function()
+      local co = assert(coroutine.running(), "launch_dir_first: must run inside dap's coroutine")
+      local dir
+      vim.schedule(function()
+        vim.ui.input({ prompt = "Dir: ", default = vim.fn.getcwd(), completion = "dir" }, function(answer)
+          dir = answer or ""
+          coroutine.resume(co)
+        end)
+      end)
+      coroutine.yield()
+
+      local cfg = vim.tbl_extend("error", {
+        type = "python",
+        request = "launch",
+        console = "integratedTerminal", -- gives the debuggee a real TTY via runInTerminal
+        justMyCode = false,             -- step into library code too; flip to true to stay in your code
+      }, extra)
+      cfg.cwd = dir
+      if cfg.args == ARGS_FROM_DIR then
+        -- seed with `dir .. "/"` so <Tab>-completion browses that dir, not cwd
+        cfg.args = prompt("Args: ", dir ~= "" and (dir .. "/") or "")
+      end
+      return cfg
+    end,
+  })
+end
+
 -- Named configurations. `run(name)` looks them up here; `setup()` also pushes
 -- them onto `dap.configurations.python` so they appear in the
 -- `:lua require('dap').continue()` picker (your `<Leader>dc`).
@@ -87,11 +134,10 @@ M.configs = {
     program = "${file}",
     args = prompt "Args: ",
   },
-  ["file: current + args + dir"] = launch_dir {
+  ["file: current + args + dir"] = launch_dir_first {
     name = "file: current + args + dir",
     program = "${file}",
-    args = prompt "Args: ",
-    cwd = prompt_dir "Dir: ",
+    args = ARGS_FROM_DIR,
   },
   ["module: -m ..."] = launch {
     name = "module: -m ...",
@@ -115,7 +161,7 @@ M.configs = {
     end,
     args = prompt "CLI args: ",
   },
-  ["cli: entry point + dir"] = launch_dir {
+  ["cli: entry point + dir"] = launch_dir_first {
     name = "cli: entry point + dir",
     program = function()
       return ui_input({ prompt = "Entry point (console_script name): " }, function(name)
@@ -128,8 +174,7 @@ M.configs = {
         end
       end)
     end,
-    args = prompt "CLI args: ",
-    cwd = prompt_dir "Dir: ",
+    args = ARGS_FROM_DIR,
   },
 
   ["cli: list entry points"] = launch {
@@ -148,7 +193,7 @@ M.configs = {
     args = prompt "CLI args:",
   },
 
-  ["cli: list entry points + dir"] = launch_dir {
+  ["cli: list entry points + dir"] = launch_dir_first {
     name = "cli: list entry points + dir",
 
     program = function()
@@ -161,8 +206,7 @@ M.configs = {
         }, function(choice) coroutine.resume(coro, vim.fn.getcwd() .. "/" .. dir .. "/" .. choice) end)
       end)
     end,
-    args = prompt "CLI args:",
-    cwd = prompt_dir "Dir: ",
+    args = ARGS_FROM_DIR,
   },
 
   -- ── pytest ────────────────────────────────────────────────────────────
