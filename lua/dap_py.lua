@@ -68,12 +68,12 @@ local function prompt_dir(label, default, completion)
   end
 end
 
--- Sentinel marking "prompt for args, seeded from the dir the user just
--- entered" in a `launch_dir_first` config's `args` field (see below).
+-- Sentinel marking "prompt for args, with file-completion rooted at the dir
+-- the user just entered" in a `launch_dir_first` config's `args` field.
 local ARGS_FROM_DIR = {}
 
 -- Like `launch_dir`, but guarantees the dir prompt happens *before* `args` is
--- resolved, and seeds the args prompt's file-completion from that dir.
+-- resolved, and roots the args prompt's file-completion at that dir.
 --
 -- Why not just put both as fields on the config table? nvim-dap resolves
 -- function/coroutine fields via `for k, v in pairs(config)`, whose order is
@@ -92,7 +92,7 @@ local function launch_dir_first(extra)
       local co = assert(coroutine.running(), "launch_dir_first: must run inside dap's coroutine")
       local dir
       vim.schedule(function()
-        vim.ui.input({ prompt = "Dir: ", default = vim.fn.getcwd(), completion = "dir" }, function(answer)
+        vim.ui.input({ prompt = "Dir: ", completion = "dir" }, function(answer)
           dir = answer or ""
           coroutine.resume(co)
         end)
@@ -107,8 +107,21 @@ local function launch_dir_first(extra)
       }, extra)
       cfg.cwd = dir
       if cfg.args == ARGS_FROM_DIR then
-        -- seed with `dir .. "/"` so <Tab>-completion browses that dir, not cwd
-        cfg.args = prompt("Args: ", dir ~= "" and (dir .. "/") or "")
+        cfg.args = function()
+          -- Root <Tab>-completion at `dir` by `:lcd`-ing there just for the
+          -- duration of this prompt, so the args field stays empty by
+          -- default instead of being pre-filled with `dir`.
+          local prev_cwd
+          if dir ~= "" then
+            prev_cwd = vim.fn.getcwd()
+            vim.cmd.lcd(dir)
+          end
+          return ui_input({ prompt = "Args: ", completion = "file" }, function(answer)
+            if prev_cwd then vim.cmd.lcd(prev_cwd) end
+            if answer == "" then return {} end
+            return vim.split(answer, "%s+", { trimempty = true })
+          end)
+        end
       end
       return cfg
     end,
