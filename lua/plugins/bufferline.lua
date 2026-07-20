@@ -20,6 +20,7 @@ return {
   "akinsho/bufferline.nvim",
   event = "VeryLazy",
   cond = not vim.g.vscode,
+  dependencies = { "folke/snacks.nvim" },
   keys = {
     { "L", cycle(1), desc = "Next buffer" },
     { "H", cycle(-1), desc = "Previous buffer" },

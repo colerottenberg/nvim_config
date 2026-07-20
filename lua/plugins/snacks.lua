@@ -29,16 +29,14 @@ local function add_workspace_folder(p, item)
   end
 end
 
-local layouts = require "snacks.picker.config.layouts"
-
 return {
   "folke/snacks.nvim",
   lazy = false,
   priority = 900,
   keys = {
     -- find
-    { "<Leader>ft", picker("colorschemes", { focus = "list", layout = layouts.right }), desc = "Find themes" },
-    { "<Leader>fT", picker("todo_comments", { focus = "list", layout = layouts.right }), desc = "Find TODO comments" },
+    { "<Leader>ft", picker("colorschemes", { focus = "list", layout = "right" }), desc = "Find themes" },
+    { "<Leader>fT", picker("todo_comments", { focus = "list", layout = "right" }), desc = "Find TODO comments" },
     { "<Leader>fb", picker "buffers", desc = "Find buffers" },
     { "<Leader>ff", picker "files", desc = "Find files" },
     { "<Leader>fF", picker("files", { hidden = true, ignored = true }), desc = "Find all files" },
@@ -46,7 +44,7 @@ return {
     { "<Leader>fs", picker "git_status", desc = "Find git status" },
     { "<Leader>fw", picker "grep", desc = "Find words" },
     { "<Leader>fW", picker("grep", { hidden = true, ignored = true }), desc = "Find all words" },
-    { "<Leader>fl", picker("lines", { layout = layouts.select }), desc = "Find lines" },
+    { "<Leader>fl", picker("lines", { layout = "select" }), desc = "Find lines" },
     {
       "<Leader>fc",
       picker "grep_word",
@@ -96,7 +94,7 @@ return {
       picker("lsp_symbols", {
         focus = "list",
         tree = true,
-        layout = layouts.right,
+        layout = "right",
         auto_close = false,
         jump = {
           close = false,
