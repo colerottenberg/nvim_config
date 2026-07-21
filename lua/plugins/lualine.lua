@@ -40,7 +40,7 @@ return {
       lualine_a = { "mode" },
       lualine_b = {
         "branch",
-        { "diff", source = diff_source },
+        { "diff",        source = diff_source },
         { "diagnostics", sources = { "nvim_diagnostic" } },
       },
       lualine_c = {
@@ -48,6 +48,7 @@ return {
         { "aerial" },
       },
       lualine_x = {
+        { "searchcount" },
         { "overseer" },
         { "lsp_status" },
         { "filetype" },
@@ -67,4 +68,5 @@ return {
       "mason",
     },
   },
+  dependencies = { 'nvim-tree/nvim-web-devicons' }
 }

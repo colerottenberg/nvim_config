@@ -147,7 +147,6 @@ local mappings = {
       cond = "textDocument/formatting",
     },
     ["<Leader>lr"] = { "<Cmd>lsp restart<CR>", desc = "Restart Language Server" },
-    ["<Leader>ln"] = { vim.lsp.buf.rename, desc = "Rename current symbol", cond = "textDocument/rename" },
     ["<Leader>lh"] = { vim.lsp.buf.signature_help, desc = "Signature help", cond = "textDocument/signatureHelp" },
     ["gK"] = { vim.lsp.buf.signature_help, desc = "Signature help", cond = "textDocument/signatureHelp" },
     ["<Leader>lw"] = {

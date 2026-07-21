@@ -13,6 +13,7 @@ return {
     "L3MON4D3/LuaSnip",
     "rafamadriz/friendly-snippets",
     "saghen/blink.compat",
+    "onsails/lspkind.nvim",
   },
   opts = {
     enabled = function()
@@ -69,7 +70,16 @@ return {
       menu = {
         auto_show = function(ctx) return ctx.mode ~= "cmdline" end,
         winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
-        draw = { treesitter = { "lsp" } },
+        draw = {
+          treesitter = { "lsp" },
+          components = {
+            kind_icon = {
+              text = function(ctx)
+                return require("lspkind").symbol_map[ctx.kind] or ''
+              end
+            }
+          }
+        },
       },
       accept = { auto_brackets = { enabled = true } },
       documentation = {

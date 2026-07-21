@@ -4,7 +4,8 @@ return {
   "stevearc/aerial.nvim",
   cmd = { "AerialToggle", "AerialOpen", "AerialNavToggle" },
   keys = {
-    { "<Leader>ln", vim.cmd.AerialNavToggle, desc = "Symbols outline" },
+    { "<Leader>lS", function() require("aerial").snacks_picker({ focus = "list", layout = "right" }) end, desc = "Symbols outline" },
+    { "<Leader>ln", function() require("aerial").nav_toggle() end,                                        desc = "Symbols navigation" },
   },
   opts = {
     attach_mode = "global",
@@ -12,6 +13,7 @@ return {
     layout = { min_width = 28 },
     show_guides = true,
     filter_kind = false,
+    nerd_font = "auto",
     guides = { mid_item = "├ ", last_item = "└ ", nested_top = "│ ", whitespace = "  " },
     keymaps = {
       ["[y"] = "actions.prev",
@@ -28,4 +30,7 @@ return {
       vim.keymap.set("n", "]y", "<Cmd>AerialNext<CR>", { buffer = bufnr, desc = "Next symbol" })
     end,
   },
+  dependencies = {
+    "onsails/lspkind.nvim",
+  }
 }
