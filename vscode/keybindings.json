@@ -94,5 +94,37 @@
   {
     "key": "ctrl+shift+p",
     "command": "workbench.action.showCommands"
+  },
+
+  // ============================================================
+  // Completion widget navigation — mirrors blink.cmp's Tab-cycle /
+  // Enter-accept / Ctrl-j / Ctrl-k muscle memory. blink.cmp itself
+  // never loads under vscode-neovim (config.lazy is skipped when
+  // vim.g.vscode is set), so this is native VS Code IntelliSense
+  // navigation instead. Enter already accepts by default. Ctrl+N/P
+  // are already bound by vscode-neovim itself; these add Tab/Shift-Tab
+  // and Ctrl+J/K as aliases. Safe because useCtrlKeysForInsertMode is
+  // false in settings.json, so these ctrl+ combos already reach
+  // VSCodium directly instead of being forwarded to Neovim.
+  // ============================================================
+  {
+    "key": "tab",
+    "command": "selectNextSuggestion",
+    "when": "suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "key": "shift+tab",
+    "command": "selectPrevSuggestion",
+    "when": "suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "selectNextSuggestion",
+    "when": "suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "selectPrevSuggestion",
+    "when": "suggestWidgetVisible && textInputFocus"
   }
 ]
