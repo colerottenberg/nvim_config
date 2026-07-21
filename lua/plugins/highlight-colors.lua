@@ -4,9 +4,6 @@ return {
   "brenoprata10/nvim-highlight-colors",
   event = { "BufReadPost", "InsertEnter" },
   cmd = "HighlightColors",
-  keys = {
-    { "<Leader>uZ", "<Cmd>HighlightColors Toggle<CR>", desc = "Toggle color highlight" },
-  },
   opts = {
     enable_named_colors = false,
     virtual_symbol = "󱓻",
