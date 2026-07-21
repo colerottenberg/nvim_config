@@ -132,11 +132,7 @@ return {
       function() Snacks.zen() end,
       desc = "Zen mode (centered)",
     },
-    {
-      "<Leader>uZ",
-      function() Snacks.zen.zoom() end,
-      desc = "Zen zoom mode (centered)",
-    }
+
   },
   ---@type snacks.Config
   opts = {
@@ -203,7 +199,7 @@ return {
         inlay_hints = false, -- optional
       },
       center = true,
-      show = { statusline = false, tabline = false },
+      show = { statusline = true, tabline = true },
       -- Override the "zen" style's backdrop: it defaults to a semi-transparent
       -- blend (see snacks/zen.lua) that lets the original buffer show through.
       -- blend=99 (not 100: snacks special-cases 100 as "no backdrop at all")
