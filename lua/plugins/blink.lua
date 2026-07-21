@@ -1,4 +1,4 @@
--- Completion (blink.cmp) with LuaSnip, lazydev, avante, and DAP sources.
+-- Completion (blink.cmp) with LuaSnip, lazydev, and DAP sources.
 
 local function has_words_before()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -13,7 +13,6 @@ return {
     "L3MON4D3/LuaSnip",
     "rafamadriz/friendly-snippets",
     "saghen/blink.compat",
-    "Kaiser-Yang/blink-cmp-avante",
   },
   opts = {
     enabled = function()
@@ -28,11 +27,9 @@ return {
         ["dap-repl"] = { "dap", "buffer" },
         dapui_watches = { "dap", "buffer" },
         dapui_hover = { "dap", "buffer" },
-        AvanteInput = { "avante", "lsp", "path", "buffer" },
       },
       providers = {
         lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
-        avante = { module = "blink-cmp-avante", name = "Avante" },
         dap = { name = "dap", module = "blink.compat.source" },
       },
     },

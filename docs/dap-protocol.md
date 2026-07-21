@@ -51,7 +51,8 @@ architecture:
 ```
 
 - **Development tool / client** — owns the UI: breakpoint gutter, variables pane,
-  stepping commands. In this config that's **nvim-dap** + **nvim-dap-ui**.
+  stepping commands. In this config that's **nvim-dap** + **nvim-dap-ui**
+  (`lua/plugins/dap.lua`).
 - **Debug adapter** — a process that translates DAP requests into whatever the
   real debugger understands, and translates the debugger's stops/output back into
   DAP events. Examples: `codelldb` (wraps LLDB), `debugpy` (Python), and GDB's
@@ -226,7 +227,7 @@ client: `runInTerminal` asks the client to run a command in a terminal, and
 - **`runInTerminal`** — the adapter can't (and shouldn't) own a TTY. To give the
   debuggee a real interactive terminal — `stdin`, job control, a pty — it asks the
   *client* to spawn the process in a terminal the user can see. This is why
-  `console = "integratedTerminal"` in a debugpy/python config (as `dap_uv` uses)
+  `console = "integratedTerminal"` in a debugpy/python config (as `dap_py` uses)
   works: debugpy issues `runInTerminal` and nvim-dap opens a terminal buffer.
   Gated by the client capability `supportsRunInTerminalRequest`.
 - **`startDebugging`** — lets an adapter spin up *child* sessions: multi-process
@@ -270,7 +271,7 @@ for Neovim. Conceptually it implements exactly the left-hand box of §2:
    stdio — e.g. GDB's `--interpreter=dap`, debugpy) or `type = "server"` (connect
    to a TCP port the adapter listens on — e.g. `codelldb`, which nvim-dap launches
    then connects to via `${port}`). An adapter may also be a Lua *function*
-   `(callback, config)` that decides at runtime (the `dap_uv` Python adapter does
+   `(callback, config)` that decides at runtime (the `dap_py` Python adapter does
    this to branch launch vs. attach).
 2. **Configurations** (`dap.configurations.<filetype>`) are the `launch`/`attach`
    request bodies, one list per filetype. `dap.continue()` (your `<leader>dc`)
@@ -281,7 +282,7 @@ for Neovim. Conceptually it implements exactly the left-hand box of §2:
    the initialize→configure→launch handshake, registers your breakpoints via
    `setBreakpoints`, and listens for events. You can hook those events with
    `dap.listeners.after.event_initialized[...]` / `before.event_terminated[...]`
-   — which is exactly how `debugging.lua` makes nvim-dap-ui open and close
+   — which is exactly how `lua/plugins/dap.lua` makes nvim-dap-ui open and close
    automatically.
 4. **The UI** is layered on top: `nvim-dap-ui` (with `nvim-nio`) renders the
    scopes/stacks/breakpoints/watches by issuing the standard `threads` →

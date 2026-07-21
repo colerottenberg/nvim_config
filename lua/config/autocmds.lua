@@ -7,6 +7,14 @@
 local function augroup(name) return vim.api.nvim_create_augroup("user_" .. name, { clear = true }) end
 local autocmd = vim.api.nvim_create_autocmd
 
+-- Buck2 build files: BUCK/TARGETS have no extension, and *.bxl is Buck's
+-- extension-language dialect of Starlark, so neither is auto-detected as
+-- `bzl` (the filetype after/lsp/buck2.lua attaches to).
+vim.filetype.add {
+  extension = { bxl = "bzl" },
+  filename = { BUCK = "bzl", TARGETS = "bzl" },
+}
+
 -- Highlight yanked text.
 autocmd("TextYankPost", {
   group = augroup "highlight_yank",

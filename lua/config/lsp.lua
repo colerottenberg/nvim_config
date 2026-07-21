@@ -277,5 +277,10 @@ end
 
 -- ── Servers enabled without mason ─────────────────────────────────────────
 -- (formerly astrolsp `servers = { "ruff" }`). mason-installed servers are
--- enabled by mason-lspconfig automatic_enable (see plugins/mason.lua).
+-- enabled by mason-lspconfig automatic_enable (see plugins/lsp.lua).
 vim.lsp.enable "ruff"
+
+-- buck2 has no Mason package -- the `buck2` binary itself is the server (see
+-- after/lsp/buck2.lua). Excluded from automatic_enable's Bazel/Starlark
+-- alternatives in plugins/lsp.lua so nothing else claims .bzl buffers.
+vim.lsp.enable "buck2"

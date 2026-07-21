@@ -1,15 +1,15 @@
--- Pretty in-buffer markdown rendering (also used for Avante output).
+-- Pretty in-buffer markdown rendering.
 
 return {
   "MeanderingProgrammer/render-markdown.nvim",
-  ft = { "markdown", "Avante" },
+  ft = "markdown",
   cmd = "RenderMarkdown",
   dependencies = { "nvim-treesitter/nvim-treesitter" },
   keys = {
     { "<Leader>um", "<Cmd>RenderMarkdown toggle<CR>", desc = "Toggle markdown rendering" },
   },
   opts = {
-    file_types = { "markdown", "Avante" },
+    file_types = { "markdown" },
     completions = { lsp = { enabled = true } },
   },
 }

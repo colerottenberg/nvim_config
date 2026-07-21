@@ -150,8 +150,12 @@ return {
     local EMBEDDED_GDB = vim.env.CROSS_GDB or "aarch64-linux-gnu-gdb"
     local ESP_GDB = vim.env.ESP_GDB or "xtensa-esp32s3-elf-gdb"
 
-    -- Mason-managed adapter installs (codelldb etc.).
-    require("mason-nvim-dap").setup { ensure_installed = {}, automatic_installation = false, handlers = {} }
+    -- Mason-managed adapter installs.
+    require("mason-nvim-dap").setup {
+      ensure_installed = { "codelldb", "debugpy" },
+      automatic_installation = false,
+      handlers = {},
+    }
 
     -- Inline variable values (virtual text) during a debug session.
     require("nvim-dap-virtual-text").setup {

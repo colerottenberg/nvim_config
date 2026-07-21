@@ -12,12 +12,12 @@ and session lifecycle), see [`dap-protocol.md`](./dap-protocol.md).
 
 | Piece | Where | Role |
 |---|---|---|
-| `nvim-dap` | `lua/plugins/debugging.lua` | The DAP **client**. Talks the protocol to each adapter. |
+| `nvim-dap` | `lua/plugins/dap.lua` | The DAP **client**. Talks the protocol to each adapter. |
 | `nvim-dap-ui` + `nvim-nio` | same file | Scopes / stacks / breakpoints / watches UI. Auto-opens on session start. |
-| `mason-nvim-dap` | pulled in by the `cpp` & `rust` community packs | Installs adapters and registers sensible defaults. |
-| `rustaceanvim` | `rust` community pack | **Owns Rust debugging** — auto-configures the `codelldb` adapter. Don't hand-roll Rust DAP. |
-| `codelldb`, `debugpy` | installed in Mason | The actual adapters used below. |
-| `dap_uv` | `lua/dap_uv.lua` | Python debugging through `uv`-managed envs (this repo's module). |
+| `mason-nvim-dap` | dependency of `lua/plugins/dap.lua`, `ensure_installed = { "codelldb", "debugpy" }` | Installs adapters and registers sensible defaults. |
+| `rustaceanvim` | `lua/plugins/lang/rust.lua` | **Owns Rust debugging** — auto-configures the `codelldb` adapter via `vim.g.rustaceanvim.dap`. Don't hand-roll Rust DAP. |
+| `codelldb`, `debugpy` | installed in Mason (auto via `ensure_installed` above) | The actual adapters used below. |
+| `dap_py` | `lua/dap_py.lua` | Python debugging through `uv`-managed envs (this repo's module; loaded only for Python buffers via `after/ftplugin/python.lua`). |
 
 Leader is `<Space>`, local-leader is `,`.
 
@@ -34,18 +34,19 @@ Leader is `<Space>`, local-leader is `,`.
 | `du` | toggle dap-ui |
 | `<Leader>uI` | toggle inline variable values (virtual text) |
 | `de` | eval expression under cursor / visual selection |
-| `dF` | debug current Python file (via `dap_uv`) |
-| `dt` / `dT` | pytest current file / whole suite (via `dap_uv`) |
+
+Python has its own buffer-local keymaps (set in `after/ftplugin/python.lua`,
+only active in Python buffers), under local-leader (`,`): `,f` debug current
+file, `,t` / `,T` pytest current file / whole suite, `,c` / `,C` run a CLI
+entry point / list entry points (all via `dap_py`).
 
 Function keys (VS Code-style): `<F5>` continue/start · `<S-F5>` terminate ·
 `<F6>` pause · `<F9>` toggle breakpoint · `<F10>` step over · `<F11>` step into ·
 `<S-F11>` step out.
 
 > **Where the function keys are defined — and a terminal gotcha.** They live in
-> `lua/plugins/astrocore.lua` under `mappings.n`, **not** in the nvim-dap `keys`
-> field. AstroNvim core (`astronvim.plugins.dap`) already binds these through
-> astrocore, so a lazy `keys` mapping for the same key gets shadowed — astrocore
-> mappings are the source of truth. Also, most terminals send **Shift+F5 as
+> the nvim-dap `keys` field in `lua/plugins/dap.lua` (lines ~126-144), right
+> alongside the rest of the DAP keymaps. Most terminals send **Shift+F5 as
 > `<F17>`** and **Shift+F11 as `<F23>`** (legacy xterm F13–F24 encoding); newer
 > terminals (kitty/CSI-u protocol) send `<S-F5>`/`<S-F11>`. We bind *both*
 > encodings so the shifted keys work regardless of terminal. To see what your
@@ -58,8 +59,10 @@ current buffer's filetype and lets you pick one.
 
 ## 2. The mental model: adapter + configurations
 
-Adding any debugger is always the same two steps inside the `config` function of
-`lua/plugins/debugging.lua`:
+Adding any debugger is always the same two steps, either inline in the
+`config` function of `lua/plugins/dap.lua` or inside a dedicated module (see
+[`adding-a-debug-adapter.md`](adding-a-debug-adapter.md) for when to use
+which):
 
 ```lua
 -- (a) An ADAPTER: how nvim-dap launches/reaches the debug adapter process.
@@ -82,10 +85,11 @@ Two request kinds:
 
 ---
 
-## 3. Python (`debugpy` via `uv`) — `lua/dap_uv.lua`
+## 3. Python (`debugpy` via `uv`) — `lua/dap_py.lua`
 
-`debugging.lua` calls `require("dap_uv").setup()`, which registers a `python`
-adapter that launches `debugpy.adapter` **inside your project env** via:
+`after/ftplugin/python.lua` calls `require("dap_py").setup()` (only when a
+Python buffer is opened), which registers a `python` adapter that launches
+`debugpy.adapter` **inside your project env** via:
 
 ```sh
 uv run --with debugpy -- python -m debugpy.adapter
@@ -99,12 +103,16 @@ because `uv run` syncs the project env first.
 
 | Config | What it does |
 |---|---|
-| *file: current* | launch the current file (`<leader>dF`) |
+| *file: current* | launch the current file (`,f`) |
+| *file: current + dir* | …prompting for a working directory |
 | *file: current + args* | …prompting for CLI args |
+| *file: current + args + dir* | …prompting for both, dir first |
 | *module: -m ...* | prompt for a module (`python -m pkg.main`) + args |
-| *pytest: current file* | `pytest ${file}` (`<leader>dt`) |
+| *cli: entry point* (+ *dir*) | run a `.venv/bin/<name>` console-script entry point (`,c`) |
+| *cli: list entry points* (+ *dir*) | pick an entry point from `.venv/bin` (`,C`) |
+| *pytest: current file* | `pytest ${file}` (`,t`) |
 | *pytest: current file (filter)* | …prompting for a `-k` filter |
-| *pytest: whole suite* | `pytest` over the project (`<leader>dT`) |
+| *pytest: whole suite* | `pytest` over the project (`,T`) |
 | *attach: localhost:5678* | connect to a local debugpy listener |
 | *attach: remote (host:port)* | connect to a container/remote listener (with path mapping) |
 
@@ -119,7 +127,7 @@ uv run --with debugpy python -m debugpy --listen 5678 --wait-for-client app.py
 
 then pick *attach: localhost:5678*. For a container, expose the port and pick
 *attach: remote (host:port)*; it maps `${workspaceFolder}` ↔ the remote source
-root so breakpoints bind (adjust `remoteRoot` in `lua/dap_uv.lua` if your code
+root so breakpoints bind (adjust `pathMappings` in `lua/dap_py.lua` if your code
 lives somewhere other than the remote CWD).
 
 > If `uv` isn't on `PATH`, the adapter falls back to an active venv → `.venv/bin/python` → `python3` (debugpy must then be installed in that interpreter).
@@ -176,7 +184,7 @@ gdbserver :3333 --attach <pid>
 ### On your machine
 
 Point the config at the right cross GDB. Set it via env var (or edit
-`EMBEDDED_GDB` at the top of `debugging.lua`):
+`EMBEDDED_GDB` at the top of the `config` function in `lua/plugins/dap.lua`):
 
 ```sh
 export CROSS_GDB=aarch64-poky-linux-gdb     # e.g. from your Yocto/Buildroot SDK
@@ -248,28 +256,27 @@ you use a CMSIS-DAP probe, it changes only the OpenOCD interface config
 
 ## 8. Adding more debuggers / fallbacks
 
-**Pattern recap:** install the adapter (Mason or `ensure_installed` in
-`lua/plugins/mason.lua`), define `dap.adapters.<x>`, add entries to
-`dap.configurations.<ft>`.
+**Pattern recap:** install the adapter (Mason, via `ensure_installed` in
+`lua/plugins/dap.lua`'s `mason-nvim-dap.setup{}` call — currently
+`{ "codelldb", "debugpy" }` — or manually), define `dap.adapters.<x>`, add
+entries to `dap.configurations.<ft>`. See
+[`adding-a-debug-adapter.md`](adding-a-debug-adapter.md) for a full worked
+example (Go/delve) and guidance on inline-vs-dedicated-module placement.
 
-- **Go:** `:MasonInstall delve`, then the `dap.adapters.delve` server adapter +
-  `dap.configurations.go`. The `astrocommunity.pack.go` pack wires this for you.
-- **JS/TS:** `js-debug-adapter` (Mason) + `pwa-node` configs.
+- **Go:** not configured yet. `:MasonInstall delve`, then a `dap.adapters.delve`
+  server adapter + `dap.configurations.go` — see
+  [`adding-a-debug-adapter.md`](adding-a-debug-adapter.md).
+- **JS/TS:** not configured yet. `js-debug-adapter` (Mason) + `pwa-node` configs.
 - **`cppdbg` (cpptools) fallback for remote GDB:** if your SDK GDB predates 14.1
   (no DAP), install `cpptools` (`:MasonInstall cpptools`) and use its `cppdbg`
   adapter with `miDebuggerPath = "<cross-gdb>"` and
   `miDebuggerServerAddress = "host:3333"`. This drives an *old* GDB over MI, so
   no GDB ≥ 14.1 requirement — the classic VS Code remote-embedded approach.
 
-To auto-install an adapter on a fresh machine, add it to `ensure_installed` in
-`lua/plugins/mason.lua` (e.g. uncomment `"debugpy"`, add `"codelldb"`).
-
 ---
 
 ## 9. Troubleshooting
 
-- **`<leader>dt` errored before** — the config referenced `require("dap_uv")`,
-  which didn't exist. It's now `lua/dap_uv.lua`. Fixed.
 - **`:DapShowLog`** opens the adapter log — first stop for "session won't start".
 - **GDB DAP does nothing / "interpreter dap not found"** — your GDB is < 14.1.
 - **codelldb can't find the binary** — build with `-g`; give an absolute path.

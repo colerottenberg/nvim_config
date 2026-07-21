@@ -1,5 +1,5 @@
 -- Python-only: registers the uv-based debugpy adapter and configs
--- (lua/dap_uv.lua) so `<Leader>dc` etc. show Python configs. Loads for
+-- (lua/dap_py.lua) so `<Leader>dc` etc. show Python configs. Loads for
 -- filetype=python ONLY -- nothing here affects other filetypes.
 local dap_py = require "dap_py"
 dap_py.setup()
