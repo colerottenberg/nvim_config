@@ -23,9 +23,9 @@ local keys = {
     mode = { "n", "t", "i" },
     desc = "Toggle terminal",
   },
-  { "<Leader>tf", "<Cmd>ToggleTerm direction=float<CR>",              desc = "Float terminal" },
+  { "<Leader>tf", "<Cmd>ToggleTerm direction=float<CR>", desc = "Float terminal" },
   { "<Leader>th", "<Cmd>ToggleTerm size=10 direction=horizontal<CR>", desc = "Horizontal terminal" },
-  { "<Leader>tv", "<Cmd>ToggleTerm size=80 direction=vertical<CR>",   desc = "Vertical terminal" },
+  { "<Leader>tv", "<Cmd>ToggleTerm size=80 direction=vertical<CR>", desc = "Vertical terminal" },
 }
 
 if vim.fn.executable "lazygit" == 1 and vim.fn.executable "git" == 1 then

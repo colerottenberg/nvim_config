@@ -35,27 +35,27 @@ return {
   priority = 900,
   keys = {
     -- find
-    { "<Leader>ft", picker("colorschemes", { focus = "list", layout = "right" }),  desc = "Find themes" },
+    { "<Leader>ft", picker("colorschemes", { focus = "list", layout = "right" }), desc = "Find themes" },
     { "<Leader>fT", picker("todo_comments", { focus = "list", layout = "right" }), desc = "Find TODO comments" },
-    { "<Leader>fb", picker "buffers",                                              desc = "Find buffers" },
-    { "<Leader>ff", picker "files",                                                desc = "Find files" },
-    { "<Leader>fF", picker("files", { hidden = true, ignored = true }),            desc = "Find all files" },
-    { "<Leader>fg", picker "git_files",                                            desc = "Find git files" },
-    { "<Leader>fs", picker "git_status",                                           desc = "Find git status" },
-    { "<Leader>fw", picker "grep",                                                 desc = "Find words" },
-    { "<Leader>fW", picker("grep", { hidden = true, ignored = true }),             desc = "Find all words" },
-    { "<Leader>fl", picker("lines", { layout = "select" }),                        desc = "Find lines" },
+    { "<Leader>fb", picker "buffers", desc = "Find buffers" },
+    { "<Leader>ff", picker "files", desc = "Find files" },
+    { "<Leader>fF", picker("files", { hidden = true, ignored = true }), desc = "Find all files" },
+    { "<Leader>fg", picker "git_files", desc = "Find git files" },
+    { "<Leader>fs", picker "git_status", desc = "Find git status" },
+    { "<Leader>fw", picker "grep", desc = "Find words" },
+    { "<Leader>fW", picker("grep", { hidden = true, ignored = true }), desc = "Find all words" },
+    { "<Leader>fl", picker("lines", { layout = "select" }), desc = "Find lines" },
     {
       "<Leader>fc",
       picker "grep_word",
       desc = "Find word under cursor",
     },
-    { "<Leader>fo", picker "recent",    desc = "Find recent files" },
-    { "<Leader>fh", picker "help",      desc = "Find help" },
-    { "<Leader>fk", picker "keymaps",   desc = "Find keymaps" },
-    { "<Leader>fm", picker "man",       desc = "Find man pages" },
+    { "<Leader>fo", picker "recent", desc = "Find recent files" },
+    { "<Leader>fh", picker "help", desc = "Find help" },
+    { "<Leader>fk", picker "keymaps", desc = "Find keymaps" },
+    { "<Leader>fm", picker "man", desc = "Find man pages" },
     { "<Leader>fr", picker "registers", desc = "Find registers" },
-    { "<Leader>fC", picker "commands",  desc = "Find commands" },
+    { "<Leader>fC", picker "commands", desc = "Find commands" },
     {
       "<Leader>fn",
       picker "notifications",
@@ -67,13 +67,13 @@ return {
       desc = "Resume last picker",
     },
     -- lists
-    { "<Leader>x", picker("qflist", { focus = "list" }),                  desc = "Quickfix/Lists" },
-    { "<C-q>",     picker("qflist", { focus = "list" }),                  desc = "Quickfix/Lists" },
+    { "<Leader>x", picker("qflist", { focus = "list" }), desc = "Quickfix/Lists" },
+    { "<C-q>", picker("qflist", { focus = "list" }), desc = "Quickfix/Lists" },
     -- LSP pickers / hierarchy
-    { "gai",       picker("lsp_incoming_calls", { focus = "list" }),      desc = "Incoming calls" },
-    { "gao",       picker("lsp_outgoing_calls", { focus = "list" }),      desc = "Outgoing calls" },
-    { "gaI",       function() vim.lsp.buf.typehierarchy "subtypes" end,   desc = "Subtypes" },
-    { "gaO",       function() vim.lsp.buf.typehierarchy "supertypes" end, desc = "Supertypes" },
+    { "gai", picker("lsp_incoming_calls", { focus = "list" }), desc = "Incoming calls" },
+    { "gao", picker("lsp_outgoing_calls", { focus = "list" }), desc = "Outgoing calls" },
+    { "gaI", function() vim.lsp.buf.typehierarchy "subtypes" end, desc = "Subtypes" },
+    { "gaO", function() vim.lsp.buf.typehierarchy "supertypes" end, desc = "Supertypes" },
     {
       "gw",
       function() require("snacks.picker").projects { confirm = add_workspace_folder } end,
@@ -106,33 +106,33 @@ return {
       function() require("snacks.picker").lsp_workspace_symbols() end,
       desc = "Search workspace symbols",
     },
-    { "<Leader>ld", picker("diagnostics", { focus = "list" }),            desc = "Search diagnostics" },
+    { "<Leader>ld", picker("diagnostics", { focus = "list" }), desc = "Search diagnostics" },
     -- git
-    { "<Leader>gc", picker "git_log",                                     desc = "Git commits (repository)" },
+    { "<Leader>gc", picker "git_log", desc = "Git commits (repository)" },
     {
       "<Leader>gC",
       picker("git_log", { focus = "list", current_file = true, follow = true }),
       desc = "Git commits (file)",
     },
-    { "<Leader>gb", picker "git_branches",                                       desc = "Git branches" },
-    { "<Leader>gM", picker "git_log_line",                                       desc = "Git log line" },
+    { "<Leader>gb", picker "git_branches", desc = "Git branches" },
+    { "<Leader>gM", picker "git_log_line", desc = "Git log line" },
     -- buffers
-    { "<Leader>c",  function() require("snacks").bufdelete() end,                desc = "Close buffer" },
-    { "<Leader>C",  function() require("snacks").bufdelete { force = true } end, desc = "Force close buffer" },
-    { "<Leader>bC", function() require("snacks").bufdelete.all() end,            desc = "Close all buffers" },
+    { "<Leader>c", function() require("snacks").bufdelete() end, desc = "Close buffer" },
+    { "<Leader>C", function() require("snacks").bufdelete { force = true } end, desc = "Force close buffer" },
+    { "<Leader>bC", function() require("snacks").bufdelete.all() end, desc = "Close all buffers" },
     -- misc
-    { "<Leader>R",  function() require("snacks").rename.rename_file() end,       desc = "Rename file" },
-    { "<Leader>h",  function() require("snacks").dashboard.open() end,           desc = "Dashboard" },
-    { "<Leader>uD", function() require("snacks").notifier.hide() end,            desc = "Dismiss notifications" },
-    { "<Leader>u|", function() require("snacks").toggle.indent():toggle() end,   desc = "Toggle indent guides" },
-    { "]r",         function() require("snacks").words.jump(vim.v.count1) end,   desc = "Next reference" },
-    { "[r",         function() require("snacks").words.jump(-vim.v.count1) end,  desc = "Previous reference" },
+    { "<Leader>R", function() require("snacks").rename.rename_file() end, desc = "Rename file" },
+    { "<Leader>h", function() require("snacks").dashboard.open() end, desc = "Dashboard" },
+    { "<Leader>uD", function() require("snacks").notifier.hide() end, desc = "Dismiss notifications" },
+    { "<Leader>u|", function() require("snacks").toggle.indent():toggle() end, desc = "Toggle indent guides" },
+    { "]r", function() require("snacks").words.jump(vim.v.count1) end, desc = "Next reference" },
+    { "[r", function() require("snacks").words.jump(-vim.v.count1) end, desc = "Previous reference" },
+    { "<Leader>gg", function() require("snacks").lazygit.open() end, desc = "Lazygit" },
     {
       "<Leader>uz",
       function() Snacks.zen() end,
       desc = "Zen mode (centered)",
     },
-
   },
   ---@type snacks.Config
   opts = {
@@ -154,6 +154,12 @@ return {
           { icon = "", key = "n", desc = "New File", action = "<Leader>n" },
           { icon = "󰱼", key = "f", desc = "Find File", action = "<Leader>ff" },
           { icon = "󱎸", key = "w", desc = "Find Word", action = "<Leader>fw" },
+          {
+            icon = "",
+            key = "g",
+            desc = "Lazygit",
+            action = function() require("snacks.lazygit").open() end,
+          },
           { icon = "", key = "s", desc = "Load Session", action = function() require("resession").load() end },
           { icon = "", key = "c", desc = "Config", action = edit_config },
           {
@@ -175,7 +181,7 @@ return {
       },
       sections = {
         { section = "header", padding = 5 },
-        { section = "keys",   gap = 1,    padding = 3 },
+        { section = "keys", gap = 1, padding = 3 },
         -- The built-in startup section works again under lazy.nvim.
         { section = "startup" },
       },
@@ -205,12 +211,6 @@ return {
       -- blend=99 (not 100: snacks special-cases 100 as "no backdrop at all")
       -- resolves to ~99% Normal bg / 1% black, i.e. matches the colorscheme.
       win = { style = "zen", width = 120, backdrop = { transparent = false, blend = 99 } },
-      zoom = {
-        toggles = {},
-        center = false,
-        show = { statusline = true, tabline = true },
-        win = { backdrop = false, width = 0 },
-      },
     },
   },
   config = function(_, opts)

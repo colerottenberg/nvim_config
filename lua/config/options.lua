@@ -54,15 +54,22 @@ opt.exrc = true -- (override) read project-local .nvim.lua / .exrc
 
 g.markdown_recommended_style = 0
 
--- ── polish (formerly lua/polish.lua): Windows PowerShell shell ─────────────
--- selene: allow(undefined_variable)
-if jit.os == "Windows" then
-  local o = vim.o
-  o.shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell"
-  o.shellcmdflag =
-    "-NoLogo -NoProfile -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
-  o.shellredir = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
-  o.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
-  o.shellquote = ""
-  o.shellxquote = ""
+-- if jit.os == "Windows" then
+--   local o = vim.o
+--   o.shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell"
+--   o.shellcmdflag =
+--     "-NoLogo -NoProfile -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
+--   o.shellredir = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+--   o.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+--   o.shellquote = ""
+--   o.shellxquote = ""
+-- end
+-- Optimal Windows PowerShell configuration for Neovim
+if vim.fn.has "win32" == 1 then
+  vim.o.shell = "pwsh.exe" -- Or "powershell.exe" if pwsh is not installed
+  vim.o.shellcmdflag = "-NoLogo -Command"
+  vim.o.shellredir = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+  vim.o.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+  vim.o.shellquote = ""
+  vim.o.shellxquote = ""
 end
