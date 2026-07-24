@@ -1,5 +1,5 @@
 return {
-  "onsails/lspkind.nvim",
+  'onsails/lspkind.nvim',
   lazy = true,
-  opts = { mode = "symbol_text" }
+  opts = { mode = 'symbol_text' },
 }

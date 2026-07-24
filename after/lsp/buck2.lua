@@ -4,7 +4,7 @@
 -- than through mason-lspconfig's automatic_enable. See
 -- docs/adding-a-language-server.md.
 return {
-  cmd = { "buck2", "lsp" },
-  filetypes = { "bzl" },
-  root_markers = { ".buckconfig", ".git" },
+  cmd = { 'buck2', 'lsp' },
+  filetypes = { 'bzl' },
+  root_markers = { '.buckconfig', '.git' },
 }

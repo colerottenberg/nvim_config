@@ -5,12 +5,12 @@
 -- `updatetime`) and renders a lightbulb when the result is non-empty.
 
 return {
-  "kosayoda/nvim-lightbulb",
-  event = "LspAttach",
+  'kosayoda/nvim-lightbulb',
+  event = 'LspAttach',
   cond = not vim.g.vscode,
   opts = {
     autocmd = { enabled = true },
     sign = { enabled = false },
-    virtual_text = { enabled = true, text = "", hl = "LightBulbVirtualText" },
+    virtual_text = { enabled = true, text = '', hl = 'LightBulbVirtualText' },
   },
 }

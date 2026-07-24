@@ -5,12 +5,14 @@
 
 local function diff_source()
   local gs = vim.b.gitsigns_status_dict
-  if gs then return { added = gs.added, modified = gs.changed, removed = gs.removed } end
+  if gs then
+    return { added = gs.added, modified = gs.changed, removed = gs.removed }
+  end
 end
 
 return {
-  "nvim-lualine/lualine.nvim",
-  event = "VeryLazy",
+  'nvim-lualine/lualine.nvim',
+  event = 'VeryLazy',
   cond = not vim.g.vscode,
   ---@class LualineSectionTable
   ---@field lualine_a? (string|table|fun():string)[]
@@ -32,41 +34,41 @@ return {
   ---@type LualineConfig
   opts = {
     options = {
-      theme = "auto",
+      theme = 'auto',
       globalstatus = true, -- single statusline (laststatus=3)
-      disabled_filetypes = { statusline = { "dashboard", "alpha", "snacks_dashboard" } },
+      disabled_filetypes = { statusline = { 'dashboard', 'alpha', 'snacks_dashboard' } },
     },
     sections = {
-      lualine_a = { "mode" },
+      lualine_a = { 'mode' },
       lualine_b = {
-        "branch",
-        { "diff",        source = diff_source },
-        { "diagnostics", sources = { "nvim_diagnostic" } },
+        'branch',
+        { 'diff', source = diff_source },
+        { 'diagnostics', sources = { 'nvim_diagnostic' } },
       },
       lualine_c = {
-        { "filename", colored = true, icon_only = true, icon = { align = "right" } },
-        { "aerial" },
+        { 'filename', colored = true, icon_only = true, icon = { align = 'right' } },
+        { 'aerial' },
       },
       lualine_x = {
-        { "searchcount" },
-        { "overseer" },
-        { "lsp_status" },
-        { "filetype" },
+        { 'searchcount' },
+        { 'overseer' },
+        { 'lsp_status' },
+        { 'filetype' },
       },
-      lualine_y = { "progress" },
-      lualine_z = { "location" },
+      lualine_y = { 'progress' },
+      lualine_z = { 'location' },
     },
     extensions = {
-      "neo-tree",
-      "toggleterm",
-      "quickfix",
-      "man",
-      "aerial",
-      "nvim-dap-ui",
-      "overseer",
-      "lazy",
-      "mason",
+      'neo-tree',
+      'toggleterm',
+      'quickfix',
+      'man',
+      'aerial',
+      'nvim-dap-ui',
+      'overseer',
+      'lazy',
+      'mason',
     },
   },
-  dependencies = { 'nvim-tree/nvim-web-devicons' }
+  dependencies = { 'nvim-tree/nvim-web-devicons' },
 }

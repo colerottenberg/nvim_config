@@ -3,17 +3,17 @@
 
 return {
   {
-    "mrcjkb/rustaceanvim",
-    version = "^9",
-    ft = "rust",
+    'mrcjkb/rustaceanvim',
+    version = '^9',
+    ft = 'rust',
     init = function()
       -- rustaceanvim reads this global; must exist before the rust ftplugin runs.
       vim.g.rustaceanvim = {
         server = {
           default_settings = {
-            ["rust-analyzer"] = {
-              files = { exclude = { ".direnv", ".git", "target" } },
-              check = { command = "clippy", extraArgs = { "--no-deps" } },
+            ['rust-analyzer'] = {
+              files = { exclude = { '.direnv', '.git', 'target' } },
+              check = { command = 'clippy', extraArgs = { '--no-deps' } },
             },
           },
         },
@@ -24,8 +24,8 @@ return {
   },
 
   {
-    "Saecki/crates.nvim",
-    event = { "BufRead Cargo.toml" },
+    'Saecki/crates.nvim',
+    event = { 'BufRead Cargo.toml' },
     opts = {
       completion = { crates = { enabled = true } },
       lsp = {

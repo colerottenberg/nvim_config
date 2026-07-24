@@ -1,11 +1,11 @@
 -- Full-window git blame view.
 
 return {
-  "FabijanZulj/blame.nvim",
-  cmd = "BlameToggle",
+  'FabijanZulj/blame.nvim',
+  cmd = 'BlameToggle',
   cond = not vim.g.vscode,
   keys = {
-    { "<Leader>gB", "<Cmd>BlameToggle<CR>", desc = "Toggle git blame" },
+    { '<Leader>gB', '<Cmd>BlameToggle<CR>', desc = 'Toggle git blame' },
   },
   opts = {},
 }

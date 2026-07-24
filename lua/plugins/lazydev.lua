@@ -2,15 +2,15 @@
 -- in plugins/blink.lua.
 
 return {
-  "folke/lazydev.nvim",
-  ft = "lua",
-  cmd = "LazyDev",
+  'folke/lazydev.nvim',
+  ft = 'lua',
+  cmd = 'LazyDev',
   opts = {
     library = {
-      { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-      { path = "lazy.nvim", words = { "Lazy" } },
-      { path = "snacks.nvim", words = { "Snacks" } },
-      { path = "lazydev.nvim", words = { "LazyDev" } },
+      { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      { path = 'lazy.nvim', words = { 'Lazy' } },
+      { path = 'snacks.nvim', words = { 'Snacks' } },
+      { path = 'lazydev.nvim', words = { 'LazyDev' } },
     },
   },
 }
