@@ -172,12 +172,8 @@ local mappings = {
       desc = 'Workspace diagnostics',
       cond = 'workspace/diagnostic',
     },
-    ['<Leader>uf'] = {
-      toggles.buffer_autoformat,
-      desc = 'Toggle autoformatting (buffer)',
-      cond = 'textDocument/formatting',
-    },
-    ['<Leader>uF'] = { toggles.autoformat, desc = 'Toggle autoformatting (global)', cond = 'textDocument/formatting' },
+    ['<Leader>uf'] = { toggles.buffer_autoformat, desc = 'Toggle autoformatting (buffer)' },
+    ['<Leader>uF'] = { toggles.autoformat, desc = 'Toggle autoformatting (global)' },
     ['<Leader>uh'] = {
       toggles.buffer_inlay_hints,
       desc = 'Toggle inlay hints (buffer)',
