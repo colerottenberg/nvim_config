@@ -102,11 +102,6 @@ return {
       picker('lsp_references', { focus = 'list', formatters = { file = { filename_only = true } } }),
       desc = 'LSP references',
     },
-    {
-      '<Leader>ls',
-      picker('lsp_symbols'),
-      desc = 'Search symbols',
-    },
 
     {
       '<Leader>lR',

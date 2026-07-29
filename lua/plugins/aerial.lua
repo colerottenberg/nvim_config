@@ -5,14 +5,14 @@ return {
   cmd = { 'AerialToggle', 'AerialOpen', 'AerialNavToggle' },
   keys = {
     {
-      '<Leader>lS',
+      '<Leader>ls',
       function()
-        require('aerial').snacks_picker({ focus = 'list', layout = 'right' })
+        require('aerial').snacks_picker()
       end,
       desc = 'Symbols outline',
     },
     {
-      '<Leader>ln',
+      '<Leader>lS',
       function()
         require('aerial').nav_toggle()
       end,
@@ -44,5 +44,6 @@ return {
   },
   dependencies = {
     'onsails/lspkind.nvim',
+    'folke/snacks.nvim',
   },
 }
