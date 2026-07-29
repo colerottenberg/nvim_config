@@ -316,8 +316,13 @@ end
 vim.lsp.enable('ruff')
 
 -- buck2 has no Mason package -- the `buck2` binary itself is the server (see
--- lsp/buck2.lua). Excluded from automatic_enable's Bazel/Starlark
--- alternatives in plugins/lsp.lua so nothing else claims .bzl buffers.
+-- after/lsp/buck2.lua), so it is enabled explicitly here.
+--
+-- `bzl` buffers deliberately run three servers at once, because no single one
+-- covers Buck2: buck2 resolves labels/targets, starpls supplies hover docs +
+-- signature help (it embeds Bazel's builtin doc corpus; see
+-- after/lsp/starpls.lua), and starlark_rust contributes lint diagnostics.
+-- The latter two are Mason-installed and auto-enabled by mason-lspconfig.
 -- Adding filetypes for buck2.
 vim.filetype.add({
   extension = {

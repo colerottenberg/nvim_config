@@ -19,6 +19,14 @@ return {
             -- rust_analyzer is owned by rustaceanvim, jdtls by nvim-java.
             'rust_analyzer',
             'jdtls',
+            -- `bzl` buffers intentionally run THREE servers side by side, each
+            -- covering what the others can't (see after/lsp/starpls.lua):
+            --   buck2        -- label/target resolution, real Buck2 semantics
+            --   starpls      -- hover docs, signature help, symbols, refs
+            --   starlark_rust-- lint-only diagnostics (unused args/assigns)
+            -- These two are Bazel-only and add nothing here.
+            'bzl',
+            'bazelrc_lsp',
           },
         },
       })

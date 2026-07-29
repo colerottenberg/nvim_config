@@ -106,15 +106,32 @@ This repo now wires it up as the canonical example of Path B:
   Starlark/`bzl` detection.
 - **`lua/config/lsp.lua`** — `vim.lsp.enable "buck2"`, alongside `ruff`, since
   no Mason package backs it.
-- **`lua/plugins/lsp.lua`** — `automatic_enable.exclude` includes
-  `"starlark_rust"`, `"starpls"`, `"bzl"`, `"bazelrc_lsp"` — the
-  Mason-known Bazel/Starlark servers — so none of them can ever attach
-  alongside (or instead of) the hand-configured `buck2` server if one of
-  those packages gets installed later.
+- **`lua/plugins/lsp.lua`** — `automatic_enable.exclude` includes only
+  `"bzl"` and `"bazelrc_lsp"` (Bazel-only, useless here). `starpls` and
+  `starlark_rust` are deliberately *left enabled* — see below.
 
 The result: open a `BUCK`/`TARGETS`/`*.bzl` file inside a directory with a
 `.buckconfig`, and `buck2 lsp` attaches — entirely outside Mason's install
 pipeline, fully under your control.
+
+### Why `bzl` runs three servers at once
+
+No single server covers Buck2, so `bzl` buffers intentionally stack three.
+Capabilities below are from each server's own `initialize` response:
+
+| Server | Provides | Gap |
+| --- | --- | --- |
+| `buck2` | label/target resolution, true Buck2 semantics | no builtin doc corpus |
+| `starpls` | hover docs, signature help, doc symbols, references, completion | Bazel-only; knows nothing of Buck2 |
+| `starlark_rust` | lint diagnostics (`unused-argument`, `unused-assign`) | `hoverProvider: true` but returns empty `contents` — a linter, not a hint source |
+
+`starpls` is the only one with real hover content because Bazel's builtin
+HTML documentation is compiled into its binary. That is also why it is
+Bazel-shaped: it runs `bazel info` on attach and flags Buck2 prelude symbols
+as undefined. `after/lsp/starpls.lua` handles both — it suppresses the
+`Failed to fetch Bazel configuration` popup and, in a `.buckconfig`
+workspace only, filters `"x" is not defined` diagnostics. That filter also
+hides genuine typos; unset it with `vim.g.starpls_filter_undefined = false`.
 
 ## 4. Path C — server setup tangled with a real plugin
 
