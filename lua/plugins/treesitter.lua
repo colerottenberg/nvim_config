@@ -149,8 +149,6 @@ return {
         -- Assignments (left and right hand sides)
         ['as'] = '@assignment.outer',
         ['is'] = '@assignment.inner',
-        ['hh'] = '@assignment.lhs',
-        ['hl'] = '@assignment.rhs',
 
         -- Return statements
         ['ar'] = '@return.outer',

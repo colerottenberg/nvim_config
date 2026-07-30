@@ -70,6 +70,11 @@ return {
       picker('resume'),
       desc = 'Resume last picker',
     },
+    {
+      '<Leader>fp',
+      picker('lazy'),
+      desc = 'Lazy plugins',
+    },
     -- lists
     { '<Leader>x', picker('qflist', { focus = 'list' }), desc = 'Quickfix/Lists' },
     { '<C-q>', picker('qflist', { focus = 'list' }), desc = 'Quickfix/Lists' },
@@ -131,9 +136,8 @@ return {
     },
     { '<Leader>ld', picker('diagnostics', { focus = 'list' }), desc = 'Search diagnostics' },
     -- git
-    { '<Leader>gc', picker('git_log'), desc = 'Git commits (repository)' },
     {
-      '<Leader>gC',
+      '<Leader>gc',
       picker('git_log', { focus = 'list', current_file = true, follow = true }),
       desc = 'Git commits (file)',
     },
@@ -267,12 +271,12 @@ return {
           { icon = '', key = 'q', desc = 'Quit', action = '<Cmd>qa<CR>' },
         },
         header = table.concat({
-          '██████╗  ██████╗ ████████╗████████╗███████╗███╗   ██╗██╗   ██╗██╗███╗   ███╗',
-          '██╔══██╗██╔═══██╗╚══██╔══╝╚══██╔══╝██╔════╝████╗  ██║██║   ██║██║████╗ ████║',
-          '██████╔╝██║   ██║   ██║      ██║   █████╗  ██╔██╗ ██║██║   ██║██║██╔████╔██║',
-          '██╔══██╗██║   ██║   ██║      ██║   ██╔══╝  ██║╚██╗██║╚██╗ ██╔╝██║██║╚██╔╝██║',
-          '██║  ██║╚██████╔╝   ██║      ██║   ███████╗██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║',
-          '╚═╝  ╚═╝ ╚═════╝    ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝',
+          '███╗   ██╗██╗   ██╗██╗███╗   ███╗',
+          '████╗  ██║██║   ██║██║████╗ ████║',
+          '██╔██╗ ██║██║   ██║██║██╔████╔██║',
+          '██║╚██╗██║╚██╗ ██╔╝██║██║╚██╔╝██║',
+          '██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║',
+          '╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝',
         }, '\n'),
       },
       sections = {

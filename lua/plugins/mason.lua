@@ -4,7 +4,6 @@ return {
   ---@type MasonSettings
   opts = {
     -- use system tools before mason tools
-    PATH = 'append',
     max_concurrent_installers = 10,
   },
   keys = {

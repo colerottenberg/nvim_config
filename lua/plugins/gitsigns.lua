@@ -72,9 +72,6 @@ return {
         gs.nav_hunk('first')
       end, 'First hunk')
       map('n', '<Leader>gl', function()
-        gs.blame_line()
-      end, 'View git blame')
-      map('n', '<Leader>gL', function()
         gs.blame_line({ full = true })
       end, 'View full git blame')
       map('n', '<Leader>gp', function()
@@ -101,10 +98,7 @@ return {
       map('n', '<Leader>gd', function()
         gs.diffthis()
       end, 'View git diff')
-      map('n', '<Leader>gD', diff_commit, 'View git diff a commit')
-      map('n', '<Leader>gh', function()
-        gs.diffthis('~1')
-      end, 'Git diff ~1')
+      map('n', '<Leader>gd', diff_commit, 'View git diff a commit')
       map({ 'o', 'x' }, 'ig', gs.select_hunk, 'Select git hunk')
     end,
   },
