@@ -1,3 +1,6 @@
+if vim.g.vscode then
+  return
+end
 local function map(lhs, rhs, desc)
   vim.keymap.set('n', lhs, rhs, { buffer = true, silent = true, desc = desc })
 end
