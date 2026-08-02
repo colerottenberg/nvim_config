@@ -25,10 +25,10 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup({
+---@type LazyConfig
+local opt = {
   spec = {
-    { import = 'plugins' },
-    { import = 'plugins.lang' },
+    { import = 'plugins.common' },
   },
   install = { colorscheme = { 'catppuccin-macchiato', 'habamax' } },
   checker = { enabled = false },
@@ -45,4 +45,11 @@ require('lazy').setup({
       },
     },
   },
-})
+}
+
+if not vim.g.vscode then
+  table.insert(opt.spec, { import = 'plugins.lang' })
+  table.insert(opt.spec, { import = 'plugins' })
+end
+
+require('lazy').setup(opt)

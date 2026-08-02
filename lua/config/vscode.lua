@@ -62,9 +62,9 @@ map('n', 'gD', action('editor.action.revealDeclaration'), { desc = 'Go to declar
 map('n', 'gI', action('editor.action.goToImplementation'), { desc = 'Go to implementation' })
 map('n', 'gri', action('editor.action.goToImplementation'), { desc = 'Go to implementation' })
 map('n', 'grr', action('editor.action.goToReferences'), { desc = 'Go to references' })
-map('n', 'gra', action('editor.action.quickFix'), { desc = 'Code action' })
+map({ 'n', 'x' }, 'gra', action('editor.action.quickFix'), { desc = 'Code action' })
 map('n', 'grn', action('editor.action.rename'), { desc = 'Rename symbol' })
-map('n', 'grx', action('codelens.showLensesInCurrentLine'), { desc = 'Rename symbol' })
+map('n', 'grx', action('codelens.showLensesInCurrentLine'), { desc = 'CodeLens' })
 map({ 'n', 'x' }, 'grf', function()
   vscode.with_insert(function()
     vscode.action('editor.action.refactor')
@@ -91,8 +91,6 @@ map('n', 'gao', function()
     act('editor.showOutgoingCalls')
   end, 200)
 end, { desc = 'Call hierarchy (outgoing)' })
-map('n', 'gaI', action('references-view.showCallHierarchy'), { desc = 'Incoming calls (tree)' })
-map('n', 'gaO', action('references-view.showOutgoingCalls'), { desc = 'Outgoing calls (tree)' })
 map('n', 'gy', action('editor.action.goToTypeDefinition'), { desc = 'Go to type definition' })
 
 -- Workspace / LSP.
@@ -103,6 +101,8 @@ map('n', '<Leader>lc', action('workbench.action.openSettings'), { desc = 'Open s
 map('n', '<Leader>ls', action('workbench.action.gotoSymbol'), { desc = 'Document symbols' })
 map('n', '<Leader>lg', action('workbench.action.showAllSymbols'), { desc = 'Search workspace symbols' })
 map('n', '<Leader>ld', action('workbench.actions.view.problems'), { desc = 'Open problems panel' })
+map('n', '<Leader>lf', action('editor.action.formatDocument'), { desc = 'Format Document' })
+map('x', '<Leader>lf', action('editor.action.formatSelection'), { desc = 'Format Document' })
 
 -- Find files / grep (closest VS Code equivalents of the snacks.picker `<Leader>f*` set).
 map('n', '<Leader>ff', action('workbench.action.quickOpen'), { desc = 'Find files' })
