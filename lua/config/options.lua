@@ -51,6 +51,8 @@ opt.winborder = 'rounded' -- default floating window border
 opt.wrap = true -- (override) wrap long lines
 opt.writebackup = false -- don't make a backup before overwriting
 opt.exrc = true -- (override) read project-local .nvim.lua / .exrc
+opt.background = 'dark' -- set the default value to dark mode because it's cool
+-- opts.rocks.enabled = false -- disable luarocks
 
 g.markdown_recommended_style = 0
 

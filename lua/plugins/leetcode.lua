@@ -49,5 +49,13 @@ return {
       end,
       desc = 'toggle description',
     },
+    {
+      '<Leader>Le',
+      function()
+        local lc = require('leetcode.command')
+        lc.exit()
+      end,
+      desc = 'exit',
+    },
   },
 }

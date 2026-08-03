@@ -91,7 +91,6 @@ return {
       groups = { all = { NormalFloat = { link = 'Normal' } } },
     },
   },
-  { 'nyoom-engineering/oxocarbon.nvim', lazy = true },
   { 'savq/melange-nvim', lazy = true },
   { 'zootedb0t/citruszest.nvim', lazy = true },
   { 'uloco/bluloco.nvim', lazy = true, dependencies = { 'rktjmp/lush.nvim' }, opts = {} },
