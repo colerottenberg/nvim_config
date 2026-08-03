@@ -61,17 +61,9 @@ return {
   'akinsho/toggleterm.nvim',
   cmd = { 'ToggleTerm', 'TermExec' },
   keys = keys,
+  ---@type ToggleTermConfig
   opts = {
-    highlights = {
-      Normal = { link = 'Normal' },
-      NormalNC = { link = 'NormalNC' },
-      NormalFloat = { link = 'NormalFloat' },
-      FloatBorder = { link = 'FloatBorder' },
-      StatusLine = { link = 'StatusLine' },
-      StatusLineNC = { link = 'StatusLineNC' },
-      WinBar = { link = 'WinBar' },
-      WinBarNC = { link = 'WinBarNC' },
-    },
+    direction = 'float',
     size = 10,
     shading_factor = 2,
     on_create = function(t)
