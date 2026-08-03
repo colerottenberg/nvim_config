@@ -64,12 +64,6 @@ local toggles = {
     vim.g.autoformat = not vim.g.autoformat
     notify('Global autoformatting', vim.g.autoformat)
   end,
-  buffer_inlay_hints = function()
-    local buf = vim.api.nvim_get_current_buf()
-    local enabled = not vim.lsp.inlay_hint.is_enabled({ bufnr = buf })
-    vim.lsp.inlay_hint.enable(enabled, { bufnr = buf })
-    notify('Buffer inlay hints', enabled)
-  end,
   inlay_hints = function()
     local enabled = not vim.lsp.inlay_hint.is_enabled({})
     vim.lsp.inlay_hint.enable(enabled)
@@ -174,11 +168,6 @@ local mappings = {
     },
     ['<Leader>uf'] = { toggles.buffer_autoformat, desc = 'Toggle autoformatting (buffer)' },
     ['<Leader>uF'] = { toggles.autoformat, desc = 'Toggle autoformatting (global)' },
-    ['<Leader>uh'] = {
-      toggles.buffer_inlay_hints,
-      desc = 'Toggle inlay hints (buffer)',
-      cond = 'textDocument/inlayHint',
-    },
     ['<Leader>uH'] = { toggles.inlay_hints, desc = 'Toggle inlay hints (global)', cond = 'textDocument/inlayHint' },
     ['<Leader>uY'] = {
       toggles.buffer_semantic_tokens,

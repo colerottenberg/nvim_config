@@ -195,6 +195,13 @@ return {
       desc = 'Toggle indent guides',
     },
     {
+      '<Leader>uh',
+      function()
+        require('snacks').toggle.inlay_hints():toggle()
+      end,
+      desc = 'Toggle indent guides',
+    },
+    {
       ']r',
       function()
         require('snacks').words.jump(vim.v.count1)
