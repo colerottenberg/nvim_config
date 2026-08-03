@@ -39,7 +39,7 @@ return {
   priority = 900,
   keys = {
     -- find
-    { '<Leader>ft', picker('colorschemes', { focus = 'list', layout = 'right' }), desc = 'Find themes' },
+    { '<Leader>ft', picker('colorschemes', { focus = 'input', layout = 'right' }), desc = 'Find themes' },
     { '<Leader>fT', picker('todo_comments', { focus = 'list', layout = 'right' }), desc = 'Find TODO comments' },
     { '<Leader>fb', picker('buffers'), desc = 'Find buffers' },
     { '<Leader>ff', picker('files'), desc = 'Find files' },
@@ -228,6 +228,14 @@ return {
         Snacks.zen()
       end,
       desc = 'Zen mode (centered)',
+    },
+    {
+      '<Leader>O',
+      function()
+        local explorer = require('snacks.explorer')
+        explorer.open({ follow_file = true })
+      end,
+      desc = 'Reveal file in explorer',
     },
   },
   ---@type snacks.Config
