@@ -4,7 +4,7 @@ return {
   'L3MON4D3/LuaSnip',
   lazy = true,
   build = vim.fn.has('win32') == 0 and 'make install_jsregexp' or nil,
-  dependencies = { 'rafamadriz/friendly-snippets', 'honza/vim-snippets' },
+  dependencies = { 'rafamadriz/friendly-snippets' },
   opts = {
     history = true,
     delete_check_events = 'TextChanged',
