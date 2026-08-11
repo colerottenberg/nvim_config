@@ -5,8 +5,11 @@ return {
     'MunifTanjim/nui.nvim',
     'folke/snacks.nvim',
   },
-  opts = {},
-  cmd = { 'Leet' },
+  ---@type lc.UserConfig
+  opts = {
+    lang = 'c',
+  },
+  event = 'VeryLazy',
   keys = {
     { '<Leader>Lm', vim.cmd.Leet, desc = 'Leetcode Menu' },
     {
