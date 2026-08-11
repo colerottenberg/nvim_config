@@ -246,6 +246,13 @@ return {
     input = { enabled = true },
     ---@type snacks.image.Config
     image = { enabled = true, doc = { enabled = false } },
+    styles = {
+      input = {
+        b = {
+          completion = true,
+        },
+      },
+    },
     picker = { enabled = true, ui_select = true },
     notifier = {
       enabled = true,

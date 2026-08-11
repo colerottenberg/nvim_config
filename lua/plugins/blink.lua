@@ -16,9 +16,16 @@ return {
     'onsails/lspkind.nvim',
   },
   opts = {
+
     enabled = function()
-      local dap_ft = vim.tbl_contains({ 'dap-repl', 'dapui_watches', 'dapui_hover' }, vim.bo.filetype)
-      if vim.bo.buftype == 'prompt' and not dap_ft then
+      -- 1. Check if we are inside a UI element we want to FORCE allow
+      local allowed_fts = { 'dap-repl', 'dapui_watches', 'dapui_hover', 'snacks_input' }
+      if vim.tbl_contains(allowed_fts, vim.bo.filetype) then
+        return true
+      end
+
+      -- 2. Keep the original safety guards for everything else
+      if vim.bo.buftype == 'prompt' then
         return false
       end
       return vim.b.completion ~= false
