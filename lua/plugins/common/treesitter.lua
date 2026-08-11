@@ -127,8 +127,8 @@ return {
         ['ia'] = '@parameter.inner',
 
         -- Conditionals (if/else)
-        ['ai'] = '@conditional.outer',
-        ['ii'] = '@conditional.inner',
+        ['a?'] = '@conditional.outer',
+        ['i?'] = '@conditional.inner',
 
         -- Loops (for/while)
         ['al'] = '@loop.outer',
