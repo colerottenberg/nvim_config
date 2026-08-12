@@ -2,6 +2,9 @@ return {
   {
     'obsidian-nvim/obsidian.nvim',
     version = '*', -- use latest release, remove to use latest commit
+    cond = function()
+      return vim.fn.executable('obsidian') == 1
+    end,
     ft = 'markdown',
     cmd = 'Obsidian',
     ---@module 'obsidian'
