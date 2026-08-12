@@ -50,6 +50,28 @@ return {
       desc = 'conditional breakpoint',
     },
     {
+      '<Leader>dL',
+      function()
+        vim.ui.input({ prompt = 'Breakpoint log: ' }, function(log)
+          if log then
+            require('dap').set_breakpoint(nil, nil, log)
+          end
+        end)
+      end,
+      desc = 'log breakpoint',
+    },
+    {
+      '<Leader>dH',
+      function()
+        vim.ui.input({ prompt = 'Breakpoint hit: ' }, function(hit)
+          if hit then
+            require('dap').set_breakpoint(nil, hit, nil)
+          end
+        end)
+      end,
+      desc = 'hit breakpoint',
+    },
+    {
       '<Leader>dc',
       function()
         require('dap').continue()
@@ -77,7 +99,7 @@ return {
       end,
       desc = 'step out',
     },
-    },
+
     {
       '<Leader>dr',
       function()
