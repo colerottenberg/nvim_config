@@ -18,18 +18,25 @@ return {
   },
   keys = {
     {
+      '<Leader>d<CR>',
+      function()
+        require('dap').focus_frame()
+      end,
+      desc = 'Focus Frame',
+    },
+    {
       '<Leader>db',
       function()
         require('dap').toggle_breakpoint()
       end,
-      desc = 'DAP: toggle breakpoint',
+      desc = 'toggle breakpoint',
     },
     {
       '<Leader>dx',
       function()
         require('dap').clear_breakpoints()
       end,
-      desc = 'DAP: clear breakpoints',
+      desc = 'clear breakpoints',
     },
     {
       '<Leader>dB',
@@ -40,38 +47,53 @@ return {
           end
         end)
       end,
-      desc = 'DAP: conditional breakpoint',
+      desc = 'conditional breakpoint',
     },
     {
       '<Leader>dc',
       function()
         require('dap').continue()
       end,
-      desc = 'DAP: continue / start',
+      desc = 'continue / start',
     },
     {
       '<Leader>di',
       function()
         require('dap').step_into()
       end,
-      desc = 'DAP: step into',
+      desc = 'step into',
     },
     {
       '<Leader>do',
       function()
         require('dap').step_over()
       end,
-      desc = 'DAP: step over',
+      desc = 'step over',
     },
     {
       '<Leader>dO',
       function()
         require('dap').step_out()
       end,
-      desc = 'DAP: step out',
+      desc = 'step out',
+    },
     },
     {
       '<Leader>dr',
+      function()
+        require('dap').restart()
+      end,
+      desc = 'restart',
+    },
+    {
+      '<Leader>df',
+      function()
+        require('dap').restart_frame()
+      end,
+      desc = 'restart frame',
+    },
+    {
+      '<Leader>dR',
       function()
         local width = vim.o.columns
         local height = vim.o.lines
@@ -86,7 +108,7 @@ return {
           height = float_height,
         })
       end,
-      desc = 'DAP: toggle REPL',
+      desc = 'toggle REPL',
     },
     {
       '<Leader>dC',
@@ -104,35 +126,35 @@ return {
           height = float_height,
         })
       end,
-      desc = 'DAP: toggle Console',
+      desc = 'toggle Console',
     },
     {
       '<Leader>dl',
       function()
         require('dap').run_last()
       end,
-      desc = 'DAP: run last',
+      desc = 'run last',
     },
     {
       '<Leader>ds',
       function()
         require('dap').run_to_cursor()
       end,
-      desc = 'DAP: run to line',
+      desc = 'run to line',
     },
     {
       '<Leader>dq',
       function()
         require('dap').terminate()
       end,
-      desc = 'DAP: terminate',
+      desc = 'terminate',
     },
     {
       '<Leader>du',
       function()
         require('dapui').toggle()
       end,
-      desc = 'DAP: toggle UI',
+      desc = 'toggle UI',
     },
     {
       '<Leader>uI',
@@ -145,7 +167,7 @@ return {
         require('dapui').eval()
       end,
       mode = { 'n', 'v' },
-      desc = 'DAP: eval expression',
+      desc = 'eval expression',
     },
     -- Function keys (VS Code style). Terminals send Shift+F5/F11 either as
     -- <F17>/<F23> (legacy xterm) or <S-F5>/<S-F11> (kitty/CSI-u); bind both.
