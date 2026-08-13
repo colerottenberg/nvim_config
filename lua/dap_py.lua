@@ -175,11 +175,21 @@ M.configs = {
     program = function()
       return ui_input({ prompt = 'Entry point (console_script name): ' }, function(name)
         if vim.fn.has('wsl') == 1 then
-          return vim.fn.getcwd() .. '/.venv/bin/' .. name
+          local venv_path = vim.fn.getcwd() .. '/.venv/bin/' .. name
+          if vim.uv.fs_stat(venv_path) then
+            return venv_path
+          else
+            return vim.fn.exepath(name)
+          end
         elseif vim.fn.has('win32') == 1 then
-          return vim.fn.getcwd() .. '/.venv/Scripts/' .. name .. '.exe'
+          local venv_path = vim.fn.getcwd() .. '/.venv/Scripts/' .. name .. '.exe'
+          if vim.uv.fs_stat(venv_path) then
+            return venv_path
+          else
+            return vim.fn.exepath(name .. '.exe')
+          end
         else
-          return vim.fn.getcwd() .. '/.venv/bin/' .. name
+          return vim.fn.exepath(name)
         end
       end)
     end,
