@@ -8,7 +8,7 @@ return {
     },
     ---@type lc.UserConfig
     opts = {
-      lang = 'c',
+      lang = 'cpp',
     },
     event = 'VeryLazy',
     keys = {
