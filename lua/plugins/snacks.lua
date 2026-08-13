@@ -202,20 +202,6 @@ return {
       desc = 'Toggle indent guides',
     },
     {
-      ']r',
-      function()
-        require('snacks').words.jump(vim.v.count1)
-      end,
-      desc = 'Next reference',
-    },
-    {
-      '[r',
-      function()
-        require('snacks').words.jump(-vim.v.count1)
-      end,
-      desc = 'Previous reference',
-    },
-    {
       '<Leader>gg',
       function()
         require('snacks').lazygit.open()
@@ -316,7 +302,9 @@ return {
       animate = { enabled = false },
     },
     scope = { enabled = true, filter = not_large },
-    words = { enabled = true, filter = not_large },
+    -- LSP document-highlight: Python servers return kind=Write for the whole
+    -- def/class node, so the cursor paints a background over the entire block.
+    words = { enabled = false },
     ---@type snacks.zen.Config
     zen = {
       toggles = {
