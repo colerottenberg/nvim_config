@@ -14,7 +14,7 @@ return {
     {
       '<Leader>lS',
       function()
-        require('aerial').nav_toggle()
+        require('aerial').toggle({ direction = 'left', focus = false })
       end,
       desc = 'Symbols navigation',
     },

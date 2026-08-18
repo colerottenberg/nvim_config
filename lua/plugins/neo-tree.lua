@@ -17,7 +17,6 @@ table.insert(selector_sources, { source = 'diagnostics', display_name = '󰒡 Di
 return {
   'nvim-neo-tree/neo-tree.nvim',
   cmd = 'Neotree',
-  cond = not vim.g.vscode,
   dependencies = {
     'nvim-lua/plenary.nvim',
     'MunifTanjim/nui.nvim',
@@ -150,7 +149,7 @@ return {
             use_float = false,
           },
         },
-        ['T'] = 'none',
+        -- ['T'] = 'none',
         ['t'] = function(state)
           local node = state.tree:get_node()
           local path = node.path

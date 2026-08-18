@@ -41,7 +41,7 @@ return {
     -- find
     { '<Leader>ft', picker('colorschemes', { focus = 'input', layout = 'right' }), desc = 'Find themes' },
     { '<Leader>fT', picker('todo_comments', { focus = 'list', layout = 'right' }), desc = 'Find TODO comments' },
-    { '<Leader>fb', picker('buffers'), desc = 'Find buffers' },
+    { '<Leader>fb', picker('grep', { buffers = true }), desc = 'Find word in buffers' },
     { '<Leader>ff', picker('files'), desc = 'Find files' },
     { '<Leader>fF', picker('files', { hidden = true, ignored = true }), desc = 'Find all files' },
     { '<Leader>fg', picker('git_files'), desc = 'Find git files' },

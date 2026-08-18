@@ -15,6 +15,7 @@ return {
     'saghen/blink.compat',
     'onsails/lspkind.nvim',
   },
+  ---@type blink.cmp.Config
   opts = {
 
     enabled = function()
@@ -79,6 +80,10 @@ return {
       },
     },
     completion = {
+      ghost_text = {
+        enabled = true,
+        show_without_selection = true,
+      },
       list = { selection = { preselect = false, auto_insert = true } },
       menu = {
         auto_show = function(ctx)
@@ -105,7 +110,7 @@ return {
     },
     cmdline = {
       keymap = { ['<End>'] = { 'hide', 'fallback' } },
-      completion = { ghost_text = { enabled = false } },
+      completion = { ghost_text = { enabled = true } },
     },
     signature = {
       window = { winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder' },

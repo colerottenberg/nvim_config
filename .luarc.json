@@ -8,6 +8,7 @@
     "quote_style": "single",
     "line_space_after_expression_statement": "keep",
     "call_arg_parentheses": "always"
-  }
+  },
+    "completion.autoRequire": false
 }
 
