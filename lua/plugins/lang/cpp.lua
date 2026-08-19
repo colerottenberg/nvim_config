@@ -1,5 +1,7 @@
 -- C / C++ / CUDA: clangd config + clangd_extensions + cmake-tools.
--- Buffer-local symbol keymaps live in after/ftplugin/cpp.lua.
+-- All cpp/cmake keymaps live in this file's `keys` table below.
+
+local cmake_ft = { 'c', 'cpp', 'cmake', 'objc', 'objcpp', 'cuda', 'proto' }
 
 return {
   ---@type LazySpec
@@ -82,99 +84,29 @@ return {
           console = 'integratedTerminal',
         },
         cmake_executor = { -- executor to use
-          name = 'quickfix', -- name of the executor
+          name = 'overseer', -- name of the executor
           opts = {}, -- the options the executor will get, possible values depend on the executor type. See `default_opts` for possible values.
           default_opts = { -- a list of default and possible values for executors
-            quickfix = {
-              show = 'always', -- "always", "only_on_error"
-              position = 'belowright', -- "vertical", "horizontal", "leftabove", "aboveleft", "rightbelow", "belowright", "topleft", "botright", use `:h vertical` for example to see help on them
-              size = 10,
-              encoding = 'utf-8', -- if encoding is not "utf-8", it will be converted to "utf-8" using `vim.fn.iconv`
-              auto_close_when_success = true, -- typically, you can use it with the "always" option; it will auto-close the quickfix buffer if the execution is successful.
-            },
-            toggleterm = {
-              direction = 'float', -- 'vertical' | 'horizontal' | 'tab' | 'float'
-              close_on_exit = false, -- whether close the terminal when exit
-              auto_scroll = true, -- whether auto scroll to the bottom
-              singleton = true, -- single instance, autocloses the opened one, if present
-            },
             overseer = {
-              new_task_opts = {
-                strategy = {
-                  'toggleterm',
-                  direction = 'horizontal',
-                  auto_scroll = true,
-                  quit_on_exit = 'success',
-                },
-              }, -- options to pass into the `overseer.new_task` command
+              -- strategy left unset: falls back to overseer's default 'jobstart' strategy.
+              -- overseer.nvim removed its 'toggleterm' strategy (see stevearc/overseer.nvim@5764e36),
+              -- so cmake-tools' README example config no longer works as documented.
+              new_task_opts = {},
               on_new_task = function(task)
-                require('overseer').open({ enter = false, direction = 'right' })
+                require('overseer').open({ enter = false, direction = 'bottom' })
               end, -- a function that gets overseer.Task when it is created, before calling `task:start`
             },
-            terminal = {
-              name = 'Main Terminal',
-              prefix_name = '[CMakeTools]: ', -- This must be included and must be unique, otherwise the terminals will not work. Do not use a simple spacebar " ", or any generic name
-              split_direction = 'horizontal', -- "horizontal", "vertical"
-              split_size = 11,
-
-              -- Window handling
-              single_terminal_per_instance = true, -- Single viewport, multiple windows
-              single_terminal_per_tab = true, -- Single viewport per tab
-              keep_terminal_static_location = true, -- Static location of the viewport if avialable
-              auto_resize = true, -- Resize the terminal if it already exists
-
-              -- Running Tasks
-              start_insert = false, -- If you want to enter terminal with :startinsert upon using :CMakeRun
-              focus = false, -- Focus on terminal when cmake task is launched.
-              do_not_add_newline = false, -- Do not hit enter on the command inserted when using :CMakeRun, allowing a chance to review or modify the command before hitting enter.
-            }, -- terminal executor uses the values in cmake_terminal
           },
         },
         cmake_runner = { -- runner to use
-          name = 'terminal', -- name of the runner
+          name = 'overseer', -- name of the runner
           opts = {}, -- the options the runner will get, possible values depend on the runner type. See `default_opts` for possible values.
           default_opts = { -- a list of default and possible values for runners
-            quickfix = {
-              show = 'always', -- "always", "only_on_error"
-              position = 'belowright', -- "bottom", "top"
-              size = 10,
-              encoding = 'utf-8',
-              auto_close_when_success = true, -- typically, you can use it with the "always" option; it will auto-close the quickfix buffer if the execution is successful.
-            },
-            toggleterm = {
-              direction = 'float', -- 'vertical' | 'horizontal' | 'tab' | 'float'
-              close_on_exit = false, -- whether close the terminal when exit
-              auto_scroll = true, -- whether auto scroll to the bottom
-              singleton = true, -- single instance, autocloses the opened one, if present
-            },
             overseer = {
-              new_task_opts = {
-                strategy = {
-                  'toggleterm',
-                  direction = 'horizontal',
-                  autos_croll = true,
-                  quit_on_exit = 'success',
-                },
-              }, -- options to pass into the `overseer.new_task` command
-              on_new_task = function(task) end, -- a function that gets overseer.Task when it is created, before calling `task:start`
-            },
-            terminal = {
-              name = 'Main Terminal',
-              prefix_name = '[CMakeTools]: ', -- This must be included and must be unique, otherwise the terminals will not work. Do not use a simple spacebar " ", or any generic name
-              split_direction = 'horizontal', -- "horizontal", "vertical"
-              split_size = 11,
-
-              -- Window handling
-              single_terminal_per_instance = true, -- Single viewport, multiple windows
-              single_terminal_per_tab = true, -- Single viewport per tab
-              keep_terminal_static_location = true, -- Static location of the viewport if avialable
-              auto_resize = true, -- Resize the terminal if it already exists
-
-              -- Running Tasks
-              start_insert = false, -- If you want to enter terminal with :startinsert upon using :CMakeRun
-              focus = false, -- Focus on terminal when cmake task is launched.
-              do_not_add_newline = false, -- Do not hit enter on the command inserted when using :CMakeRun, allowing a chance to review or modify the command before hitting enter.
-              use_shell_alias = false, -- Hide the verbose command wrapper by using a shell alias, showing only the program's output (currently not supported on Windows)
+              new_task_opts = {},
+              on_new_task = function(task)
+                require('overseer').open({ enter = false, direction = 'bottom' })
+              end, -- a function that gets overseer.Task when it is created, before calling `task:start`
             },
           },
         },
@@ -184,42 +116,265 @@ return {
           spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }, -- icons used for progress display
           refresh_rate_ms = 100, -- how often to iterate icons
         },
-        cmake_virtual_text_support = true, -- Show the target related to current file using virtual text (at right corner)
+        cmake_virtual_text_support = true, -- Show the target related to current file using virtual text (at bottom corner)
         cmake_use_scratch_buffer = false, -- A buffer that shows what cmake-tools has done
       })
     end,
     keys = {
-      {
-        '<LocalLeader>c',
-        function()
-          vim.cmd.CMakeClean()
-        end,
-        desc = 'Clean CMake Build',
-        ft = { 'c', 'cpp', 'cmake', 'objc', 'objcpp', 'cuda', 'proto' },
-      },
+      -- Core workflow
       {
         '<LocalLeader>g',
         function()
           vim.cmd.CMakeGenerate()
         end,
-        desc = 'Generate CMake ',
-        ft = { 'c', 'cpp', 'cmake', 'objc', 'objcpp', 'cuda', 'proto' },
+        desc = 'CMake Generate',
+        ft = cmake_ft,
       },
       {
         '<LocalLeader>b',
         function()
           vim.cmd.CMakeBuild()
         end,
-        desc = 'Build CMake ',
-        ft = { 'c', 'cpp', 'cmake', 'objc', 'objcpp', 'cuda', 'proto' },
+        desc = 'CMake Build',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>B',
+        function()
+          vim.cmd.CMakeBuildCurrentFile()
+        end,
+        desc = 'CMake Build Current File',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>r',
+        function()
+          vim.cmd.CMakeRun()
+        end,
+        desc = 'CMake Run',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>R',
+        function()
+          vim.cmd.CMakeRunCurrentFile()
+        end,
+        desc = 'CMake Run Current File',
+        ft = cmake_ft,
       },
       {
         '<LocalLeader>d',
         function()
           vim.cmd.CMakeDebug()
         end,
-        desc = 'Debug CMake ',
-        ft = { 'c', 'cpp', 'cmake', 'objc', 'objcpp', 'cuda', 'proto' },
+        desc = 'CMake Debug',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>D',
+        function()
+          vim.cmd.CMakeDebugCurrentFile()
+        end,
+        desc = 'CMake Debug Current File',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>t',
+        function()
+          vim.cmd.CMakeRunTest()
+        end,
+        desc = 'CMake Run Test',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>i',
+        function()
+          vim.cmd.CMakeInstall()
+        end,
+        desc = 'CMake Install',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>c',
+        function()
+          vim.cmd.CMakeClean()
+        end,
+        desc = 'CMake Clean',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>x',
+        function()
+          vim.cmd.CMakeStop()
+        end,
+        desc = 'CMake Stop',
+        ft = cmake_ft,
+      },
+
+      -- Quick workflow (generate + build/run/debug in one step)
+      {
+        '<LocalLeader>qb',
+        function()
+          vim.cmd.CMakeQuickBuild()
+        end,
+        desc = 'CMake Quick Build',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>qr',
+        function()
+          vim.cmd.CMakeQuickRun()
+        end,
+        desc = 'CMake Quick Run',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>qd',
+        function()
+          vim.cmd.CMakeQuickDebug()
+        end,
+        desc = 'CMake Quick Debug',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>qs',
+        function()
+          vim.cmd.CMakeQuickStart()
+        end,
+        desc = 'CMake Quick Start',
+        ft = cmake_ft,
+      },
+
+      -- Selection (kit/target/preset/cwd)
+      {
+        '<LocalLeader>sk',
+        function()
+          vim.cmd.CMakeSelectKit()
+        end,
+        desc = 'CMake Select Kit',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>sb',
+        function()
+          vim.cmd.CMakeSelectBuildType()
+        end,
+        desc = 'CMake Select Build Type',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>st',
+        function()
+          vim.cmd.CMakeSelectBuildTarget()
+        end,
+        desc = 'CMake Select Build Target',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>sl',
+        function()
+          vim.cmd.CMakeSelectLaunchTarget()
+        end,
+        desc = 'CMake Select Launch Target',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>sw',
+        function()
+          vim.cmd.CMakeSelectCwd()
+        end,
+        desc = 'CMake Select Cwd',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>sd',
+        function()
+          vim.cmd.CMakeSelectBuildDir()
+        end,
+        desc = 'CMake Select Build Dir',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>spc',
+        function()
+          vim.cmd.CMakeSelectConfigurePreset()
+        end,
+        desc = 'CMake Select Configure Preset',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>spb',
+        function()
+          vim.cmd.CMakeSelectBuildPreset()
+        end,
+        desc = 'CMake Select Build Preset',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>spt',
+        function()
+          vim.cmd.CMakeSelectTestPreset()
+        end,
+        desc = 'CMake Select Test Preset',
+        ft = cmake_ft,
+      },
+
+      -- Open / settings / misc
+      {
+        '<LocalLeader>oo',
+        function()
+          vim.cmd.CMakeOpen()
+        end,
+        desc = 'CMake Open',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>oc',
+        function()
+          vim.cmd.CMakeOpenCache()
+        end,
+        desc = 'CMake Open Cache',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>ox',
+        function()
+          vim.cmd.CMakeClose()
+        end,
+        desc = 'CMake Close',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>os',
+        function()
+          vim.cmd.CMakeSettings()
+        end,
+        desc = 'CMake Settings',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>ot',
+        function()
+          vim.cmd.CMakeTargetSettings()
+        end,
+        desc = 'CMake Target Settings',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>of',
+        function()
+          vim.cmd.CMakeShowTargetFiles()
+        end,
+        desc = 'CMake Show Target Files',
+        ft = cmake_ft,
+      },
+      {
+        '<LocalLeader>oa',
+        function()
+          vim.cmd.CMakeLaunchArgs()
+        end,
+        desc = 'CMake Launch Args',
+        ft = cmake_ft,
       },
     },
   },

@@ -35,7 +35,7 @@ lua/plugins/*.lua         one lazy spec per plugin: trigger (event/cmd/ft/keys),
                           opts, and that plugin's keymaps in `keys`
 lua/plugins/lang/*.lua    rust / cpp / java / csv language tooling
 lua/dap_py.lua            Python DAP via uv
-after/ftplugin/*.lua      buffer-local rust/cpp/csv/python keymaps
+after/ftplugin/*.lua      buffer-local rust/csv/python keymaps
 after/lsp/*.lua           hand-configured language server overrides (native
                           Neovim rtp convention — see docs/adding-a-language-server.md)
 ```
