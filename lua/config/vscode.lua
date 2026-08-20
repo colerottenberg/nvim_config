@@ -164,3 +164,12 @@ map('n', '<Leader>dr', action('workbench.action.debug.restart'), { desc = 'Resta
 map('n', '<Leader>dw', action('workbench.debug.action.toggleRepl'), { desc = 'Toggle debug console' })
 map('n', '<Leader>du', action('workbench.debug.action.focusCallStackView'), { desc = 'Focus call stack' })
 map('n', '<Leader>dC', action('workbench.action.debug.selectandstart'), { desc = 'Run debug configuration' })
+-- Inside your existing lua/config/vscode.lua, after the existing mappings:
+
+-- Continue.dev AI integration (Avante-style keybindings)
+
+-- Chat panel access (Avante-style)
+map('n', '<Leader>ac', action('continue.focusContinueInput'), { desc = 'Continue: Show chat panel' })
+map('n', '<Leader>ai', action('continue.focusContinueInputWithoutClear'), { desc = 'Continue: Focus chat input' })
+map('n', '<Leader>as', action('continue.triggerSuggest'), { desc = 'Continue: Trigger manual suggest' })
+map('n', '<Leader>ao', action('continue.openConfigPage'), { desc = 'Continue: Open settings' })
