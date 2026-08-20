@@ -45,13 +45,13 @@ return {
     config = function()
       local osys = require('cmake-tools.osys')
       require('cmake-tools').setup({
-        cmake_command = 'cmake', -- this is used to specify cmake command path
-        ctest_command = 'ctest', -- this is used to specify ctest command path
-        ctest_show_labels = false, -- also show labels in the test picker
+        cmake_command = 'cmake',                                          -- this is used to specify cmake command path
+        ctest_command = 'ctest',                                          -- this is used to specify ctest command path
+        ctest_show_labels = false,                                        -- also show labels in the test picker
         cmake_use_preset = true,
-        cmake_regenerate_on_save = true, -- auto generate when save CMakeLists.txt
+        cmake_regenerate_on_save = true,                                  -- auto generate when save CMakeLists.txt
         cmake_generate_options = { '-DCMAKE_EXPORT_COMPILE_COMMANDS=1' }, -- this will be passed when invoke `CMakeGenerate`
-        cmake_build_options = {}, -- this will be passed when invoke `CMakeBuild`
+        cmake_build_options = {},                                         -- this will be passed when invoke `CMakeBuild`
         -- support macro expansion:
         --       ${kit}
         --       ${kitGenerator}
@@ -61,21 +61,21 @@ return {
             return 'out\\${variant:buildType}'
           end
           return 'out/${variant:buildType}'
-        end, -- this is used to specify generate directory for cmake, allows macro expansion, can be a string or a function returning the string, relative to cwd.
+        end,                    -- this is used to specify generate directory for cmake, allows macro expansion, can be a string or a function returning the string, relative to cwd.
         cmake_compile_commands_options = {
           action = 'soft_link', -- available options: soft_link, copy, lsp, none
           -- soft_link: this will automatically make a soft link from compile commands file to target
           -- copy:      this will automatically copy compile commands file to target
           -- lsp:       this will automatically set compile commands file location using lsp
           -- none:      this will make this option ignored
-          target = vim.loop.cwd, -- path or function returning path to directory, this is used only if action == "soft_link" or action == "copy"
+          target = vim.loop.cwd,                   -- path or function returning path to directory, this is used only if action == "soft_link" or action == "copy"
         },
-        cmake_kits_path = nil, -- this is used to specify global cmake kits path, see CMakeKits for detailed usage
+        cmake_kits_path = nil,                     -- this is used to specify global cmake kits path, see CMakeKits for detailed usage
         cmake_variants_message = {
-          short = { show = true }, -- whether to show short message
+          short = { show = true },                 -- whether to show short message
           long = { show = true, max_length = 40 }, -- whether to show long message
         },
-        cmake_dap_configuration = { -- debug settings for cmake
+        cmake_dap_configuration = {                -- debug settings for cmake
           name = 'cpp',
           type = 'codelldb',
           request = 'launch',
@@ -83,10 +83,10 @@ return {
           runInTerminal = true,
           console = 'integratedTerminal',
         },
-        cmake_executor = { -- executor to use
+        cmake_executor = {   -- executor to use
           name = 'overseer', -- name of the executor
-          opts = {}, -- the options the executor will get, possible values depend on the executor type. See `default_opts` for possible values.
-          default_opts = { -- a list of default and possible values for executors
+          opts = {},         -- the options the executor will get, possible values depend on the executor type. See `default_opts` for possible values.
+          default_opts = {   -- a list of default and possible values for executors
             overseer = {
               -- strategy left unset: falls back to overseer's default 'jobstart' strategy.
               -- overseer.nvim removed its 'toggleterm' strategy (see stevearc/overseer.nvim@5764e36),
@@ -98,10 +98,10 @@ return {
             },
           },
         },
-        cmake_runner = { -- runner to use
+        cmake_runner = {     -- runner to use
           name = 'overseer', -- name of the runner
-          opts = {}, -- the options the runner will get, possible values depend on the runner type. See `default_opts` for possible values.
-          default_opts = { -- a list of default and possible values for runners
+          opts = {},         -- the options the runner will get, possible values depend on the runner type. See `default_opts` for possible values.
+          default_opts = {   -- a list of default and possible values for runners
             overseer = {
               new_task_opts = {},
               on_new_task = function(task)
