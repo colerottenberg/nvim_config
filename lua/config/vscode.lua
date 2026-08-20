@@ -56,6 +56,9 @@ map('n', '<C-L>', action('workbench.action.navigateRight'), { desc = 'Move right
 map('n', ']d', action('editor.action.marker.nextInFiles'), { desc = 'Next diagnostic' })
 map('n', '[d', action('editor.action.marker.prevInFiles'), { desc = 'Previous diagnostic' })
 
+-- Fold
+map('n', 'za', action('editor.fold'), { desc = 'Toggle Fold' })
+
 -- Core LSP navigation (matches the native vim.lsp `gr*` defaults + our `<Leader>l*`).
 map('n', 'gd', action('editor.action.revealDefinition'), { desc = 'Go to definition' })
 map('n', 'gD', action('editor.action.revealDeclaration'), { desc = 'Go to declaration' })
@@ -99,6 +102,7 @@ map('n', 'gR', action('editor.action.goToReferences'), { desc = 'LSP references'
 map('n', '<Leader>lW', action('workbench.action.addRootFolder'), { desc = 'Add workspace folder' })
 map('n', '<Leader>lc', action('workbench.action.openSettings'), { desc = 'Open settings' })
 map('n', '<Leader>ls', action('workbench.action.gotoSymbol'), { desc = 'Document symbols' })
+map('n', '<Leader>lS', action('outline.focus'), { desc = 'Outline symbols' })
 map('n', '<Leader>lg', action('workbench.action.showAllSymbols'), { desc = 'Search workspace symbols' })
 map('n', '<Leader>ld', action('workbench.actions.view.problems'), { desc = 'Open problems panel' })
 map('n', '<Leader>lf', action('editor.action.formatDocument'), { desc = 'Format Document' })
