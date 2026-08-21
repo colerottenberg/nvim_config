@@ -18,29 +18,36 @@
 
 return {
   'yetone/avante.nvim',
-  build = 'make',
+  build = vim.fn.has('win32') ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false'
+    or 'make',
   event = 'VeryLazy',
   version = false, -- avante's own recommendation: track main, not a tagged release
   dependencies = {
     'nvim-lua/plenary.nvim',
     'MunifTanjim/nui.nvim',
   },
-  opts = {
-    provider = 'bedrock',
-    providers = {
-      bedrock = {
-        model = 'nvidia.nemotron-super-3-120b',
-        aws_region = 'us-gov-west-1',
-        aws_profile = 'bedrock-gov', -- replace with your actual `aws sso login` profile name
-        -- Explicit endpoint: points at the non-streaming Converse API (see the model
-        -- handler file for why streaming isn't wired up), for this model + region.
-        endpoint = 'https://bedrock-runtime.us-gov-west-1.amazonaws.com/model/nvidia.nemotron-super-3-120b/converse',
-        timeout = 60000,
-        extra_request_body = {
-          max_tokens = 8192,
-          temperature = 0.7,
+  config = function()
+    ---@type avante.Config
+    local opts = {
+      debug = true,
+      provider = 'bedrock',
+      providers = {
+        bedrock = {
+          model = 'nvidia.nemotron-super-3-120b',
+          aws_region = 'us-gov-west-1',
+          aws_profile = 'continue_dev_bedrock', -- replace with your actual `aws sso login` profile name
+          -- Explicit endpoint: points at the non-streaming Converse API (see the model
+          -- handler file for why streaming isn't wired up), for this model + region.
+          endpoint = 'https://vpce-0a9085a853a50c2ff-m217zc35.bedrock-runtime.us-gov-west-1.vpce.amazonaws.com',
+          timeout = 30000,
+          extra_request_body = {
+            max_tokens = 2048,
+            temperature = 0.7,
+          },
         },
       },
-    },
-  },
+    }
+    local avante = require('avante')
+    avante.setup(opts)
+  end,
 }
