@@ -10,26 +10,109 @@ return {
     name = 'catppuccin',
     lazy = false,
     priority = 1000,
-    opts = {
-      integrations = {
-        aerial = true,
-        blink_cmp = true,
-        dap = true,
-        dap_ui = true,
-        gitsigns = true,
-        mason = true,
-        native_lsp = { enabled = true },
-        neotree = true,
-        notifier = true,
-        overseer = true,
-        render_markdown = true,
-        snacks = true,
-        treesitter = true,
-        which_key = true,
-      },
-    },
-    config = function(_, opts)
-      require('catppuccin').setup(opts)
+    config = function()
+      local catppuccin = require('catppuccin')
+      local c = require('catppuccin.palettes').get_palette()
+      local transparent_bg = false
+      ---@type CatppuccinOptions
+      local opts = {
+        flavour = 'mocha',
+        background = {
+          dark = 'macchiato',
+          light = 'latte',
+        },
+        float = {
+          transparent = true,
+          solid = true,
+        },
+        transparent_background = false,
+        styles = {
+          comments = { 'italic' },
+          conditionals = { 'italic' },
+          loops = { 'bold' },
+          functions = { 'bold' },
+          keywords = { 'italic' },
+          strings = {},
+          variables = { 'italic' },
+          numbers = {},
+          booleans = { 'bold', 'italic' },
+          properties = { 'italic' },
+          types = { 'bold' },
+          operators = { 'italic' },
+        },
+        lsp_styles = { -- Handles the style of specific lsp hl groups (see `:h lsp-highlight`).
+          virtual_text = {
+            errors = { 'italic' },
+            hints = { 'italic' },
+            warnings = { 'italic' },
+            information = { 'italic' },
+            ok = { 'italic' },
+          },
+          underlines = {
+            errors = { 'underline' },
+            hints = { 'underline' },
+            warnings = { 'underline' },
+            information = { 'underline' },
+            ok = { 'underline' },
+          },
+          inlay_hints = {
+            background = false,
+          },
+        },
+        integrations = {
+          aerial = true,
+          blink_cmp = true,
+          dap = true,
+          dap_ui = true,
+          gitsigns = true,
+          mason = true,
+          native_lsp = { enabled = true },
+          neotree = true,
+          notifier = true,
+          overseer = true,
+          render_markdown = true,
+          snacks = true,
+          treesitter = true,
+          which_key = true,
+          -- transparent_bg = opts.transparent_background and "NONE" or C.mantle
+          lualine = {
+            normal = {
+              a = { bg = c.blue, fg = c.mantle, gui = 'bold' },
+              b = { bg = c.surface0, fg = c.blue },
+              c = { bg = transparent_bg, fg = c.text },
+            },
+
+            insert = {
+              a = { bg = c.green, fg = c.base, gui = 'bold' },
+              b = { bg = c.surface0, fg = c.green },
+            },
+
+            terminal = {
+              a = { bg = c.green, fg = c.base, gui = 'bold' },
+              b = { bg = c.surface0, fg = c.green },
+            },
+
+            command = {
+              a = { bg = c.peach, fg = c.base, gui = 'bold' },
+              b = { bg = c.surface0, fg = c.peach },
+            },
+            visual = {
+              a = { bg = c.mauve, fg = c.base, gui = 'bold' },
+              b = { bg = c.surface0, fg = c.mauve },
+            },
+            replace = {
+              a = { bg = c.red, fg = c.base, gui = 'bold' },
+              b = { bg = c.surface0, fg = c.red },
+            },
+            inactive = {
+              a = { bg = transparent_bg, fg = c.blue },
+              b = { bg = transparent_bg, fg = c.surface1, gui = 'bold' },
+              c = { bg = transparent_bg, fg = c.overlay0 },
+            },
+          },
+        },
+      }
+      catppuccin.setup(opts)
 
       -- Persist the colorscheme on change.
       vim.api.nvim_create_autocmd('ColorScheme', {
