@@ -16,10 +16,12 @@
 -- custom handler at lua/avante/providers/bedrock/nvidia/nemotron-super-3-120b.lua
 -- that speaks Bedrock's Converse API instead of the Claude-only invoke_model format.
 
+---@type LazySpec
 return {
   'yetone/avante.nvim',
   build = vim.fn.has('win32') ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false'
     or 'make',
+  enabled = false,
   event = 'VeryLazy',
   version = false, -- avante's own recommendation: track main, not a tagged release
   dependencies = {

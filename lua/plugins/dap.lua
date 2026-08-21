@@ -15,6 +15,7 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
     'rcarriga/cmp-dap',
     'saghen/blink.compat',
+    'Weissle/persistent-breakpoints.nvim',
   },
   keys = {
     {
@@ -27,49 +28,30 @@ return {
     {
       '<Leader>db',
       function()
-        require('dap').toggle_breakpoint()
+        require('persistent-breakpoints.api').toggle_breakpoint()
       end,
       desc = 'toggle breakpoint',
     },
     {
       '<Leader>dx',
       function()
-        require('dap').clear_breakpoints()
+        require('persistent-breakpoints.api').clear_all_breakpoints()
       end,
       desc = 'clear breakpoints',
     },
     {
       '<Leader>dB',
       function()
-        vim.ui.input({ prompt = 'Breakpoint condition: ' }, function(condition)
-          if condition then
-            require('dap').set_breakpoint(condition)
-          end
-        end)
+        require('persistent-breakpoints.api').set_conditional_breakpoint()
       end,
       desc = 'conditional breakpoint',
     },
     {
       '<Leader>dL',
       function()
-        vim.ui.input({ prompt = 'Breakpoint log: ' }, function(log)
-          if log then
-            require('dap').set_breakpoint(nil, nil, log)
-          end
-        end)
+        require('persistent-breakpoints.api').set_log_point()
       end,
       desc = 'log breakpoint',
-    },
-    {
-      '<Leader>dH',
-      function()
-        vim.ui.input({ prompt = 'Breakpoint hit: ' }, function(hit)
-          if hit then
-            require('dap').set_breakpoint(nil, hit, nil)
-          end
-        end)
-      end,
-      desc = 'hit breakpoint',
     },
     {
       '<Leader>dc',
@@ -210,7 +192,7 @@ return {
     {
       '<F9>',
       function()
-        require('dap').toggle_breakpoint()
+        require('persistent-breakpoints.api').toggle_breakpoint()
       end,
       desc = 'Debugger: toggle breakpoint',
     },
@@ -269,6 +251,22 @@ return {
       ensure_installed = { 'codelldb', 'debugpy' },
       automatic_installation = false,
       handlers = {},
+    })
+
+    require('persistent-breakpoints').setup({
+
+      save_dir = vim.fn.stdpath('data') .. '/nvim_checkpoints',
+      -- when to load the breakpoints? "BufReadPost" is recommanded.
+      load_breakpoints_event = 'BufReadPost',
+      -- record the performance of different function. run :lua require('persistent-breakpoints.api').print_perf_data() to see the result.
+      perf_record = false,
+      -- perform callback when loading a persisted breakpoint
+      --- @param opts DAPBreakpointOptions options used to create the breakpoint ({condition, logMessage, hitCondition})
+      --- @param buf_id integer the buffer the breakpoint was set on
+      --- @param line integer the line the breakpoint was set on
+      on_load_breakpoint = nil,
+      -- set this to true if the breakpoints are not loaded when you are using a session-like plugin.
+      always_reload = false,
     })
 
     -- Inline variable values (virtual text) during a debug session.
