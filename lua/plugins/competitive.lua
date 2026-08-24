@@ -9,6 +9,22 @@ return {
     ---@type lc.UserConfig
     opts = {
       lang = 'cpp',
+      injector = { ---@type table<lc.lang, lc.inject>
+        ['cpp'] = {
+          before = { '#include <gtest/gtest.h>' },
+          imports = function(default_imports)
+            -- return a different list to omit default imports
+            local useful_stl = { '#include <algorithm>', '#include <functional>' }
+            return vim.list_extend(default_imports, useful_stl)
+          end,
+          after = {
+            'int main(int argc, char **argv) {',
+            '::testing::InitGoogleTest(&argc, argv);',
+            'return RUN_ALL_TESTS();',
+            '}',
+          },
+        },
+      },
     },
     event = 'VeryLazy',
     keys = {
@@ -54,7 +70,7 @@ return {
         desc = 'toggle description',
       },
       {
-        '<Leader>Le',
+        '<Leader>Lq',
         function()
           local lc = require('leetcode.command')
           lc.exit()
