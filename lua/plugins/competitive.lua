@@ -18,6 +18,17 @@ return {
             return vim.list_extend(default_imports, useful_stl)
           end,
           after = {
+            'class SolutionFixture : public ::testing::Test',
+            '{',
+            '  protected:',
+            '    Solution s;',
+            '};',
+            '',
+            'TEST_F(SolutionFixture, Example1)',
+            '{',
+            '    EXPECT_EQ(5, 5);',
+            '}',
+            '',
             'int main(int argc, char **argv) {',
             '::testing::InitGoogleTest(&argc, argv);',
             'return RUN_ALL_TESTS();',
