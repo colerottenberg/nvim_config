@@ -14,6 +14,9 @@ return {
     local luasnip = require('luasnip')
     luasnip.config.setup(opts)
     luasnip.filetype_extend('javascript', { 'javascriptreact' })
+    luasnip.filetype_extend('c', { 'cdoc' })
+    luasnip.filetype_extend('cpp', { 'cppdoc' })
+    luasnip.filetype_extend('python', { 'pydoc' })
     for _, loader in ipairs({ 'vscode', 'snipmate', 'lua' }) do
       require('luasnip.loaders.from_' .. loader).lazy_load()
     end
