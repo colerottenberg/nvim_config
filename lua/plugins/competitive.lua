@@ -12,10 +12,15 @@ return {
       injector = { ---@type table<lc.lang, lc.inject>
         ['cpp'] = {
           before = { '#include <gtest/gtest.h>' },
-          imports = function(default_imports)
+          imports = function()
             -- return a different list to omit default imports
-            local useful_stl = { '#include <algorithm>', '#include <functional>' }
-            return vim.list_extend(default_imports, useful_stl)
+            local useful_stl = {
+              '#include <vector>',
+              '#include <algorithm>',
+              '#include <functional>',
+              'using namespace std;',
+            }
+            return useful_stl
           end,
           after = {
             'class SolutionFixture : public ::testing::Test',
@@ -26,7 +31,6 @@ return {
             '',
             'TEST_F(SolutionFixture, Example1)',
             '{',
-            '    EXPECT_EQ(5, 5);',
             '}',
             '',
             'int main(int argc, char **argv) {',

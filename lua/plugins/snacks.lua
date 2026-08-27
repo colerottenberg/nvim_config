@@ -276,6 +276,7 @@ return {
               require('snacks.picker').colorschemes()
             end,
           },
+          { icon = '󰙨', key = 'l', desc = 'Leetcode', action = '<Cmd>Leet<CR>' },
           { icon = '', key = 'q', desc = 'Quit', action = '<Cmd>qa<CR>' },
         },
         header = table.concat({

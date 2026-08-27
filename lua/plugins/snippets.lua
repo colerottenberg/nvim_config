@@ -5,14 +5,9 @@ return {
   lazy = true,
   build = vim.fn.has('win32') == 0 and 'make install_jsregexp' or nil,
   dependencies = { 'rafamadriz/friendly-snippets' },
-  opts = {
-    history = true,
-    delete_check_events = 'TextChanged',
-    region_check_events = 'CursorMoved',
-  },
-  config = function(_, opts)
+  config = function()
     local luasnip = require('luasnip')
-    luasnip.config.setup(opts)
+    luasnip.config.setup({})
     luasnip.filetype_extend('javascript', { 'javascriptreact' })
     luasnip.filetype_extend('c', { 'cdoc' })
     luasnip.filetype_extend('cpp', { 'cppdoc' })
