@@ -28,6 +28,7 @@ local keys = {
   { '<Leader>tf', '<Cmd>ToggleTerm direction=float<CR>', desc = 'Float terminal' },
   { '<Leader>th', '<Cmd>ToggleTerm direction=horizontal<CR>', desc = 'Horizontal terminal' },
   { '<Leader>tv', '<Cmd>ToggleTerm direction=vertical<CR>', desc = 'Vertical terminal' },
+  { '<Leader>ts', '<Cmd>TermSelect<CR>', desc = 'Select terminal' },
   {
     '<Leader>tb',
     function()
@@ -61,21 +62,37 @@ return {
   'akinsho/toggleterm.nvim',
   cmd = { 'ToggleTerm', 'TermExec' },
   keys = keys,
-  ---@type ToggleTermConfig
-  opts = {
-    direction = 'float',
-    size = 10,
-    shading_factor = 2,
-    on_create = function(t)
-      vim.opt_local.foldcolumn = '0'
-      vim.opt_local.signcolumn = 'no'
-      if t.hidden then
-        local function toggle()
-          t:toggle()
+
+  config = function()
+    local tt = require('toggleterm')
+    ---@type ToggleTermConfig
+    local opts = {
+      direction = 'float',
+      size = function(term)
+        if term.direction == 'horizontal' then
+          return vim.o.lines * 0.3
+        elseif term.direction == 'vertical' then
+          return vim.o.columns * 0.4
+        else
+          size = 20
         end
-        vim.keymap.set({ 'n', 't', 'i' }, "<C-'>", toggle, { desc = 'Toggle terminal', buffer = t.bufnr })
-        vim.keymap.set({ 'n', 't', 'i' }, '<F7>', toggle, { desc = 'Toggle terminal', buffer = t.bufnr })
-      end
-    end,
-  },
+      end,
+      shading_factor = 2,
+      on_create = function(t)
+        vim.opt_local.foldcolumn = '0'
+        vim.opt_local.signcolumn = 'no'
+        if t.hidden then
+          local function toggle()
+            t:toggle()
+          end
+          vim.keymap.set({ 'n', 't', 'i' }, "<C-'>", toggle, { desc = 'Toggle terminal', buffer = t.bufnr })
+          vim.keymap.set({ 'n', 't', 'i' }, '<F7>', toggle, { desc = 'Toggle terminal', buffer = t.bufnr })
+        end
+      end,
+      insert_mappings = true,
+      terminal_mappings = true,
+      start_in_insert = true,
+    }
+    tt.setup(opts)
+  end,
 }
