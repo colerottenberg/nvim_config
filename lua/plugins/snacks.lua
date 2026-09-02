@@ -48,7 +48,7 @@ return {
     { '<Leader>fs', picker('git_status'), desc = 'Find git status' },
     { '<Leader>fw', picker('grep'), desc = 'Find words' },
     { '<Leader>fW', picker('grep', { hidden = true, ignored = true }), desc = 'Find all words' },
-    { '<Leader>fl', picker('lines', { layout = 'select' }), desc = 'Find lines' },
+    { '<Leader>fl', picker('lines', { layout = 'dropdown' }), desc = 'Find lines' },
     {
       '<Leader>fc',
       picker('grep_word'),
