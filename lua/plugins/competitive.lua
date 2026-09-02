@@ -40,6 +40,17 @@ return {
           },
         },
       },
+      hooks = {
+        ['enter'] = {
+          function()
+            local dap = require('dap')
+            -- disable DAP UI Auto
+            dap.listeners.after.event_initialized.dapui = nil
+            dap.listeners.before.event_terminated.dapui = nil
+            dap.listeners.before.event_exited.dapui = nil
+          end,
+        },
+      },
     },
     event = 'VeryLazy',
     keys = {
