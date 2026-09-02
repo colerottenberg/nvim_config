@@ -147,7 +147,23 @@ return {
   { 'folke/tokyonight.nvim', lazy = true, opts = {} },
   { 'rebelot/kanagawa.nvim', lazy = true },
   { 'thesimonho/kanagawa-paper.nvim', lazy = true, opts = {} },
-  { 'rose-pine/neovim', name = 'rose-pine', lazy = true },
+  {
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    lazy = false,
+    config = function()
+      local rosepine = require('rose-pine')
+      rosepine.setup({
+        enable = {
+          terminal = true,
+        },
+        styles = {
+          bold = true,
+          italic = true,
+        },
+      })
+    end,
+  },
   { 'ellisonleao/gruvbox.nvim', lazy = true },
   {
     'EdenEast/nightfox.nvim',
