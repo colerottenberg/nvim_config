@@ -161,6 +161,18 @@ return {
       desc = 'toggle UI',
     },
     {
+      '<Leader>dD',
+      function()
+        local dap = require('dap')
+        local dapui = require('dapui')
+        dap.listeners.after.event_initialized['dapui'] = nil
+        dap.listeners.before.event_terminated['dapui'] = nil
+        dap.listeners.before.event_exited['dapui'] = nil
+        dapui.close()
+      end,
+      desc = 'Disable UI',
+    },
+    {
       '<Leader>uI',
       '<Cmd>DapVirtualTextToggle<CR>',
       desc = 'Toggle DAP inline values',
@@ -287,11 +299,11 @@ return {
     -- codepoints (Font Awesome range, present in every Nerd Font) via nr2char
     -- so the glyphs don't depend on this file's byte encoding.
     local dap_signs = {
-      DapBreakpoint = { cp = 0xf111, hl = 'DiagnosticError' }, -- circle
+      DapBreakpoint = { cp = 0xf111, hl = 'DiagnosticError' },          -- circle
       DapBreakpointCondition = { cp = 0xf192, hl = 'DiagnosticError' }, -- dot-circle
-      DapBreakpointRejected = { cp = 0xf05e, hl = 'DiagnosticError' }, -- ban
-      DapLogPoint = { cp = 0xf0eb, hl = 'DiagnosticInfo' }, -- lightbulb
-      DapStopped = { cp = 0xf061, hl = 'DiagnosticWarn' }, -- arrow-right
+      DapBreakpointRejected = { cp = 0xf05e, hl = 'DiagnosticError' },  -- ban
+      DapLogPoint = { cp = 0xf0eb, hl = 'DiagnosticInfo' },             -- lightbulb
+      DapStopped = { cp = 0xf061, hl = 'DiagnosticWarn' },              -- arrow-right
     }
     for name, o in pairs(dap_signs) do
       vim.fn.sign_define(name, {
