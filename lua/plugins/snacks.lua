@@ -211,7 +211,7 @@ return {
     {
       '<Leader>uz',
       function()
-        Snacks.zen()
+        Snacks.zen.zen()
       end,
       desc = 'Zen mode (centered)',
     },
@@ -249,7 +249,14 @@ return {
       preset = {
         keys = {
           { icon = '', key = 'n', desc = 'New File', action = '<Leader>n' },
-          { icon = '󰱼', key = 'f', desc = 'Find File', action = '<Leader>ff' },
+          {
+            icon = '󰱼',
+            key = 'f',
+            desc = 'Find File',
+            action = function()
+              require('snacks.picker').files({ layout = 'dropdown' })
+            end,
+          },
           { icon = '󱎸', key = 'w', desc = 'Find Word', action = '<Leader>fw' },
           {
             icon = '',
@@ -309,14 +316,14 @@ return {
     ---@type snacks.zen.Config
     zen = {
       toggles = {
-        dim = false,
+        dim = true,
         git_signs = false,
         mini_diff_signs = false,
-        diagnostics = false, -- optional
-        inlay_hints = false, -- optional
+        diagnostics = true, -- optional
+        inlay_hints = true, -- optional
       },
       center = true,
-      show = { statusline = true, tabline = true },
+      show = { statusline = false, tabline = true },
       -- Override the "zen" style's backdrop: it defaults to a semi-transparent
       -- blend (see snacks/zen.lua) that lets the original buffer show through.
       -- blend=99 (not 100: snacks special-cases 100 as "no backdrop at all")
