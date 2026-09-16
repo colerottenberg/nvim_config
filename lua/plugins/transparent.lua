@@ -21,13 +21,24 @@ return {
       'FloatTitle',
       'RenderMarkdownCode',
       'LightBulbVirtualText',
+      'NeoTree',
+      'BufferLine',
+      'lualine_c_normal', -- Center fill area background (Normal mode)
+      'lualine_c_insert', -- Center fill area background (Insert mode)
+      'lualine_c_visual', -- Center fill area background (Visual mode)
+      'lualine_c_replace', -- Center fill area background (Replace mode)
+      'lualine_c_command', -- Center fill area background (Command mode)
+      'lualine_c_inactive', -- Center fill area background (When window lost focus)
+    },
+    exclude_groups = {
+      'lualine_a',
+      'lualine_b',
+      'lualine_y',
+      'lualine_z',
     },
   },
   config = function(_, opts)
     local transparent = require('transparent')
     transparent.setup(opts)
-    transparent.clear_prefix('BufferLine')
-    transparent.clear_prefix('NeoTree')
-    transparent.clear_prefix('lualine')
   end,
 }
