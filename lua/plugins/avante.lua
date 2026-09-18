@@ -27,11 +27,19 @@ return {
   dependencies = {
     'nvim-lua/plenary.nvim',
     'MunifTanjim/nui.nvim',
+    'folke/snacks.nvim',
+    --- The below is optional, make sure to setup it properly if you have lazy=true
+    {
+      'Olical/conjure',
+      ft = { 'markdown' }, -- Optional: For markdown preview/conceal
+    },
   },
   config = function()
     ---@type avante.Config
     local opts = {
-      debug = true,
+      input = {
+        provider = 'snacks',
+      },
       provider = 'opencode',
       acp_providers = {
         ['opencode'] = {

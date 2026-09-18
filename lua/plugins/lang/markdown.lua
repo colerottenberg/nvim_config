@@ -13,7 +13,7 @@ return {
   ---@type LazySpec
   {
     'MeanderingProgrammer/render-markdown.nvim',
-    ft = 'markdown',
+    ft = { 'markdown', 'Avante' },
     cmd = 'RenderMarkdown',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     keys = {
