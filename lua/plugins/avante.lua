@@ -28,15 +28,11 @@ return {
     'nvim-lua/plenary.nvim',
     'MunifTanjim/nui.nvim',
     'folke/snacks.nvim',
-    --- The below is optional, make sure to setup it properly if you have lazy=true
-    {
-      'Olical/conjure',
-      ft = { 'markdown' }, -- Optional: For markdown preview/conceal
-    },
   },
   config = function()
     ---@type avante.Config
     local opts = {
+      mode = 'legacy',
       input = {
         provider = 'snacks',
       },
@@ -47,6 +43,10 @@ return {
           arg = { 'acp' },
         },
       },
+      behaviour = {
+        auto_apply_diff_after_generation = false,
+      },
+      system_prompt = 'You are a precise programming assistant. Provide clear, minimal code snippets and explanations. Do not attempt to format outputs as tool calls or autonomous agent actions.',
     }
     local avante = require('avante')
     avante.setup(opts)
