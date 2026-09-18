@@ -21,7 +21,7 @@ return {
   'yetone/avante.nvim',
   build = vim.fn.has('win32') ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false'
     or 'make',
-  enabled = false,
+  enabled = true,
   event = 'VeryLazy',
   version = false, -- avante's own recommendation: track main, not a tagged release
   dependencies = {
@@ -32,20 +32,11 @@ return {
     ---@type avante.Config
     local opts = {
       debug = true,
-      provider = 'bedrock',
-      providers = {
-        bedrock = {
-          model = 'nvidia.nemotron-super-3-120b',
-          aws_region = 'us-gov-west-1',
-          aws_profile = 'continue_dev_bedrock', -- replace with your actual `aws sso login` profile name
-          -- Explicit endpoint: points at the non-streaming Converse API (see the model
-          -- handler file for why streaming isn't wired up), for this model + region.
-          endpoint = 'https://vpce-0a9085a853a50c2ff-m217zc35.bedrock-runtime.us-gov-west-1.vpce.amazonaws.com',
-          timeout = 30000,
-          extra_request_body = {
-            max_tokens = 2048,
-            temperature = 0.7,
-          },
+      provider = 'opencode',
+      acp_providers = {
+        ['opencode'] = {
+          command = 'opencode',
+          arg = { 'acp' },
         },
       },
     }
