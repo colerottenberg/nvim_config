@@ -1,0 +1,239 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "!Terminal",
+    "bindings": {
+      "alt-enter": "zed::ToggleFullScreen",
+    },
+  },
+  {
+    "context": "Workspace && !menu",
+    "bindings": {
+      "shift shift": "file_finder::Toggle",
+    },
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "j k": "vim::SwitchToNormalMode",
+    },
+  },
+  {
+    "context": "Editor && vim_mode == insert && menu",
+    "bindings": {
+      "tab": "editor::Tab",
+    },
+  },
+  {
+    "context": "Editor && VimControl && !VimWaiting && !menu",
+    "bindings": {
+      "space e": "project_panel::ToggleFocus",
+      "space o": "pane::RevealInProjectPanel",
+    },
+  },
+  {
+    "context": "ProjectPanel && !Editor",
+    "bindings": {
+      "space o": "project_panel::ToggleFocus",
+      "space e": "workspace::ToggleLeftDock",
+      "l": "project_panel::OpenPermanent",
+      "O": "workspace::OpenWithSystem",
+      "t": "workspace::OpenInTerminal",
+    },
+  },
+  {
+    "context": "!ProjectPanel && Editor && VimControl && !VimWaiting && !menu",
+    "bindings": {
+      "space o": "project_panel::ToggleFocus",
+      "space e": "workspace::ToggleLeftDock",
+    },
+  },
+  {
+    "context": "Editor && VimControl && !VimWaiting && !menu",
+    "bindings": {
+      "g shift-r": "editor::FindAllReferences",
+      "g r a": "editor::ToggleCodeActions",
+      "g r n": "editor::Rename",
+      "g r i": "editor::GoToImplementation",
+      "g r x": "editor::ToggleCodeLens",
+      "g y": "editor::GoToTypeDefinition",
+      "g r l": "editor::Format",
+      "g a i": "call_hierarchy::ShowIncomingCalls",
+      "g a o": "call_hierarchy::ShowOutgoingCalls",
+
+      // Adding Folding Keybinding
+      "z a": "editor::ToggleFold",
+      "z c": "editor::Fold",
+
+      "space c": "pane::CloseActiveItem",
+      "space w": "workspace::Save",
+      "space q": "workspace::CloseWindow",
+      "space /": "vim::ToggleComments",
+      "space n": "workspace::NewFile",
+
+      // Buffers
+      "space b c": "pane::CloseOtherItems",
+      "space b shift-C": "pane::CloseAllItems",
+      "space b l": "pane::CloseItemsToTheLeft",
+      "space b r": "pane::CloseItemsToTheRight",
+
+      // Find Options
+      "space f f": "file_finder::Toggle",
+      "space f w": "pane::DeploySearch",
+      "space f t": "theme_selector::Toggle",
+      "space f l": "vim::Search",
+      "space f c": "vim::SearchUnderCursor",
+      "space f k": "zed::OpenKeymapFile",
+      "space f K": "zed::OpenDefaultKeymap",
+      "space f C": "zed::OpenSettingsFile",
+
+      // Pane Movement Bindings
+      "shift-H": "pane::ActivatePreviousItem",
+      "shift-L": "pane::ActivateNextItem",
+      "shift-alt-H": "pane::SwapItemLeft",
+      "shift-alt-L": "pane::SwapItemRight",
+
+      // Explorer Tree Movements
+      "ctrl-b": "workspace::ToggleLeftDock",
+      "ctrl-j": "workspace::ToggleBottomDock",
+
+      // Git Actions
+      "space g g": "git_panel::ToggleFocus",
+      "space g shift-b": "git::Blame",
+      "space g d": "git::Diff",
+      "space g l": "git::Blame",
+      "space g p": "editor::ToggleSelectedDiffHunks",
+      "space g b": "git::Branch",
+      "space g s": "git::ToggleStaged",
+      "] g": "editor::GoToHunk",
+      "[ g": "editor::GoToPreviousHunk",
+      "space g r": "git::Restore",
+      "space g R": "git::RestoreFile",
+
+      // Treesitter Navigation
+      "] f": "vim::NextMethodStart",
+      "] shift-f": "vim::NextMethodEnd",
+      "[ f": "vim::PreviousMethodStart",
+      "[ shift-f": "vim::PreviousMethodEnd",
+
+      // Starting Splits
+      "\\": "pane::SplitDown",
+      "|": "pane::SplitRight",
+
+      // Navigating Splits
+      "ctrl-w h": "workspace::ActivatePaneLeft",
+      "ctrl-w l": "workspace::ActivatePaneRight",
+      "ctrl-w j": "workspace::ActivatePaneDown",
+      "ctrl-w k": "workspace::ActivatePaneUp",
+      // LSP Actions
+      "space l s": "outline::Toggle",
+      "space l shift-S": "outline_panel::ToggleFocus",
+      "space l f": "editor::Format",
+      "ctrl-k ctrl-f": "editor::FormatSelections",
+      "space l w": "editor::SwitchSourceHeader",
+      "g l": "editor::ToggleInlineDiagnostics",
+      "space l i": "lsp_tool::ToggleMenu",
+      "space l a": "editor::ToggleCodeActions",
+      "space l d": "diagnostics::Deploy",
+      "space l g": "project_symbols::Toggle",
+
+      // Debugger
+      "space d b": "editor::ToggleBreakpoint",
+      "f9": "editor::ToggleBreakpoint",
+      "space d s": "debugger::RunToCursor",
+      "f5": "debugger::Start",
+      "space d B": "debugger::ClearAllBreakpoints",
+      "space d o": "debugger::StepOver",
+      "f10": "debugger::StepOver",
+      "space d i": "debugger::StepInto",
+      "f11": "debugger::StepInto",
+      "space d O": "debugger::StepOut",
+      "shift-f11": "debugger::StepOut",
+      "space d r": "debugger::Restart",
+      "ctrl-f5": "debugger::Restart",
+      "space d p": "debugger::Pause",
+      // "space d R": "repl",
+      "space d q": "debugger::Stop",
+      // "space d h": "debugger::EvaluateSelectedText",
+      "space d v": "debugger::FocusVariables",
+      "space d u": "debug_panel::ToggleFocus",
+
+      // Terminal Bindings
+      "ctrl-'": "terminal_panel::ToggleFocus",
+      "space t f": "workspace::NewCenterTerminal",
+      "space t h": "workspace::NewTerminal",
+
+      // Layout Changes
+      "ctrl-k ctrl-z": "workspace::ToggleCenteredLayout",
+      "space u z": "workspace::ToggleCenteredLayout",
+
+      // Toggles
+      "space u h": "editor::ToggleInlayHints",
+      "space u d": "editor::ToggleDiagnostics",
+
+      // AI Keybindings
+      "space a a": "agent::ToggleFocus",
+      "space a n": "agent::NewThread",
+      "space a i": "assistant::InlineAssist",
+      "space a e": [
+        "agent::NewExternalAgentThread",
+        { "agent": { "custom": { "name": "opencode" } } },
+      ],
+
+      // Enhanced AI/Agent Workflow
+
+      // "space a ?": "agent::ToggleModelSelector"
+    },
+  },
+  {
+    "context": "Editor && VimControl && !VimWaiting && !menu && vim_mode == visual",
+    "bindings": {
+      "space l f": "editor::FormatSelections",
+    },
+  },
+
+  // Git Panel
+  {
+    "context": "GitPanel && ChangesList && !GitBranchSelector && !GitRepositorySelector",
+    "bindings": {
+      "d": ["git::RestoreFile", { "skip_prompt": false }],
+      "shift-p": "git::Push",
+      "f": "git::Fetch",
+      "p": "git::Pull",
+    },
+  },
+  {
+    "context": "GitPanel && CommitEditor > Editor",
+    "bindings": {
+      "c": "git::Commit",
+      "shift-p": "git::Push",
+      "f": "git::Fetch",
+      "p": "git::Pull",
+    },
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-'": "terminal_panel::Toggle",
+      "alt-enter": "workspace::ToggleZoom",
+    },
+  },
+  {
+    "context": "VimControl && !menu",
+    "unbind": {
+      "g l": "vim::SelectNext",
+    },
+  },
+  {
+    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "unbind": {
+      "g r": "editor::FindAllReferences",
+    },
+  },
+]
