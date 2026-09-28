@@ -6,7 +6,6 @@ return {
   opts = {
     icons = { group = '', rules = false, separator = '-' },
     spec = {
-      { '<Leader>a', group = 'AI' },
       { '<Leader>b', group = 'Buffers' },
       { '<Leader>bs', group = 'Sort Buffers' },
       { '<Leader>d', group = 'Debugger' },
