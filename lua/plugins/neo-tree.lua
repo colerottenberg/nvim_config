@@ -24,17 +24,17 @@ return {
   },
   keys = {
     { '<Leader>e', '<Cmd>Neotree toggle<CR>', desc = 'Toggle Explorer' },
-    {
-      '<Leader>o',
-      function()
-        if vim.bo.filetype == 'neo-tree' then
-          vim.cmd.wincmd('p')
-        else
-          vim.cmd.Neotree('focus')
-        end
-      end,
-      desc = 'Toggle Explorer Focus',
-    },
+    -- {
+    --   '<Leader>o',
+    --   function()
+    --     if vim.bo.filetype == 'neo-tree' then
+    --       vim.cmd.wincmd('p')
+    --     else
+    --       vim.cmd.Neotree('focus')
+    --     end
+    --   end,
+    --   desc = 'Toggle Explorer Focus',
+    -- },
   },
   opts = {
     enable_git_status = git_available,
