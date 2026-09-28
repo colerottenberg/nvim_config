@@ -12,6 +12,9 @@ return {
     luasnip.filetype_extend('c', { 'cdoc' })
     luasnip.filetype_extend('cpp', { 'cppdoc' })
     luasnip.filetype_extend('python', { 'pydoc' })
+    luasnip.filetype_extend('lua', { 'luadoc' })
+    luasnip.filetype_extend('sh', { 'zsh' })
+    luasnip.filetype_extend('sh', { 'bash' })
     for _, loader in ipairs({ 'vscode', 'snipmate', 'lua' }) do
       require('luasnip.loaders.from_' .. loader).lazy_load()
     end
