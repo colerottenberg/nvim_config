@@ -1,4 +1,4 @@
--- Agent backend selection: NVIM_AI=claude|opencode, else opencode, else claude.
+-- Agent backend selection: NVIM_AI=claude|opencode, else first CLI on PATH.
 
 local M = {}
 
@@ -7,11 +7,11 @@ local function resolve()
   if want == 'claude' or want == 'opencode' then
     return want
   end
-  if vim.fn.executable('opencode') == 1 then
-    return 'opencode'
-  end
   if vim.fn.executable('claude') == 1 then
     return 'claude'
+  end
+  if vim.fn.executable('opencode') == 1 then
+    return 'opencode'
   end
   return 'none'
 end
