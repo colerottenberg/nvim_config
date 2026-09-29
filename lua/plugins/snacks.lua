@@ -215,14 +215,6 @@ return {
       end,
       desc = 'Zen mode (centered)',
     },
-    {
-      '<Leader>O',
-      function()
-        local explorer = require('snacks.explorer')
-        explorer.open({ follow_file = true })
-      end,
-      desc = 'Reveal file in explorer',
-    },
   },
   ---@type snacks.Config
   opts = {
@@ -239,7 +231,17 @@ return {
         },
       },
     },
-    picker = { enabled = true, ui_select = true },
+    picker = {
+      enabled = true,
+      ui_select = true,
+      win = {
+        input = {
+          keys = {
+            ['<C-c>'] = false,
+          },
+        },
+      },
+    },
     notifier = {
       enabled = true,
       icons = { debug = '', error = '', info = '', trace = '', warn = '' },
