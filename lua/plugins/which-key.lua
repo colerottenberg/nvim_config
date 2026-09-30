@@ -17,6 +17,7 @@ return {
       { '<Leader>p', group = 'Packages' },
       { '<Leader>S', group = 'Session' },
       { '<Leader>t', group = 'Terminal' },
+      { '<Leader>T', group = 'Tests' },
       { '<Leader>u', group = 'UI/UX' },
       { '<Leader>x', group = 'Quickfix/Lists' },
       { 'ga', group = 'Call Hierarchy' },

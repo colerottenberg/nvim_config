@@ -264,4 +264,27 @@ return {
       })
     end,
   },
+  {
+    'uhs-robert/oasis.nvim',
+    lazy = false,
+    priority = 1000,
+    ---@type OasisConfig
+    opts = {
+      -- transparent = true,
+      dark_style = 'midnight',
+      light_style = 'moonlight',
+      integrations = {
+        default_enabled = true,
+        plugins = {
+          lazy = true,
+          render_markdown = true,
+          snacks = true,
+          which_key = true,
+        },
+      },
+    },
+    config = function(_, opts)
+      require('oasis').setup(opts) -- (see Configuration below for all customization options)
+    end,
+  },
 }
