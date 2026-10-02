@@ -25,6 +25,26 @@ local function picker(name, cfg)
   end
 end
 
+-- The picker prompt force-enters insert mode on every BufEnter
+-- (snacks/picker/core/input.lua), so anything that returns focus to it must
+-- stopinsert afterwards to keep us in normal mode.
+---@param picker snacks.Picker
+---@param win "input"|"list"|"preview"
+local function focus_normal(picker, win)
+  picker:focus(win, { show = true }) -- show = un-hide preview in dropdown/select layouts
+  vim.schedule(function()
+    if vim.api.nvim_get_mode().mode:find('^i') then
+      vim.cmd.stopinsert()
+    end
+  end)
+end
+
+-- input -> list -> preview -> input, always landing in normal mode.
+local NEXT_WIN = { input = 'list', list = 'preview', preview = 'input' }
+local function cycle_focus(picker)
+  focus_normal(picker, NEXT_WIN[picker:current_win()] or 'list')
+end
+
 local function add_workspace_folder(p, item)
   p:close()
   if item and item.path then
@@ -234,10 +254,34 @@ return {
     picker = {
       enabled = true,
       ui_select = true,
+      actions = {
+        cycle_focus = cycle_focus,
+        focus_preview_normal = function(p)
+          focus_normal(p, 'preview')
+        end,
+        focus_list_normal = function(p)
+          focus_normal(p, 'list')
+        end,
+      },
       win = {
         input = {
           keys = {
             ['<C-c>'] = false,
+            -- normal mode only: <c-w> is already delete-word in insert mode
+            ['<c-w>w'] = 'cycle_focus',
+            ['<c-w>p'] = 'focus_preview_normal',
+          },
+        },
+        list = {
+          keys = {
+            ['<c-w>w'] = 'cycle_focus',
+            ['<c-w>p'] = 'focus_preview_normal',
+          },
+        },
+        preview = {
+          keys = {
+            ['<c-w>w'] = 'cycle_focus',
+            ['<c-w>p'] = 'focus_list_normal',
           },
         },
       },
