@@ -15,6 +15,7 @@ return {
     luasnip.filetype_extend('lua', { 'luadoc' })
     luasnip.filetype_extend('sh', { 'zsh' })
     luasnip.filetype_extend('sh', { 'bash' })
+    luasnip.filetype_extend('opencode', { 'markdown' })
     for _, loader in ipairs({ 'vscode', 'snipmate', 'lua' }) do
       require('luasnip.loaders.from_' .. loader).lazy_load()
     end

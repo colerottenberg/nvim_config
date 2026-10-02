@@ -260,6 +260,7 @@ return {
             end,
           },
           { icon = '󱎸', key = 'w', desc = 'Find Word', action = '<Leader>fw' },
+          { icon = '󰱼', key = 'e', desc = 'Open Explorer', action = '<Leader>e' },
           {
             icon = '',
             key = 'g',
@@ -309,7 +310,6 @@ return {
       indent = { char = '▏' },
       scope = { char = '▏' },
       filter = not_large,
-      animate = { enabled = false },
     },
     scope = { enabled = true, filter = not_large },
     -- LSP document-highlight: Python servers return kind=Write for the whole
@@ -334,7 +334,10 @@ return {
     },
   },
   config = function(_, opts)
-    require('snacks').setup(opts)
+    local snacks = require('snacks')
+    snacks.setup(opts)
+    snacks.toggle.dim():map('<Leader>uD')
+    snacks.toggle.animate():map('<Leader>uA')
 
     local function backdrop_hl()
       vim.api.nvim_set_hl(0, 'SnacksBackdrop', { bg = Snacks.util.color('Normal', 'bg') })

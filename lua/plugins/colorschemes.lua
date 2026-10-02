@@ -3,6 +3,7 @@
 -- theme plugin when its colorscheme is requested via :colorscheme / pickers.
 
 local cache_file = vim.fn.stdpath('state') .. '/last_colorscheme'
+local cache_background = vim.fn.stdpath('state') .. '/last_background'
 
 return {
   {
@@ -17,14 +18,8 @@ return {
       ---@type CatppuccinOptions
       local opts = {
         flavour = 'macchiato',
-        background = {
-          dark = 'macchiato',
-          light = 'latte',
-        },
-        float = {
-          transparent = true,
-          solid = true,
-        },
+        background = { dark = 'macchiato', light = 'latte' },
+        float = { transparent = true, solid = true },
         transparent_background = false,
         styles = {
           comments = { 'italic' },

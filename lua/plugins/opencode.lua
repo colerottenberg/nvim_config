@@ -16,6 +16,10 @@ return {
         open_in_tab = { '<C-t>', mode = { 'i', 'n' } },
         toggle_scope = { '<C-g>', mode = { 'i', 'n' } },
       },
+      input_window = {
+        ['<leader>om'] = { 'switch_mode' }, -- Switch between modes (build/plan)
+        ['<leader>or'] = { 'cycle_variant', mode = { 'n', 'i' } }, -- Switch between modes (build/plan)
+      },
     },
     ui = {
       input = {
