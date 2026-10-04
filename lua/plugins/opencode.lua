@@ -1,7 +1,6 @@
 ---@type LazySpec
 return {
   'sudo-tee/opencode.nvim',
-  branch = 'v2', -- Use the v2 branch for testing with OpenCode v2
   ---@type OpencodeConfig
   opts = {
     preferred_picker = 'snacks',
@@ -18,7 +17,7 @@ return {
       },
       input_window = {
         ['<leader>om'] = { 'switch_mode' }, -- Switch between modes (build/plan)
-        ['<leader>or'] = { 'cycle_variant', mode = { 'n', 'i' } }, -- Switch between modes (build/plan)
+        ['<leader>or'] = { 'cycle_variant' }, -- Switch between modes (build/plan)
       },
     },
     ui = {

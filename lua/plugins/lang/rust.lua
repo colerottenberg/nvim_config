@@ -49,6 +49,9 @@ return {
     ft = 'rust',
     init = function()
       -- rustaceanvim reads this global; must exist before the rust ftplugin runs.
+      ---@type rustaceanvim.dap.Opts
+      local dap_opts = {}
+      ---@type rustaceanvim.Opts
       vim.g.rustaceanvim = {
         server = {
           default_settings = {
@@ -99,7 +102,14 @@ return {
       -- receives the '<,'> range (its dispatcher picks the visual impl).
       { '<LocalLeader>m', rustlsp('expandMacro'), desc = 'Rust: expand macro', ft = 'rust' },
       { '<LocalLeader>J', rustlsp('joinLines'), desc = 'Rust: join lines', ft = 'rust' },
-      { '<LocalLeader>J', ':RustLsp joinLines<CR>', mode = 'x', silent = true, desc = 'Rust: join lines', ft = 'rust' },
+      {
+        '<LocalLeader>J',
+        ':RustLsp joinLines<CR>',
+        mode = 'x',
+        silent = true,
+        desc = 'Rust: join lines',
+        ft = 'rust',
+      },
       { '<LocalLeader>s', rustlsp('ssr'), desc = 'Rust: structural replace', ft = 'rust' },
       {
         '<LocalLeader>s',
