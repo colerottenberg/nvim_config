@@ -41,36 +41,43 @@ local function cargo(name)
   end
 end
 
+-- LLDB init commands that load rustc's pretty-printers (String, Vec, HashMap...).
+-- Replaces rustaceanvim's `load_rust_types`, which forwards lldb_commands
+-- verbatim; a blank line there makes LLDB fail the launch with
+-- "error: empty command". Newer toolchains ship only lldb_lookup.py (which
+-- registers everything on import); older ones also ship lldb_commands.
+-- Runs per debug launch, so a project's rust-toolchain.toml is respected.
+local function rust_lldb_init_commands()
+  local res = vim.system({ 'rustc', '--print', 'sysroot' }, { text = true, cwd = vim.fn.getcwd() }):wait()
+  if res.code ~= 0 then
+    return {}
+  end
+  local etc = vim.fs.joinpath(vim.trim(res.stdout), 'lib', 'rustlib', 'etc')
+  local lookup = vim.fs.joinpath(etc, 'lldb_lookup.py')
+  if not vim.uv.fs_stat(lookup) then
+    return {}
+  end
+  local cmds = { ('command script import "%s"'):format(lookup) }
+  local f = io.open(vim.fs.joinpath(etc, 'lldb_commands'), 'r')
+  if f then
+    for line in f:lines() do
+      line = vim.trim(line)
+      if line ~= '' and not vim.startswith(line, '#') then
+        table.insert(cmds, line)
+      end
+    end
+    f:close()
+  end
+  return cmds
+end
+
 return {
   ---@type LazySpec
   {
     'mrcjkb/rustaceanvim',
     version = '^9',
     ft = 'rust',
-    dependencies = { 'mason-org/mason.nvim' },
     init = function()
-      local codelldb_path = ''
-      local liblldb_path = ''
-
-      local mason_registry = require('mason-registry')
-      if mason_registry.is_installed('codelldb') then
-        local pkg = mason_registry.get_package('codelldb')
-        local install_path = pkg:get_install_path()
-
-        -- Adapt extensions based on your OS (.exe for Windows)
-        local extension = vim.loop.os_uname().sysname == 'Windows_NT' and '.exe' or ''
-
-        codelldb_path = install_path .. '/extension/adapter/codelldb' .. extension
-
-        if vim.loop.os_uname().sysname == 'Linux' then
-          liblldb_path = install_path .. '/extension/lldb/lib/liblldb.so'
-        elseif vim.loop.os_uname().sysname == 'Darwin' then
-          liblldb_path = install_path .. '/extension/lldb/lib/liblldb.dylib'
-        else
-          liblldb_path = install_path .. '\\extension\\lldb\\bin\\liblldb.dll'
-        end
-      end
-
       -- rustaceanvim reads this global; must exist before the rust ftplugin runs.
       ---@type rustaceanvim.Opts
       vim.g.rustaceanvim = {
@@ -93,9 +100,23 @@ return {
             },
           },
         },
+        -- The adapter is left to rustaceanvim's auto-detection (Mason codelldb,
+        -- correct liblldb per OS). Rust type formatters are loaded by
+        -- rust_lldb_init_commands() instead of `load_rust_types` (see above).
         dap = {
-          adapter = require('rustaceanvim.config').get_codelldb_adapter(codelldb_path, liblldb_path),
-          load_rust_types = true,
+          load_rust_types = function()
+            return false
+          end,
+          configuration = function()
+            return {
+              name = 'Rust debug client',
+              type = 'codelldb',
+              request = 'launch',
+              stopOnEntry = false,
+              sourceLanguages = { 'rust' },
+              initCommands = rust_lldb_init_commands(),
+            }
+          end,
         },
         tools = {
           enable_clippy = false,
