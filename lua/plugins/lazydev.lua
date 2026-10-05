@@ -11,7 +11,8 @@ return {
       { path = 'lazy.nvim', words = { 'Lazy' } },
       { path = 'snacks.nvim', words = { 'Snacks' } },
       { path = 'lazydev.nvim', words = { 'LazyDev' } },
-      { path = 'rustaceanvim', words = { 'rustaceanvim', 'rust' } },
+      { path = 'rustaceanvim', words = { 'rustaceanvim' } },
+      { path = 'rustowl', words = { 'rustowl' } },
     },
   },
 }

@@ -137,6 +137,34 @@ return {
 
   ---@type LazySpec
   {
+    'cordx56/rustowl',
+    version = '*', -- Latest stable version
+    build = 'cargo install rustowl',
+    lazy = false, -- This plugin is already lazy
+    ---@type rustowl.Config
+    opts = {
+      auto_enable = false,
+      idle_time = 300,
+      client = {
+        on_attach = function(_, buffer)
+          -- Toggle RustOwl
+          vim.keymap.set('n', '<LocalLeader>rt', function()
+            require('rustowl').toggle(buffer)
+          end)
+          -- Enable RustOwl
+          vim.keymap.set('n', '<LocalLeader>re', function()
+            require('rustowl').enable(buffer)
+          end)
+          -- Disable RustOwl
+          vim.keymap.set('n', '<LocalLeader>rd', function()
+            require('rustowl').disable(buffer)
+          end)
+        end,
+      },
+    },
+  },
+  ---@type LazySpec
+  {
     'Saecki/crates.nvim',
     event = { 'BufRead Cargo.toml' },
     opts = {
