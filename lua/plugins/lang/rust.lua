@@ -47,10 +47,31 @@ return {
     'mrcjkb/rustaceanvim',
     version = '^9',
     ft = 'rust',
+    dependencies = { 'mason-org/mason.nvim' },
     init = function()
+      local codelldb_path = ''
+      local liblldb_path = ''
+
+      local mason_registry = require('mason-registry')
+      if mason_registry.is_installed('codelldb') then
+        local pkg = mason_registry.get_package('codelldb')
+        local install_path = pkg:get_install_path()
+
+        -- Adapt extensions based on your OS (.exe for Windows)
+        local extension = vim.loop.os_uname().sysname == 'Windows_NT' and '.exe' or ''
+
+        codelldb_path = install_path .. '/extension/adapter/codelldb' .. extension
+
+        if vim.loop.os_uname().sysname == 'Linux' then
+          liblldb_path = install_path .. '/extension/lldb/lib/liblldb.so'
+        elseif vim.loop.os_uname().sysname == 'Darwin' then
+          liblldb_path = install_path .. '/extension/lldb/lib/liblldb.dylib'
+        else
+          liblldb_path = install_path .. '\\extension\\lldb\\bin\\liblldb.dll'
+        end
+      end
+
       -- rustaceanvim reads this global; must exist before the rust ftplugin runs.
-      ---@type rustaceanvim.dap.Opts
-      local dap_opts = {}
       ---@type rustaceanvim.Opts
       vim.g.rustaceanvim = {
         server = {
@@ -72,7 +93,10 @@ return {
             },
           },
         },
-        dap = { load_rust_types = true },
+        dap = {
+          adapter = require('rustaceanvim.config').get_codelldb_adapter(codelldb_path, liblldb_path),
+          load_rust_types = true,
+        },
         tools = {
           enable_clippy = false,
           executor = 'toggleterm', -- runnables/debuggables output in toggleterm

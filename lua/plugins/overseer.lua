@@ -4,7 +4,7 @@ return {
   'stevearc/overseer.nvim',
   cmd = { 'OverseerOpen', 'OverseerClose', 'OverseerToggle', 'OverseerShell', 'OverseerRun', 'OverseerTaskAction' },
   keys = {
-    { '<Leader>mt', '<Cmd>OverseerToggle! right<CR>', desc = 'Toggle Overseer' },
+    { '<Leader>mt', '<Cmd>OverseerToggle right<CR>', desc = 'Toggle Overseer' },
     { '<Leader>mc', '<Cmd>OverseerShell<CR>', desc = 'Run command' },
     { '<Leader>mr', '<Cmd>OverseerRun<CR>', desc = 'Run task' },
     { '<Leader>M', '<Cmd>OverseerRun<CR>', desc = 'Run task' },
@@ -23,7 +23,8 @@ return {
       dap = true,
       strategy = 'toggleterm',
       task_list = {
-        bindings = {
+        keymaps = {
+          ['d'] = { 'keymap.run_action', opts = { action = 'dispose' }, desc = 'Dispose task' },
           ['q'] = '<Cmd>close<CR>',
           ['K'] = 'IncreaseDetail',
           ['J'] = 'DecreaseDetail',
