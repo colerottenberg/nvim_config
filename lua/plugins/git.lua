@@ -173,7 +173,7 @@ return {
     'NeogitOrg/neogit',
     lazy = true,
     dependencies = {
-      'esmuellert/codediff.nvim',
+      'sindrets/diffview.nvim',
       'folke/snacks.nvim',
     },
     cmd = 'Neogit',
