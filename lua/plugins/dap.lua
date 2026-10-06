@@ -1,7 +1,7 @@
 -- Debugging (nvim-dap + dap-ui + virtual text). Loads on its keymaps.
--- Python is wired through uv (see lua/dap_py.lua), but only set up when
--- editing Python: after/ftplugin/python.lua calls require("dap_py").setup()
--- so non-Python buffers never load/register it. See docs/dap-guide.md.
+-- Python is wired through uv in plugins/lang/python.lua, which registers its
+-- adapter/configs on `User DapConfigured` (fired at the end of config below)
+-- and owns the python keymaps.
 --
 -- All user-facing prompts here go through `vim.ui.input`/`vim.ui.select`
 -- (never `vim.fn.input`), so they're routed through dressing.nvim's UI.
@@ -455,5 +455,11 @@ return {
         end
       end
     end)
+
+    -- Language specs (plugins/lang/*.lua) hook adapters/configs in here.
+    -- Synchronous, unlike lazy's scheduled `User LazyLoad`, so the first
+    -- `<Leader>dc` already sees them; and it runs after mason-nvim-dap's
+    -- default handlers, so language adapters take precedence.
+    vim.api.nvim_exec_autocmds('User', { pattern = 'DapConfigured', modeline = false })
   end,
 }
