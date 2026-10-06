@@ -109,30 +109,52 @@ return {
       }
       catppuccin.setup(opts)
 
-      -- Persist the colorscheme on change.
+      local function write_cache(path, value)
+        pcall(function()
+          local f = io.open(path, 'w')
+          if f then
+            f:write(value)
+            f:close()
+          end
+        end)
+      end
+
+      local function read_cache(path)
+        local f = io.open(path, 'r')
+        if not f then
+          return nil
+        end
+        local value = vim.trim(f:read('*a') or '')
+        f:close()
+        return value ~= '' and value or nil
+      end
+
+      -- Persist the colorscheme and background on change.
+      local group = vim.api.nvim_create_augroup('user_cache_colorscheme', { clear = true })
       vim.api.nvim_create_autocmd('ColorScheme', {
-        group = vim.api.nvim_create_augroup('user_cache_colorscheme', { clear = true }),
+        group = group,
         callback = function(args)
-          pcall(function()
-            local f = io.open(cache_file, 'w')
-            if f then
-              f:write(args.match)
-              f:close()
-            end
-          end)
+          write_cache(cache_file, args.match)
+          write_cache(cache_background, vim.o.background)
+        end,
+      })
+      vim.api.nvim_create_autocmd('OptionSet', {
+        group = group,
+        pattern = 'background',
+        callback = function()
+          write_cache(cache_background, vim.o.background)
         end,
       })
 
-      -- Apply the cached colorscheme, falling back to the default.
-      local colorscheme = 'catppuccin-macchiato'
-      local f = io.open(cache_file, 'r')
-      if f then
-        local cached = vim.trim(f:read('*a') or '')
-        f:close()
-        if cached ~= '' then
-          colorscheme = cached
-        end
+      -- Restore the cached background before the colorscheme so themes that
+      -- pick a variant from 'background' (e.g. plain `catppuccin`) honor it.
+      local background = read_cache(cache_background)
+      if background == 'dark' or background == 'light' then
+        vim.o.background = background
       end
+
+      -- Apply the cached colorscheme, falling back to the default.
+      local colorscheme = read_cache(cache_file) or 'catppuccin-macchiato'
       if not pcall(vim.cmd.colorscheme, colorscheme) then
         pcall(vim.cmd.colorscheme, 'catppuccin-macchiato')
       end
