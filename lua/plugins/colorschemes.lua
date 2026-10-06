@@ -234,6 +234,36 @@ return {
   { 'savq/melange-nvim', lazy = true },
   { 'zootedb0t/citruszest.nvim', lazy = true },
   { 'uloco/bluloco.nvim', lazy = true, dependencies = { 'rktjmp/lush.nvim' }, opts = {} },
+
+  -- Muted / low-contrast
+  { 'sainnhe/gruvbox-material', lazy = true },
+  { 'sainnhe/everforest', lazy = true },
+  { 'vague2k/vague.nvim', lazy = true, opts = {} },
+  { 'slugbyte/lackluster.nvim', lazy = true },
+  { 'datsfilipe/vesper.nvim', lazy = true },
+  { 'mcchrish/zenbones.nvim', lazy = true, dependencies = { 'rktjmp/lush.nvim' } },
+
+  -- Bold / high-contrast
+  { 'scottmckendry/cyberdream.nvim', lazy = true, opts = {} },
+  { 'nyoom-engineering/oxocarbon.nvim', lazy = true },
+  { 'bluz71/vim-moonfly-colors', name = 'moonfly', lazy = true },
+  { 'bluz71/vim-nightfly-colors', name = 'nightfly', lazy = true },
+  { 'dgox16/oldworld.nvim', lazy = true },
+
+  -- Cool / blue
+  { 'AlexvZyl/nordic.nvim', lazy = true },
+  { 'gbprod/nord.nvim', lazy = true },
+  {
+    'craftzdog/solarized-osaka.nvim',
+    lazy = true,
+    opts = {},
+  },
+  { 'ribru17/bamboo.nvim', lazy = true },
+
+  -- All-rounders
+  { 'projekt0n/github-nvim-theme', name = 'github-theme', lazy = true },
+  { 'marko-cerovac/material.nvim', lazy = true },
+  { 'miikanissi/modus-themes.nvim', lazy = true },
   -- Using Lazy
   {
     'navarasu/onedark.nvim',
