@@ -245,7 +245,6 @@ return {
 
   -- Bold / high-contrast
   { 'scottmckendry/cyberdream.nvim', lazy = true, opts = {} },
-  { 'nyoom-engineering/oxocarbon.nvim', lazy = true },
   { 'bluz71/vim-moonfly-colors', name = 'moonfly', lazy = true },
   { 'bluz71/vim-nightfly-colors', name = 'nightfly', lazy = true },
   { 'dgox16/oldworld.nvim', lazy = true },

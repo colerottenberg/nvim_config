@@ -262,6 +262,23 @@ return {
         focus_list_normal = function(p)
           focus_normal(p, 'list')
         end,
+        opencode_send_file = function(picker)
+          local selected = picker:selected({ fallback = true })
+          if selected and #selected > 0 then
+            local files = {}
+            for _, item in ipairs(selected) do
+              if item.file then
+                table.insert(files, item.file)
+              end
+            end
+            picker:close()
+            require('opencode.api').open_input()
+            local context = require('opencode.context')
+            for _, file in ipairs(files) do
+              context.add_file(file)
+            end
+          end
+        end,
       },
       win = {
         input = {
@@ -270,12 +287,14 @@ return {
             -- normal mode only: <c-w> is already delete-word in insert mode
             ['<c-w>w'] = 'cycle_focus',
             ['<c-w>p'] = 'focus_preview_normal',
+            ['<c-w>s'] = 'opencode_send_file',
           },
         },
         list = {
           keys = {
             ['<c-w>w'] = 'cycle_focus',
             ['<c-w>p'] = 'focus_preview_normal',
+            ['<c-w>s'] = 'opencode_send_file',
           },
         },
         preview = {

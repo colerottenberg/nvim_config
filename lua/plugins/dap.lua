@@ -6,6 +6,7 @@
 -- All user-facing prompts here go through `vim.ui.input`/`vim.ui.select`
 -- (never `vim.fn.input`), so they're routed through dressing.nvim's UI.
 
+---@type LazySpec
 return {
   'mfussenegger/nvim-dap',
   dependencies = {
