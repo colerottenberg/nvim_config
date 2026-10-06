@@ -7,6 +7,7 @@
 local opt = vim.opt
 local g = vim.g
 
+opt.autoread = true
 opt.backspace:append('nostop') -- don't stop backspace at insert
 opt.breakindent = true -- wrap indent to match line start
 opt.clipboard = 'unnamedplus' -- connection to the system clipboard
