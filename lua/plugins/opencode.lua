@@ -27,6 +27,15 @@ return {
         auto_hide = false,
       },
     },
+    context = {
+      diagnostics = {
+        info = true,
+        only_closest = false,
+      },
+      git_diff = {
+        enabled = true,
+      },
+    },
   },
   config = function(_, opts)
     require('opencode').setup(opts)
