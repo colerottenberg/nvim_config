@@ -14,13 +14,7 @@ return {
     'lewis6991/gitsigns.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
     keys = {
-      {
-        '<Leader>gP',
-        function()
-          require('gitsigns').preview_hunk()
-        end,
-        desc = 'Preview hunk',
-      },
+
       -- Navigation mappings
       {
         ']g',
@@ -103,7 +97,7 @@ return {
       {
         '<Leader>gd',
         function()
-          require('gitsigns').diffthis()
+          require('gitsigns').diffthis(nil, { unified = true })
         end,
         desc = 'View git diff',
       },
