@@ -22,6 +22,15 @@ local function filename()
 end
 
 return {
+  -- Custom ------------------------------------------------------------------
+  s(
+    { trig = 'sce', desc = 'Static Constexpr' },
+    fmt('static constexpr <> <> = <>', { i(1, 'auto'), i(2), i(3) }, { delimiters = '<>' })
+  ),
+  s(
+    { trig = 'ifc', desc = 'If Constexpr' },
+    fmt('if constexpr (<>) {\n\t<> \n}', { i(1), i(2) }, { delimiters = '<>' })
+  ),
   -- Lambdas ------------------------------------------------------------------
   s({ trig = 'lam', desc = 'Lambda' }, fmt('[<>](<>) {\n  <>\n}', { capture(1), i(2), i(0) }, { delimiters = '<>' })),
   s(
