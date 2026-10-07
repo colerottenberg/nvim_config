@@ -11,6 +11,7 @@ return {
       { '<Leader>d', group = 'Debugger' },
       { '<Leader>f', group = 'Find' },
       { '<Leader>g', group = 'Git' },
+      { '<Leader>gh', group = 'Github' },
       { '<Leader>l', group = 'Language Tools' },
       { '<Leader>L', group = 'Leetcode' },
       { '<Leader>ly', group = 'Type Hierarchy' },

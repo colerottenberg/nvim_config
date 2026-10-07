@@ -163,6 +163,36 @@ return {
     },
     { '<Leader>gb', picker('git_branches'), desc = 'Git branches' },
     { '<Leader>gM', picker('git_log_line'), desc = 'Git log line' },
+    -- Github Keybindings
+    {
+      '<Leader>ghi',
+      function()
+        require('snacks.gh').issue({ state = 'open' })
+      end,
+      desc = 'Open Issues',
+    },
+    {
+      '<Leader>ghI',
+      function()
+        require('snacks.gh').issue({ state = 'all' })
+      end,
+      desc = 'All Issues',
+    },
+    {
+      '<Leader>ghp',
+      function()
+        require('snacks.gh').pr({ state = 'open' })
+      end,
+      desc = 'Pull Requests (Open)',
+    },
+    {
+      '<Leader>ghP',
+      function()
+        require('snacks.gh').pr({ state = 'all' })
+      end,
+      desc = 'Pull Requests (All)',
+    },
+
     -- buffers
     {
       '<Leader>c',
@@ -395,6 +425,7 @@ return {
       -- resolves to ~99% Normal bg / 1% black, i.e. matches the colorscheme.
       win = { style = 'zen', width = 120, backdrop = { transparent = false, blend = 99 } },
     },
+    gh = {},
   },
   config = function(_, opts)
     local snacks = require('snacks')
