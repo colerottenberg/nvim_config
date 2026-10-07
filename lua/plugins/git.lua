@@ -5,22 +5,6 @@ local top_delete_sign = { text = '▍' }
 local change_delete_sign = { text = '▍' }
 local untracked_sign = { text = '▍' }
 
-local diff_commit = function()
-  require('snacks.picker').git_log({
-    focus = 'list',
-    confirm = function(picker, item)
-      picker:close()
-      local commit_sha = item.commit
-      if not commit_sha then
-        vim.notify('No commit hash found', vim.log.levels.WARN)
-        return
-      end
-
-      require('gitsigns').diffthis(commit_sha)
-    end,
-  })
-end
-
 ---@type LazySpec
 return {
   -- Git signs + per-buffer git hunk mappings.
@@ -70,9 +54,16 @@ return {
       {
         '<Leader>gl',
         function()
-          require('gitsigns').blame_line({ full = true })
+          require('gitsigns').toggle_current_line_blame()
         end,
-        desc = 'View full git blame',
+        desc = 'Toggle line blame',
+      },
+      {
+        '<Leader>gL',
+        function()
+          require('gitsigns').blame()
+        end,
+        desc = 'View full blame',
       },
       {
         '<Leader>gp',
@@ -116,11 +107,7 @@ return {
         end,
         desc = 'View git diff',
       },
-      {
-        '<Leader>gd',
-        diff_commit,
-        desc = 'View git diff a commit',
-      },
+
       -- Visual mode mappings
       {
         '<Leader>gr',
@@ -148,6 +135,7 @@ return {
         desc = 'Select git hunk',
       },
     },
+    ---@type Gitsigns.Config
     opts = {
       signs = {
         add = add_sign,
@@ -165,8 +153,39 @@ return {
         changedelete = change_delete_sign,
         untracked = untracked_sign,
       },
+      word_diff = true,
     },
     dependencies = { 'folke/snacks.nvim' },
+  },
+  ---@type LazySpec
+  {
+    'sindrets/diffview.nvim',
+    cmd = { 'DiffviewOpen', 'DiffviewClose' },
+    ---@type LazyKeysSpec[]
+    keys = {
+      {
+        '<leader>gD',
+        function()
+          require('diffview').open()
+        end,
+        desc = 'Diff working tree',
+      },
+    },
+    ---@type DiffviewConfig
+    opts = {
+      keymaps = {
+        file_panel = {
+          {
+            'n',
+            'q',
+            function()
+              require('diffview').close()
+            end,
+            { desc = 'Close Diffview' },
+          },
+        },
+      },
+    },
   },
   ---@type LazySpec
   {
