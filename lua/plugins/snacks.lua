@@ -53,6 +53,7 @@ local function add_workspace_folder(p, item)
   end
 end
 
+---@type LazySpec
 return {
   'folke/snacks.nvim',
   lazy = false,
@@ -71,7 +72,10 @@ return {
     { '<Leader>fl', picker('lines', { layout = 'dropdown' }), desc = 'Find lines' },
     {
       '<Leader>fc',
-      picker('grep_word'),
+      function()
+        require('snacks.picker').grep_word({ buffers = true })
+      end,
+      mode = { 'n', 'x' },
       desc = 'Find word under cursor',
     },
     { '<Leader>fo', picker('recent'), desc = 'Find recent files' },
@@ -161,8 +165,7 @@ return {
       picker('git_log', { focus = 'list', current_file = true, follow = true }),
       desc = 'Git commits (file)',
     },
-    { '<Leader>gb', picker('git_branches'), desc = 'Git branches' },
-    { '<Leader>gM', picker('git_log_line'), desc = 'Git log line' },
+    { '<Leader>gL', picker('git_log_line'), desc = 'Git log line' },
     -- Github Keybindings
     {
       '<Leader>ghi',
@@ -257,6 +260,13 @@ return {
         require('snacks').lazygit.open()
       end,
       desc = 'Lazygit',
+    },
+    {
+      '<Leader>gH',
+      function()
+        require('snacks').lazygit.log_file()
+      end,
+      desc = 'Log (file)',
     },
     {
       '<Leader>uz',

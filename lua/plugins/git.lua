@@ -46,7 +46,7 @@ return {
       },
       -- Leader-based mappings
       {
-        '<Leader>gl',
+        '<Leader>gb',
         function()
           require('gitsigns').toggle_current_line_blame()
         end,

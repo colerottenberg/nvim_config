@@ -31,6 +31,8 @@ return {
     { trig = 'ifc', desc = 'If Constexpr' },
     fmt('if constexpr (<>) {\n\t<> \n}', { i(1), i(2) }, { delimiters = '<>' })
   ),
+  s({ trig = 'nd', desc = 'no discard' }, t('[[nodiscard]]')),
+  s({ trig = 'np', desc = 'nullptr' }, t('nullptr')),
   -- Lambdas ------------------------------------------------------------------
   s({ trig = 'lam', desc = 'Lambda' }, fmt('[<>](<>) {\n  <>\n}', { capture(1), i(2), i(0) }, { delimiters = '<>' })),
   s(
