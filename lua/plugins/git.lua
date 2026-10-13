@@ -1,10 +1,3 @@
-local add_sign = { text = '▍' }
-local change_sign = { text = '▍' }
-local delete_sign = { text = '▍' }
-local top_delete_sign = { text = '▍' }
-local change_delete_sign = { text = '▍' }
-local untracked_sign = { text = '▍' }
-
 ---@type LazySpec
 return {
   -- Git signs + per-buffer git hunk mappings.
@@ -130,25 +123,7 @@ return {
       },
     },
     ---@type Gitsigns.Config
-    opts = {
-      signs = {
-        add = add_sign,
-        change = change_sign,
-        delete = delete_sign,
-        topdelete = top_delete_sign,
-        changedelete = change_delete_sign,
-        untracked = untracked_sign,
-      },
-      signs_staged = {
-        add = add_sign,
-        change = change_sign,
-        delete = delete_sign,
-        topdelete = top_delete_sign,
-        changedelete = change_delete_sign,
-        untracked = untracked_sign,
-      },
-      word_diff = true,
-    },
+    opts = {},
     dependencies = { 'folke/snacks.nvim' },
   },
   ---@type LazySpec
