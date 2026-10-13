@@ -94,6 +94,19 @@ return {
         end,
         desc = 'View git diff',
       },
+      {
+        '<Leader>gq',
+        function()
+          require('gitsigns').setqflist('attached', { open = false }, function(err)
+            if err == nil then
+              vim.notify('Added Git Hunks to Quickfix List', vim.log.levels.INFO)
+            else
+              vim.notify(err, vim.log.levels.ERROR)
+            end
+          end)
+        end,
+        desc = 'Add Buffer Git Hunks to qflist',
+      },
 
       -- Visual mode mappings
       {
@@ -130,6 +143,7 @@ return {
   {
     'sindrets/diffview.nvim',
     cmd = { 'DiffviewOpen', 'DiffviewClose' },
+    dependencies = { 'folke/snacks.nvim' },
     ---@type LazyKeysSpec[]
     keys = {
       {
@@ -168,5 +182,11 @@ return {
     keys = {
       { '<leader>gn', '<cmd>Neogit<cr>', desc = 'Show Neogit UI' },
     },
+  },
+  ---@type LazySpec
+  {
+    'esmuellert/codediff.nvim',
+    cmd = 'CodeDiff',
+    opts = {},
   },
 }

@@ -58,6 +58,7 @@ return {
   'folke/snacks.nvim',
   lazy = false,
   priority = 900,
+  ---@type LazyKeys[]
   keys = {
     -- find
     { '<Leader>ft', picker('colorschemes', { focus = 'input', layout = 'right' }), desc = 'Find themes' },
