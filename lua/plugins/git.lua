@@ -1,3 +1,63 @@
+local dv = function(args)
+  require('diffview').open(args)
+end
+
+---@type table<string, snacks.picker.Action.spec>
+local dv_actions = {
+  -- working tree vs. highlighted commit
+  dv_worktree = function(picker, item)
+    if not item then
+      return
+    end
+    picker:close()
+    dv({ item.commit })
+  end,
+
+  -- only the changes introduced by the highlighted commit
+  dv_commit = function(picker, item)
+    if not item then
+      return
+    end
+    picker:close()
+    dv({ item.commit .. '^!' })
+  end,
+
+  -- range between two multi-selected commits (Tab to select)
+  dv_range = function(picker)
+    local sel = picker:selected({ fallback = false })
+    if #sel ~= 2 then
+      vim.notify('Select exactly two commits (<Tab>)', vim.log.levels.WARN)
+      return
+    end
+    -- git_log lists newest first, so the higher idx is the older commit
+    table.sort(sel, function(a, b)
+      return a.idx > b.idx
+    end)
+    picker:close()
+    dv({ sel[1].commit .. '^..' .. sel[2].commit })
+  end,
+
+  -- same range, but against the merge base (three-dot)
+  dv_range_base = function(picker)
+    local sel = picker:selected({ fallback = false })
+    if #sel ~= 2 then
+      vim.notify('Select exactly two commits (<Tab>)', vim.log.levels.WARN)
+      return
+    end
+    table.sort(sel, function(a, b)
+      return a.idx > b.idx
+    end)
+    picker:close()
+    dv({ sel[1].commit .. '...' .. sel[2].commit })
+  end,
+}
+---@type table<string, false|string|fun(self: snacks.win)|snacks.win.Keys>
+local dv_keys = {
+  ['<a-d>'] = { 'dv_worktree', mode = { 'n', 'i' } },
+  ['<a-c>'] = { 'dv_commit', mode = { 'n', 'i' } },
+  ['<a-r>'] = { 'dv_range', mode = { 'n', 'i' } },
+  ['<a-b>'] = { 'dv_range_base', mode = { 'n', 'i' } },
+}
 ---@type LazySpec
 return {
   -- Git signs + per-buffer git hunk mappings.
@@ -149,9 +209,12 @@ return {
       {
         '<leader>gD',
         function()
-          require('diffview').open()
+          require('snacks').picker.git_log({
+            actions = dv_actions,
+            win = { input = { keys = dv_keys } },
+          })
         end,
-        desc = 'Diff working tree',
+        desc = 'Diff picker',
       },
     },
     ---@type DiffviewConfig
