@@ -33,6 +33,13 @@ return {
   ),
   s({ trig = 'nd', desc = 'no discard' }, t('[[nodiscard]]')),
   s({ trig = 'np', desc = 'nullptr' }, t('nullptr')),
+  s({ trig = 'av', desc = 'auto var' }, fmt('auto <> = <>', { i(1, 'var'), i(2) }, { delimiters = '<>' })),
+  s({ trig = 'cav', desc = 'const auto var' }, fmt('const auto <> = <>', { i(1, 'var'), i(2) }, { delimiters = '<>' })),
+  s({ trig = 'arv', desc = 'auto reference var' }, fmt('auto& <> = <>', { i(1, 'var'), i(2) }, { delimiters = '<>' })),
+  s(
+    { trig = 'carv', desc = 'const auto reference var' },
+    fmt('const auto& <> = <>', { i(1, 'var'), i(2) }, { delimiters = '<>' })
+  ),
   -- Lambdas ------------------------------------------------------------------
   s({ trig = 'lam', desc = 'Lambda' }, fmt('[<>](<>) {\n  <>\n}', { capture(1), i(2), i(0) }, { delimiters = '<>' })),
   s(
