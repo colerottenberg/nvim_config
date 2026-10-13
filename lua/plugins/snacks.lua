@@ -58,7 +58,6 @@ return {
   'folke/snacks.nvim',
   lazy = false,
   priority = 900,
-  ---@type LazyKeys[]
   keys = {
     -- find
     { '<Leader>ft', picker('colorschemes', { focus = 'input', layout = 'right' }), desc = 'Find themes' },
@@ -160,13 +159,6 @@ return {
       desc = 'Search workspace symbols',
     },
     { '<Leader>ld', picker('diagnostics', { focus = 'list' }), desc = 'Search diagnostics' },
-    -- git
-    {
-      '<Leader>gc',
-      picker('git_log', { focus = 'list', current_file = true, follow = true }),
-      desc = 'Git commits (file)',
-    },
-    { '<Leader>gL', picker('git_log_line'), desc = 'Git log line' },
     -- Github Keybindings
     {
       '<Leader>ghi',

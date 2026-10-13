@@ -51,12 +51,82 @@ local dv_actions = {
     dv({ sel[1].commit .. '...' .. sel[2].commit })
   end,
 }
----@type table<string, false|string|fun(self: snacks.win)|snacks.win.Keys>
 local dv_keys = {
   ['<a-d>'] = { 'dv_worktree', mode = { 'n', 'i' } },
   ['<a-c>'] = { 'dv_commit', mode = { 'n', 'i' } },
   ['<a-r>'] = { 'dv_range', mode = { 'n', 'i' } },
   ['<a-b>'] = { 'dv_range_base', mode = { 'n', 'i' } },
+}
+
+-- detached HEAD entries have no branch name, so fall back to the commit
+local function branch_ref(item)
+  return item.branch or item.commit
+end
+
+local function two_branches(picker)
+  local sel = picker:selected({ fallback = false })
+  if #sel ~= 2 then
+    vim.notify('Select exactly two branches (<Tab>)', vim.log.levels.WARN)
+    return
+  end
+  return branch_ref(sel[1]), branch_ref(sel[2])
+end
+
+---@type table<string, snacks.picker.Action.spec>
+local dv_branch_actions = {
+  -- working tree vs. highlighted branch
+  dv_branch_worktree = function(picker, item)
+    if not item then
+      return
+    end
+    picker:close()
+    dv({ branch_ref(item) })
+  end,
+
+  -- what the highlighted branch adds since it diverged from HEAD (PR-style)
+  dv_branch_base = function(picker, item)
+    if not item then
+      return
+    end
+    picker:close()
+    dv({ 'HEAD...' .. branch_ref(item) })
+  end,
+
+  -- direct diff between two multi-selected branches (Tab to select)
+  dv_branch_range = function(picker)
+    local a, b = two_branches(picker)
+    if not a then
+      return
+    end
+    picker:close()
+    dv({ a .. '..' .. b })
+  end,
+
+  -- two selected branches, against their merge base (three-dot)
+  dv_branch_range_base = function(picker)
+    local a, b = two_branches(picker)
+    if not a then
+      return
+    end
+    picker:close()
+    dv({ a .. '...' .. b })
+  end,
+
+  -- commit history of the highlighted branch
+  dv_branch_history = function(picker, item)
+    if not item then
+      return
+    end
+    picker:close()
+    vim.cmd('DiffviewFileHistory --range=' .. branch_ref(item))
+  end,
+}
+local dv_branch_keys = {
+  ['<a-d>'] = { 'dv_branch_worktree', mode = { 'n', 'i' } },
+  ['<a-m>'] = { 'dv_branch_base', mode = { 'n', 'i' } },
+  ['<a-r>'] = { 'dv_branch_range', mode = { 'n', 'i' } },
+  ['<a-b>'] = { 'dv_branch_range_base', mode = { 'n', 'i' } },
+  ['<a-l>'] = { 'dv_branch_history', mode = { 'n', 'i' } },
 }
 ---@type LazySpec
 return {
@@ -98,13 +168,6 @@ return {
         desc = 'First hunk',
       },
       -- Leader-based mappings
-      {
-        '<Leader>gb',
-        function()
-          require('gitsigns').toggle_current_line_blame()
-        end,
-        desc = 'Toggle line blame',
-      },
       {
         '<Leader>gL',
         function()
@@ -202,25 +265,67 @@ return {
   ---@type LazySpec
   {
     'sindrets/diffview.nvim',
-    cmd = { 'DiffviewOpen', 'DiffviewClose' },
+    cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory' },
     dependencies = { 'folke/snacks.nvim' },
     ---@type LazyKeysSpec[]
     keys = {
       {
-        '<leader>gD',
+        '<leader>gl',
         function()
           require('snacks').picker.git_log({
             actions = dv_actions,
             win = { input = { keys = dv_keys } },
           })
         end,
-        desc = 'Diff picker',
+        desc = 'Git Log',
+      },
+      {
+        '<leader>gc',
+        function()
+          require('snacks').picker.git_log({
+            current_file = true,
+            actions = dv_actions,
+            win = { input = { keys = dv_keys } },
+          })
+        end,
+        desc = 'Git Log',
+      },
+      {
+        '<leader>gb',
+        function()
+          require('snacks').picker.git_branches({
+            all = true,
+            actions = dv_branch_actions,
+            win = { input = { keys = dv_branch_keys } },
+          })
+        end,
+        desc = 'Git Branches',
       },
     },
     ---@type DiffviewConfig
     opts = {
       keymaps = {
+        view = {
+          {
+            'n',
+            'q',
+            function()
+              require('diffview').close()
+            end,
+            { desc = 'Close Diffview' },
+          },
+        },
         file_panel = {
+          {
+            'n',
+            'q',
+            function()
+              require('diffview').close()
+            end,
+            { desc = 'Close Diffview' },
+          },
+        },
+        file_history_panel = {
           {
             'n',
             'q',
