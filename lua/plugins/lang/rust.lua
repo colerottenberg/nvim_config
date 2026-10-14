@@ -71,8 +71,8 @@ local function rust_lldb_init_commands()
   return cmds
 end
 
+---@type LazySpec[]
 return {
-  ---@type LazySpec
   {
     'mrcjkb/rustaceanvim',
     version = '^9',
@@ -126,16 +126,22 @@ return {
     end,
     keys = {
       -- Run / debug / test
-      { '<LocalLeader>R', rustlsp('runnables'), desc = 'Rust: pick a runnable', ft = 'rust' },
-      { '<LocalLeader>D', rustlsp('debuggables'), desc = 'Rust: pick a debuggable', ft = 'rust' },
+      { '<LocalLeader>r', rustlsp('runnables'), desc = 'Rust: pick a runnable', ft = 'rust' },
+      { '<LocalLeader>d', rustlsp('debuggables'), desc = 'Rust: pick a debuggable', ft = 'rust' },
       { '<LocalLeader>t', rustlsp('testables'), desc = 'Rust: pick a testable', ft = 'rust' },
       { '<LocalLeader>l', rustlsp({ 'run', bang = true }), desc = 'Rust: re-run last target', ft = 'rust' },
       { '<LocalLeader>j', rustlsp({ 'debug', bang = true }), desc = 'Rust: re-debug last target', ft = 'rust' },
-      { '<LocalLeader>a', with_args('run'), desc = 'Rust: run with args', ft = 'rust' },
-      { '<LocalLeader>A', with_args('debug'), desc = 'Rust: debug with args', ft = 'rust' },
+      { '<LocalLeader>R', with_args('run'), desc = 'Rust: run with args', ft = 'rust' },
+      { '<LocalLeader>D', with_args('debug'), desc = 'Rust: debug with args', ft = 'rust' },
 
       -- Diagnostics / docs / navigation
-      { '<LocalLeader>k', rustlsp({ 'hover', 'actions' }), desc = 'Rust: hover actions', ft = 'rust' },
+      {
+        'K',
+        rustlsp({ 'hover', 'actions' }),
+        desc = 'Rust: hover actions',
+        ft = 'rust',
+        remap = true,
+      },
       { '<LocalLeader>e', rustlsp('explainError'), desc = 'Rust: explain next error', ft = 'rust' },
       { '<LocalLeader>x', rustlsp('renderDiagnostic'), desc = 'Rust: render next diagnostic', ft = 'rust' },
       { '<LocalLeader>X', rustlsp('relatedDiagnostics'), desc = 'Rust: related diagnostics', ft = 'rust' },
@@ -180,7 +186,6 @@ return {
     },
   },
 
-  ---@type LazySpec
   {
     'cordx56/rustowl',
     version = '*', -- Latest stable version
@@ -190,25 +195,18 @@ return {
     opts = {
       auto_enable = false,
       idle_time = 300,
-      client = {
-        on_attach = function(_, buffer)
-          -- Toggle RustOwl
-          vim.keymap.set('n', '<LocalLeader>rt', function()
-            require('rustowl').toggle(buffer)
-          end)
-          -- Enable RustOwl
-          vim.keymap.set('n', '<LocalLeader>re', function()
-            require('rustowl').enable(buffer)
-          end)
-          -- Disable RustOwl
-          vim.keymap.set('n', '<LocalLeader>rd', function()
-            require('rustowl').disable(buffer)
-          end)
+    },
+    keys = {
+      {
+        '<LocalLeader>a',
+        function()
+          require('rustowl').toggle()
         end,
+        desc = 'Show Rustowl',
+        ft = 'rust',
       },
     },
   },
-  ---@type LazySpec
   {
     'Saecki/crates.nvim',
     event = { 'BufRead Cargo.toml' },
