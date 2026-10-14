@@ -2,6 +2,11 @@ local dv = function(args)
   require('diffview').open(args)
 end
 
+---@type fun(range:number[]?, args:string[])
+local dv_fh = function(range, args)
+  require('diffview').file_history(range, args)
+end
+
 ---@type table<string, snacks.picker.Action.spec>
 local dv_actions = {
   -- working tree vs. highlighted commit
@@ -301,6 +306,37 @@ return {
         end,
         desc = 'Git Branches',
       },
+      {
+        '<leader>gf',
+        function()
+          require('snacks').picker.git_files({
+            title = 'Git File History',
+            confirm = function(self, item, action)
+              self:close()
+              if not item then
+                return
+              end
+              dv_fh(nil, { item.file })
+            end,
+          })
+        end,
+        desc = 'Git File History',
+      },
+      {
+        '<leader>gf',
+        function()
+          local filepath = vim.api.nvim_buf_get_name(0)
+          local start_line = vim.fn.line('v')
+          local end_line = vim.fn.line('.')
+          -- Flip starting and ending if reversed
+          if start_line > end_line then
+            start_line, end_line = end_line, start_line
+          end
+          dv_fh({ start_line, end_line }, { filepath })
+        end,
+        desc = 'Git File History',
+        mode = { 'x' },
+      },
     },
     ---@type DiffviewConfig
     opts = {
@@ -314,6 +350,18 @@ return {
             end,
             { desc = 'Close Diffview' },
           },
+          {
+            'n',
+            '<leader>e',
+            '<cmd>DiffviewToggleFiles<cr>',
+            { desc = 'Toggle the file panel' },
+          },
+          {
+            'n',
+            '<leader>b',
+            '<cmd>DiffviewFocusFiles<cr>',
+            { desc = 'Bring focus to the file panel' },
+          },
         },
         file_panel = {
           {
@@ -323,6 +371,18 @@ return {
               require('diffview').close()
             end,
             { desc = 'Close Diffview' },
+          },
+          {
+            'n',
+            '<leader>e',
+            '<cmd>DiffviewToggleFiles<cr>',
+            { desc = 'Toggle the file panel' },
+          },
+          {
+            'n',
+            '<leader>b',
+            '<cmd>DiffviewFocusFiles<cr>',
+            { desc = 'Bring focus to the file panel' },
           },
         },
         file_history_panel = {
@@ -334,21 +394,20 @@ return {
             end,
             { desc = 'Close Diffview' },
           },
+          {
+            'n',
+            '<leader>e',
+            '<cmd>DiffviewToggleFiles<cr>',
+            { desc = 'Toggle the file panel' },
+          },
+          {
+            'n',
+            '<leader>b',
+            '<cmd>DiffviewFocusFiles<cr>',
+            { desc = 'Bring focus to the file panel' },
+          },
         },
       },
-    },
-  },
-  ---@type LazySpec
-  {
-    'NeogitOrg/neogit',
-    lazy = true,
-    dependencies = {
-      'sindrets/diffview.nvim',
-      'folke/snacks.nvim',
-    },
-    cmd = 'Neogit',
-    keys = {
-      { '<leader>gn', '<cmd>Neogit<cr>', desc = 'Show Neogit UI' },
     },
   },
   ---@type LazySpec
