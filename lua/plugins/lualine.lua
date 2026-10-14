@@ -3,6 +3,14 @@
 -- `theme = "auto"` recolors from the active colorscheme. Git diff is sourced
 -- from gitsigns; symbols breadcrumb from aerial; task status from overseer.
 
+local function macro_recording()
+  local rec = vim.fn.reg_recording()
+  if rec == '' then
+    return ''
+  else
+    return 'Recording @' .. rec
+  end
+end
 local function diff_source()
   local gs = vim.b.gitsigns_status_dict
   if gs then
@@ -37,6 +45,12 @@ return {
       theme = 'auto',
       globalstatus = true, -- single statusline (laststatus=3)
       disabled_filetypes = { statusline = { 'dashboard', 'alpha', 'snacks_dashboard' } },
+      refresh = {
+        events = {
+          'RecordingEnter',
+          'RecordingLeave',
+        },
+      },
     },
     sections = {
       lualine_a = { 'mode' },
@@ -50,6 +64,7 @@ return {
         { 'aerial' },
       },
       lualine_x = {
+        { macro_recording, color = { gui = 'italic,bold' } },
         { 'searchcount' },
         { 'overseer' },
         { 'lsp_status' },
