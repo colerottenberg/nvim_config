@@ -21,7 +21,6 @@ return {
     ---@type overseer.SetupOpts
     local opts = {
       dap = true,
-      strategy = 'toggleterm',
       task_list = {
         keymaps = {
           ['d'] = { 'keymap.run_action', opts = { action = 'dispose' }, desc = 'Dispose task' },

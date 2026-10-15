@@ -53,6 +53,149 @@ local function add_workspace_folder(p, item)
   end
 end
 
+-- Split terminals show "<id>: <name or title>"; `b:term_name` is set by the
+-- terminal picker's rename action. No `{}` literals: they end the %{ } block.
+local TERM_WINBAR = "%{exists('b:snacks_terminal') ? b:snacks_terminal.id : ''}: "
+  .. "%{exists('b:term_name') && b:term_name != '' ? b:term_name : get(b:, 'term_title', '')}"
+
+local float = { position = 'float' }
+local function split(position)
+  return {
+    position = position,
+    height = position == 'bottom' and 0.3 or 0,
+    width = position == 'right' and 0.4 or 0,
+    wo = { winbar = TERM_WINBAR },
+  }
+end
+
+-- Toggle a snacks terminal. When already inside one, hide it regardless of
+-- which cmd/position created it (snacks keys terminals by cmd + cwd + count).
+---@param cmd? string|string[]
+---@param opts? snacks.terminal.Opts
+local function toggle_term(cmd, opts)
+  return function()
+    if vim.bo.filetype == 'snacks_terminal' then
+      local buf = vim.api.nvim_get_current_buf()
+      for _, term in ipairs(require('snacks.terminal').list()) do
+        if term.buf == buf then
+          return term:hide()
+        end
+      end
+    end
+    require('snacks.terminal').toggle(cmd, opts)
+  end
+end
+
+local function term_items()
+  local items = {}
+  for _, term in ipairs(require('snacks.terminal').list()) do
+    local info = vim.b[term.buf].snacks_terminal or {}
+    local cmd = type(info.cmd) == 'table' and table.concat(info.cmd, ' ') or info.cmd or vim.o.shell
+    local name = vim.b[term.buf].term_name
+    if not name or name == '' then
+      name = cmd
+    end
+    local cwd = vim.fn.fnamemodify(info.cwd or vim.uv.cwd(), ':~')
+    items[#items + 1] = {
+      text = name .. ' ' .. cwd,
+      term = term,
+      id = info.id or 0,
+      name = name,
+      cwd = cwd,
+    }
+  end
+  table.sort(items, function(a, b)
+    return a.id < b.id
+  end)
+  return items
+end
+
+local function select_term()
+  if #require('snacks.terminal').list() == 0 then
+    return require('snacks.notify').warn('No open terminals')
+  end
+  require('snacks.picker').pick({
+    source = 'terminals',
+    title = 'Terminals',
+    layout = 'select',
+    focus = 'list',
+    finder = term_items,
+    format = function(item)
+      return {
+        { ('%d: '):format(item.id), 'SnacksPickerIdx' },
+        { item.name },
+        { '  ' .. item.cwd, 'SnacksPickerComment' },
+      }
+    end,
+    confirm = function(picker, item)
+      picker:close()
+      if item then
+        item.term:show():focus()
+      end
+    end,
+    actions = {
+      term_rename = function(picker, item)
+        if not item then
+          return
+        end
+        vim.ui.input({ prompt = 'Terminal name: ', default = item.name }, function(name)
+          if name ~= nil then
+            vim.b[item.term.buf].term_name = name
+            vim.cmd.redraw({ bang = true })
+          end
+          picker:find()
+          picker:focus('list')
+        end)
+      end,
+      term_kill = function(picker)
+        for _, item in ipairs(picker:selected({ fallback = true })) do
+          item.term:close({ buf = true })
+        end
+        picker:find()
+      end,
+    },
+    win = {
+      input = {
+        keys = {
+          ['<c-r>'] = { 'term_rename', mode = { 'n', 'i' } },
+          ['<F2>'] = { 'term_rename', mode = { 'n', 'i' } },
+          ['<c-x>'] = { 'term_kill', mode = { 'n', 'i' } },
+        },
+      },
+      list = {
+        keys = {
+          ['r'] = 'term_rename',
+          ['R'] = 'term_rename',
+          ['<c-r>'] = 'term_rename',
+          ['<F2>'] = 'term_rename',
+          ['dd'] = 'term_kill',
+          ['<c-x>'] = 'term_kill',
+        },
+      },
+    },
+  })
+end
+
+-- Always spawn a fresh shell: snacks identifies terminals by count, so use the
+-- next unused one instead of typing a count before the toggle key.
+local function new_term()
+  local max = 0
+  for _, term in ipairs(require('snacks.terminal').list()) do
+    local info = vim.b[term.buf].snacks_terminal
+    max = math.max(max, info and info.id or 0)
+  end
+  local term = require('snacks.terminal').get(nil, { count = max + 1, win = split('float') })
+  if term then
+    term:show():focus()
+  end
+end
+
+local function tab_term()
+  vim.cmd.tabnew()
+  vim.cmd.terminal()
+  vim.cmd.startinsert()
+end
+
 ---@type LazySpec
 return {
   'folke/snacks.nvim',
@@ -211,6 +354,45 @@ return {
       end,
       desc = 'Close all buffers',
     },
+    -- terminals
+    { '<F7>', toggle_term(nil, { win = float }), mode = { 'n', 't', 'i' }, desc = 'Toggle terminal' },
+    { "<C-'>", toggle_term(nil, { win = float }), mode = { 'n', 't', 'i' }, desc = 'Toggle terminal' },
+    { '<Leader>tf', toggle_term(nil, { win = float }), desc = 'Float terminal' },
+    {
+      '<Leader>th',
+      toggle_term(nil, { env = { SNACKS_TERM = 'horizontal' }, win = split('bottom') }),
+      desc = 'Horizontal terminal',
+    },
+    {
+      '<Leader>tv',
+      toggle_term(nil, { env = { SNACKS_TERM = 'vertical' }, win = split('right') }),
+      desc = 'Vertical terminal',
+    },
+    {
+      '<Leader>tb',
+      tab_term,
+      desc = 'Tab terminal',
+    },
+    {
+      '<Leader>ts',
+      select_term,
+      desc = 'Select terminal',
+    },
+    {
+      '<Leader>tl',
+      toggle_term('lazygit', { win = float }),
+      desc = 'Terminal lazygit',
+    },
+    {
+      '<Leader>tn',
+      new_term,
+      desc = 'New terminal',
+    },
+    {
+      '<Leader>tp',
+      toggle_term(vim.fn.executable('ptpython') == 1 and 'ptpython' or 'python3', { win = float }),
+      desc = 'Terminal python',
+    },
     -- misc
     {
       '<Leader>R',
@@ -278,6 +460,11 @@ return {
     ---@type snacks.image.Config
     image = { enabled = true, doc = { enabled = false } },
     styles = {
+      terminal = {
+        position = 'float',
+        border = 'rounded',
+        wo = { foldcolumn = '0', signcolumn = 'no' },
+      },
       input = {
         b = {
           completion = true,
@@ -312,6 +499,11 @@ return {
             end
           end
         end,
+        terminal = function(self)
+          local dir = self:dir()
+          self:close()
+          require('snacks.terminal').open(nil, { cwd = dir })
+        end,
       },
       win = {
         input = {
@@ -321,6 +513,7 @@ return {
             ['<c-w>w'] = 'cycle_focus',
             ['<c-w>p'] = 'focus_preview_normal',
             ['<c-w>s'] = 'opencode_send_file',
+            ['<c-w>t'] = 'terminal',
           },
         },
         list = {
@@ -328,6 +521,7 @@ return {
             ['<c-w>w'] = 'cycle_focus',
             ['<c-w>p'] = 'focus_preview_normal',
             ['<c-w>s'] = 'opencode_send_file',
+            ['<c-w>t'] = 'terminal',
           },
         },
         preview = {

@@ -156,16 +156,7 @@ return {
           if node.type ~= 'directory' then
             path = vim.fn.fnamemodify(path, ':h')
           end
-
-          local Terminal = require('toggleterm.terminal').Terminal
-
-          local dir_term = Terminal:new({
-            dir = path,
-            direction = 'float',
-            close_on_exit = true,
-          })
-
-          dir_term:toggle()
+          require('snacks.terminal').open(nil, { cwd = path })
         end,
 
         ['f'] = 'none',

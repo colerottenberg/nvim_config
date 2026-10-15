@@ -8,7 +8,7 @@ return {
   {
     'Civitasv/cmake-tools.nvim',
     ft = { 'c', 'cpp', 'cmake', 'objc', 'objcpp', 'cuda', 'proto' },
-    dependencies = { 'stevearc/overseer.nvim', 'akinsho/toggleterm.nvim', 'nvim-lua/plenary.nvim' },
+    dependencies = { 'stevearc/overseer.nvim', 'nvim-lua/plenary.nvim' },
     cmd = {
       'CMakeGenerate',
       'CMakeBuild',
