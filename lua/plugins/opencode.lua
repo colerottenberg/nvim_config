@@ -29,11 +29,15 @@ return {
     },
     context = {
       diagnostics = {
+        enabled = false,
         info = true,
         only_closest = false,
       },
       git_diff = {
         enabled = true,
+      },
+      current_file = {
+        enabled = false,
       },
     },
   },
