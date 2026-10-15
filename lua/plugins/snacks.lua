@@ -53,6 +53,55 @@ local function add_workspace_folder(p, item)
   end
 end
 
+-- Toggle a snacks terminal. When already inside one, hide it regardless of
+-- which cmd/position created it (snacks keys terminals by cmd + cwd + count).
+---@param cmd? string|string[]
+---@param opts? snacks.terminal.Opts
+local function toggle_term(cmd, opts)
+  return function()
+    if vim.bo.filetype == 'snacks_terminal' then
+      local buf = vim.api.nvim_get_current_buf()
+      for _, term in ipairs(require('snacks.terminal').list()) do
+        if term.buf == buf then
+          return term:hide()
+        end
+      end
+    end
+    require('snacks.terminal').toggle(cmd, opts)
+  end
+end
+
+local function select_term()
+  local terms = require('snacks.terminal').list()
+  if #terms == 0 then
+    return require('snacks.notify').warn('No open terminals')
+  end
+  vim.ui.select(terms, {
+    prompt = 'Select terminal',
+    format_item = function(term)
+      local info = vim.b[term.buf].snacks_terminal or {}
+      local cmd = info.cmd
+      cmd = type(cmd) == 'table' and table.concat(cmd, ' ') or cmd or vim.o.shell
+      return ('%d: %s [%s]'):format(term.buf, cmd, vim.fn.fnamemodify(info.cwd or vim.uv.cwd(), ':~'))
+    end,
+  }, function(term)
+    if term then
+      term:show():focus()
+    end
+  end)
+end
+
+local function tab_term()
+  vim.cmd.tabnew()
+  vim.cmd.terminal()
+  vim.cmd.startinsert()
+end
+
+local float = { position = 'float' }
+local function split(position)
+  return { position = position, height = position == 'bottom' and 0.3 or 0, width = position == 'right' and 0.4 or 0 }
+end
+
 ---@type LazySpec
 return {
   'folke/snacks.nvim',
@@ -211,6 +260,25 @@ return {
       end,
       desc = 'Close all buffers',
     },
+    -- terminals
+    { '<F7>', toggle_term(nil, { win = float }), mode = { 'n', 't', 'i' }, desc = 'Toggle terminal' },
+    { "<C-'>", toggle_term(nil, { win = float }), mode = { 'n', 't', 'i' }, desc = 'Toggle terminal' },
+    { '<Leader>tf', toggle_term(nil, { win = float }), desc = 'Float terminal' },
+    {
+      '<Leader>th',
+      toggle_term(nil, { env = { SNACKS_TERM = 'horizontal' }, win = split('bottom') }),
+      desc = 'Horizontal terminal',
+    },
+    {
+      '<Leader>tv',
+      toggle_term(nil, { env = { SNACKS_TERM = 'vertical' }, win = split('right') }),
+      desc = 'Vertical terminal',
+    },
+    { '<Leader>tb', tab_term, desc = 'Tab terminal' },
+    { '<Leader>ts', select_term, desc = 'Select terminal' },
+    { '<Leader>tl', toggle_term('lazygit', { win = float }), desc = 'Terminal lazygit' },
+    { '<Leader>tn', toggle_term('node', { win = float }), desc = 'Terminal node' },
+    { '<Leader>tp', toggle_term(vim.fn.executable('ptpython') == 1 and 'ptpython' or 'python3', { win = float }), desc = 'Terminal python' },
     -- misc
     {
       '<Leader>R',
@@ -278,6 +346,11 @@ return {
     ---@type snacks.image.Config
     image = { enabled = true, doc = { enabled = false } },
     styles = {
+      terminal = {
+        position = 'float',
+        border = 'rounded',
+        wo = { foldcolumn = '0', signcolumn = 'no' },
+      },
       input = {
         b = {
           completion = true,
@@ -312,6 +385,11 @@ return {
             end
           end
         end,
+        terminal = function(self)
+          local dir = self:dir()
+          self:close()
+          require('snacks.terminal').open(nil, { cwd = dir })
+        end,
       },
       win = {
         input = {
@@ -321,6 +399,7 @@ return {
             ['<c-w>w'] = 'cycle_focus',
             ['<c-w>p'] = 'focus_preview_normal',
             ['<c-w>s'] = 'opencode_send_file',
+            ['<c-w>t'] = 'terminal',
           },
         },
         list = {
@@ -328,6 +407,7 @@ return {
             ['<c-w>w'] = 'cycle_focus',
             ['<c-w>p'] = 'focus_preview_normal',
             ['<c-w>s'] = 'opencode_send_file',
+            ['<c-w>t'] = 'terminal',
           },
         },
         preview = {

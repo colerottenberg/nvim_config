@@ -75,7 +75,6 @@ return {
     },
     extensions = {
       'neo-tree',
-      'toggleterm',
       'quickfix',
       'man',
       'aerial',

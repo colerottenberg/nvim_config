@@ -120,7 +120,7 @@ return {
         },
         tools = {
           enable_clippy = false,
-          executor = 'toggleterm', -- runnables/debuggables output in toggleterm
+          executor = 'termopen',
         },
       }
     end,
