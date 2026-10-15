@@ -135,13 +135,7 @@ return {
       { '<LocalLeader>D', with_args('debug'), desc = 'Rust: debug with args', ft = 'rust' },
 
       -- Diagnostics / docs / navigation
-      {
-        'K',
-        rustlsp({ 'hover', 'actions' }),
-        desc = 'Rust: hover actions',
-        ft = 'rust',
-        remap = true,
-      },
+      { '<LocalLeader>k', rustlsp({ 'hover', 'actions' }), desc = 'Rust: hover actions', ft = 'rust' },
       { '<LocalLeader>e', rustlsp('explainError'), desc = 'Rust: explain next error', ft = 'rust' },
       { '<LocalLeader>x', rustlsp('renderDiagnostic'), desc = 'Rust: render next diagnostic', ft = 'rust' },
       { '<LocalLeader>X', rustlsp('relatedDiagnostics'), desc = 'Rust: related diagnostics', ft = 'rust' },
