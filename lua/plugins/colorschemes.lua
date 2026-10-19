@@ -185,9 +185,9 @@ return {
     end,
   },
 
-  { 'folke/tokyonight.nvim', lazy = true, opts = {} },
-  { 'rebelot/kanagawa.nvim', lazy = true },
-  { 'thesimonho/kanagawa-paper.nvim', lazy = true, opts = {} },
+  { 'folke/tokyonight.nvim', opts = {} },
+  { 'rebelot/kanagawa.nvim' },
+  { 'thesimonho/kanagawa-paper.nvim', opts = {} },
   {
     'rose-pine/neovim',
     name = 'rose-pine',
@@ -205,10 +205,9 @@ return {
       })
     end,
   },
-  { 'ellisonleao/gruvbox.nvim', lazy = true },
+  { 'ellisonleao/gruvbox.nvim' },
   {
     'EdenEast/nightfox.nvim',
-    lazy = true,
     opts = {
       options = {
         module_default = false,
@@ -231,38 +230,37 @@ return {
       groups = { all = { NormalFloat = { link = 'Normal' } } },
     },
   },
-  { 'savq/melange-nvim', lazy = true },
-  { 'zootedb0t/citruszest.nvim', lazy = true },
-  { 'uloco/bluloco.nvim', lazy = true, dependencies = { 'rktjmp/lush.nvim' }, opts = {} },
+  { 'savq/melange-nvim' },
+  { 'zootedb0t/citruszest.nvim' },
+  { 'uloco/bluloco.nvim', dependencies = { 'rktjmp/lush.nvim' }, opts = {} },
 
   -- Muted / low-contrast
-  { 'sainnhe/gruvbox-material', lazy = true },
-  { 'sainnhe/everforest', lazy = true },
-  { 'vague2k/vague.nvim', lazy = true, opts = {} },
-  { 'slugbyte/lackluster.nvim', lazy = true },
-  { 'datsfilipe/vesper.nvim', lazy = true },
-  { 'mcchrish/zenbones.nvim', lazy = true, dependencies = { 'rktjmp/lush.nvim' } },
+  { 'sainnhe/gruvbox-material' },
+  { 'sainnhe/everforest' },
+  { 'vague2k/vague.nvim', opts = {} },
+  { 'slugbyte/lackluster.nvim' },
+  { 'datsfilipe/vesper.nvim' },
+  { 'mcchrish/zenbones.nvim', dependencies = { 'rktjmp/lush.nvim' } },
 
   -- Bold / high-contrast
-  { 'scottmckendry/cyberdream.nvim', lazy = true, opts = {} },
-  { 'bluz71/vim-moonfly-colors', name = 'moonfly', lazy = true },
-  { 'bluz71/vim-nightfly-colors', name = 'nightfly', lazy = true },
-  { 'dgox16/oldworld.nvim', lazy = true },
+  { 'scottmckendry/cyberdream.nvim', opts = {} },
+  { 'bluz71/vim-moonfly-colors', name = 'moonfly' },
+  { 'bluz71/vim-nightfly-colors', name = 'nightfly' },
+  { 'dgox16/oldworld.nvim' },
 
   -- Cool / blue
-  { 'AlexvZyl/nordic.nvim', lazy = true },
-  { 'gbprod/nord.nvim', lazy = true },
+  { 'AlexvZyl/nordic.nvim' },
+  { 'gbprod/nord.nvim' },
   {
     'craftzdog/solarized-osaka.nvim',
-    lazy = true,
     opts = {},
   },
-  { 'ribru17/bamboo.nvim', lazy = true },
+  { 'ribru17/bamboo.nvim' },
 
   -- All-rounders
-  { 'projekt0n/github-nvim-theme', name = 'github-theme', lazy = true },
-  { 'marko-cerovac/material.nvim', lazy = true },
-  { 'miikanissi/modus-themes.nvim', lazy = true },
+  { 'projekt0n/github-nvim-theme', name = 'github-theme' },
+  { 'marko-cerovac/material.nvim' },
+  { 'miikanissi/modus-themes.nvim' },
   -- Using Lazy
   {
     'navarasu/onedark.nvim',
@@ -326,11 +324,24 @@ return {
           render_markdown = true,
           snacks = true,
           which_key = true,
+          gitsigns = true,
         },
+      },
+      styles = {
+        bold = true,
       },
     },
     config = function(_, opts)
       require('oasis').setup(opts) -- (see Configuration below for all customization options)
     end,
+    keys = {
+      {
+        '<Leader>uB',
+        function()
+          require('oasis').cycle_intensity(true)
+        end,
+        desc = 'Pick Oasis Intensity',
+      },
+    },
   },
 }

@@ -28,6 +28,10 @@ return {
     fmt('static constexpr <> <> = <>', { i(1, 'auto'), i(2), i(3) }, { delimiters = '<>' })
   ),
   s(
+    { trig = 'ice', desc = 'Inline Constexpr' },
+    fmt('inline constexpr <> <> = <>', { i(1, 'auto'), i(2), i(3) }, { delimiters = '<>' })
+  ),
+  s(
     { trig = 'ifc', desc = 'If Constexpr' },
     fmt('if constexpr (<>) {\n\t<> \n}', { i(1), i(2) }, { delimiters = '<>' })
   ),

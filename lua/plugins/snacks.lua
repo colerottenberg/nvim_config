@@ -60,16 +60,58 @@ return {
   priority = 900,
   keys = {
     -- find
-    { '<Leader>ft', picker('colorschemes', { focus = 'input', layout = 'right' }), desc = 'Find themes' },
-    { '<Leader>fT', picker('todo_comments', { focus = 'list', layout = 'right' }), desc = 'Find TODO comments' },
-    { '<Leader>fb', picker('grep', { buffers = true }), desc = 'Find word in buffers' },
-    { '<Leader>ff', picker('files'), desc = 'Find files' },
-    { '<Leader>fF', picker('files', { hidden = true, ignored = true }), desc = 'Find all files' },
-    { '<Leader>fg', picker('git_files'), desc = 'Find git files' },
-    { '<Leader>fs', picker('git_status'), desc = 'Find git status' },
-    { '<Leader>fw', picker('grep'), desc = 'Find words' },
-    { '<Leader>fW', picker('grep', { hidden = true, ignored = true }), desc = 'Find all words' },
-    { '<Leader>fl', picker('lines', { layout = 'dropdown' }), desc = 'Find lines' },
+    {
+      '<Leader>ft',
+      function()
+        require('snacks.picker').colorschemes({ focus = 'input', layout = 'ivy' })
+      end,
+      desc = 'Find themes',
+    },
+    {
+      '<Leader>fT',
+      picker('todo_comments', { focus = 'list', layout = 'right' }),
+      desc = 'Find TODO comments',
+    },
+    {
+      '<Leader>fb',
+      picker('grep', { buffers = true }),
+      desc = 'Find word in buffers',
+    },
+    {
+      '<Leader>ff',
+      picker('files'),
+      desc = 'Find files',
+    },
+    {
+      '<Leader>fF',
+      picker('files', { hidden = true, ignored = true }),
+      desc = 'Find all files',
+    },
+    {
+      '<Leader>fg',
+      picker('git_files'),
+      desc = 'Find git files',
+    },
+    {
+      '<Leader>fs',
+      picker('git_status'),
+      desc = 'Find git status',
+    },
+    {
+      '<Leader>fw',
+      picker('grep'),
+      desc = 'Find words',
+    },
+    {
+      '<Leader>fW',
+      picker('grep', { hidden = true, ignored = true }),
+      desc = 'Find all words',
+    },
+    {
+      '<Leader>fl',
+      picker('lines', { layout = 'dropdown' }),
+      desc = 'Find lines',
+    },
     {
       '<Leader>fc',
       function()

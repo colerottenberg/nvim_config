@@ -36,6 +36,13 @@ local keys = {
     end,
     desc = 'Tab terminal',
   },
+  {
+    '<Leader>tz',
+    function()
+      require('toggleterm').exec('zellij', nil, nil, nil, 'float', nil, true, true)
+    end,
+    desc = 'Tab terminal',
+  },
 }
 
 if vim.fn.executable('lazygit') == 1 and vim.fn.executable('git') == 1 then
