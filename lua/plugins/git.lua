@@ -293,7 +293,7 @@ return {
             win = { input = { keys = dv_keys } },
           })
         end,
-        desc = 'Git Log',
+        desc = 'Git Log (File)',
       },
       {
         '<leader>gb',
