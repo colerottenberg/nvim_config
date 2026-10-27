@@ -17,6 +17,13 @@ map('n', '<C-S>', '<Cmd>silent! update! | redraw<CR>', { desc = 'Force write' })
 map('n', '<C-Q>', '<Cmd>q!<CR>', { desc = 'Force quit' })
 map('n', '|', '<Cmd>vsplit<CR>', { desc = 'Vertical split' })
 map('n', '\\', '<Cmd>split<CR>', { desc = 'Horizontal split' })
+map('n', '<Esc>', function()
+  if vim.v.hlsearch == 1 then
+    return '<cmd>nohlsearch<CR>'
+  else
+    return '<Esc>'
+  end
+end, { expr = true, desc = 'Clear search highlights if active' })
 
 -- Comments (gcc/gc are built in; add below/above helpers).
 map('n', '<Leader>/', 'gcc', { remap = true, desc = 'Toggle comment line' })

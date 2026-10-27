@@ -170,7 +170,9 @@ return {
     },
     {
       'gR',
-      picker('lsp_references', { focus = 'list', formatters = { file = { filename_only = true } } }),
+      function()
+        require('snacks.picker').lsp_references()
+      end,
       desc = 'LSP references',
     },
 
@@ -327,6 +329,16 @@ return {
       },
     },
     picker = {
+      sources = {
+        lsp_references = {
+          focus = 'list',
+          formatters = {
+            file = {
+              filename_only = true,
+            },
+          },
+        },
+      },
       enabled = true,
       ui_select = true,
       actions = {
@@ -402,10 +414,8 @@ return {
           {
             icon = '',
             key = 'g',
-            desc = 'Lazygit',
-            action = function()
-              require('snacks.lazygit').open()
-            end,
+            desc = 'Git Status',
+            action = '<Cmd>Neotree focus git_status<CR>',
           },
           {
             icon = '',
