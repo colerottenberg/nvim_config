@@ -9,6 +9,17 @@ end
 
 ---@type table<string, snacks.picker.Action.spec>
 local dv_actions = {
+  -- Copy the selected commit hash to the system clipboard.
+  copy_commit = function(_, item)
+    if not item or not item.commit then
+      vim.notify('No commit selected', vim.log.levels.WARN)
+      return
+    end
+
+    vim.fn.setreg('+', item.commit)
+    vim.notify('Copied commit: ' .. item.commit)
+  end,
+
   -- working tree vs. highlighted commit
   dv_worktree = function(picker, item)
     if not item then
@@ -57,6 +68,7 @@ local dv_actions = {
   end,
 }
 local dv_keys = {
+  ['y'] = { 'copy_commit', mode = 'n', desc = 'Copy commit hash' },
   ['<a-d>'] = { 'dv_worktree', mode = { 'n', 'i' } },
   ['<a-c>'] = { 'dv_commit', mode = { 'n', 'i' } },
   ['<a-r>'] = { 'dv_range', mode = { 'n', 'i' } },
@@ -279,7 +291,10 @@ return {
         function()
           require('snacks').picker.git_log({
             actions = dv_actions,
-            win = { input = { keys = dv_keys } },
+            win = {
+              input = { keys = dv_keys },
+              list = { keys = dv_keys },
+            },
           })
         end,
         desc = 'Git Log',
@@ -290,10 +305,20 @@ return {
           require('snacks').picker.git_log({
             current_file = true,
             actions = dv_actions,
-            win = { input = { keys = dv_keys } },
+            win = {
+              input = { keys = dv_keys },
+              list = { keys = dv_keys },
+            },
           })
         end,
         desc = 'Git Log (File)',
+      },
+      {
+        '<leader>gD',
+        function()
+          require('snacks').picker.git_diff()
+        end,
+        desc = 'Git diff by file',
       },
       {
         '<leader>gb',
