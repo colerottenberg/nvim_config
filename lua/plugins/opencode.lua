@@ -21,6 +21,11 @@ return {
       },
     },
     ui = {
+      completion = {
+        file_sources = {
+          preferred_cli_tool = 'rg',
+        },
+      },
       input = {
         min_height = 0.30,
         max_height = 0.40,
@@ -28,6 +33,7 @@ return {
       },
     },
     context = {
+      enabled = true,
       diagnostics = {
         enabled = false,
         info = true,
@@ -37,7 +43,8 @@ return {
         enabled = true,
       },
       current_file = {
-        enabled = false,
+        enabled = true,
+        show_full_path = true,
       },
     },
   },
