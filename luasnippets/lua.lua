@@ -19,6 +19,10 @@ end
 return {
   -- Custom ------------------------------------------------------------------
   s({ trig = 'type', desc = 'Type Alias' }, fmt('---@type <>', { i(1) }, { delimiters = '<>' })),
+  s(
+    { trig = 'opts', desc = 'Opts table for LazyNvim' },
+    fmt('---@type <>|nil\nopts = {\n\t<>\n},', { i(1), i(2) }, { delimiters = '<>' })
+  ),
   s({ trig = 'af', desc = 'Anonymous Function' }, fmt('function() <> end', { i(1) }, { delimiters = '<>' })),
   s(
     { trig = 'cf', desc = 'Config Function' },
