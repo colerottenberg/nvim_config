@@ -20,7 +20,13 @@ return {
       'FloatBorder',
       'FloatTitle',
       'RenderMarkdownCode',
-      'LightBulbVirtualText',
+      'LightBulbVirtualText', -- code action ghost text
+      'LightBulbNumber', -- code action line number
+      'LightBulbLensNumber', -- code lens line number
+      'LightBulbSign',
+      'LightBulbFloatWin',
+      'LspCodeLens', -- native code lens virtual lines
+      'LspCodeLensSeparator',
       'NeoTree',
       'BufferLine',
       'lualine_c_normal', -- Center fill area background (Normal mode)
