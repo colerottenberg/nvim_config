@@ -7,8 +7,140 @@ local dv_fh = function(range, args)
   require('diffview').file_history(range, args)
 end
 
+local function notify_git_error(result)
+  vim.notify(result.stderr ~= '' and result.stderr or 'Git command failed', vim.log.levels.ERROR)
+end
+
+local function checkout_commit(commit, picker)
+  if vim.fn.confirm('Checkout commit ' .. commit .. '?', '&Yes\n&No', 2) ~= 1 then
+    return
+  end
+
+  picker:close()
+  vim.system({ 'git', 'switch', '--detach', commit }, { text = true }, function(result)
+    vim.schedule(function()
+      if result.code ~= 0 then
+        notify_git_error(result)
+        return
+      end
+      vim.cmd('checktime')
+      vim.notify('Checked out ' .. commit)
+    end)
+  end)
+end
+
+local function open_commit_files(picker, item)
+  if not item or not item.commit then
+    return
+  end
+
+  local commit = item.commit
+  picker:close()
+  vim.system(
+    { 'git', 'show', '--format=', '--name-status', '--find-renames', '-z', commit, '--' },
+    { text = true },
+    function(result)
+      vim.schedule(function()
+        if result.code ~= 0 then
+          notify_git_error(result)
+          return
+        end
+
+        local fields = vim.split(result.stdout, '\0', { plain = true, trimempty = true })
+        local items = {}
+        local index = 1
+        while index <= #fields do
+          local status = fields[index]
+          local path = fields[index + 1]
+          if not path then
+            break
+          end
+
+          if status:match('^[RC]') then
+            path = fields[index + 2]
+            index = index + 3
+          else
+            index = index + 2
+          end
+
+          if path then
+            table.insert(items, {
+              text = status .. ' ' .. path,
+              file = path,
+              status = status,
+            })
+          end
+        end
+
+        if #items == 0 then
+          vim.notify('No files changed in ' .. commit, vim.log.levels.INFO)
+          return
+        end
+
+        local file_actions = {
+          restore_files = function(file_picker)
+            local selected = file_picker:selected({ fallback = false })
+            if #selected == 0 then
+              selected = file_picker:items()
+            end
+
+            local paths = vim.tbl_map(function(file)
+              return file.file
+            end, selected)
+            local message = #selected == #items and 'all changed files' or (#selected .. ' selected file(s)')
+            if vim.fn.confirm('Restore ' .. message .. ' from ' .. commit .. '?', '&Yes\n&No', 2) ~= 1 then
+              return
+            end
+
+            file_picker:close()
+            local args = { 'git', 'restore', '--source=' .. commit, '--worktree', '--' }
+            vim.list_extend(args, paths)
+            vim.system(args, { text = true }, function(restore_result)
+              vim.schedule(function()
+                if restore_result.code ~= 0 then
+                  notify_git_error(restore_result)
+                  return
+                end
+                vim.cmd('checktime')
+                vim.notify('Restored ' .. message .. ' from ' .. commit)
+              end)
+            end)
+          end,
+
+          checkout_commit = function(file_picker)
+            checkout_commit(commit, file_picker)
+          end,
+        }
+
+        require('snacks').picker.pick({
+          title = 'Files changed in ' .. commit,
+          items = items,
+          format = 'text',
+          preview = 'file',
+          confirm = 'restore_files',
+          actions = file_actions,
+          win = {
+            input = {
+              keys = {
+                ['C'] = { 'checkout_commit', mode = 'n', desc = 'Checkout commit' },
+              },
+            },
+            list = {
+              keys = {
+                ['C'] = { 'checkout_commit', mode = 'n', desc = 'Checkout commit' },
+              },
+            },
+          },
+        })
+      end)
+    end
+  )
+end
+
 ---@type table<string, snacks.picker.Action.spec>
 local dv_actions = {
+  open_commit_files = open_commit_files,
+
   -- Copy the selected commit hash to the system clipboard.
   copy_commit = function(_, item)
     if not item or not item.commit then
@@ -69,6 +201,7 @@ local dv_actions = {
 }
 local dv_keys = {
   ['y'] = { 'copy_commit', mode = 'n', desc = 'Copy commit hash' },
+  ['<c-f>'] = { 'open_commit_files', mode = { 'n', 'i' }, desc = 'Select files from commit' },
   ['<a-d>'] = { 'dv_worktree', mode = { 'n', 'i' } },
   ['<a-c>'] = { 'dv_commit', mode = { 'n', 'i' } },
   ['<a-r>'] = { 'dv_range', mode = { 'n', 'i' } },
