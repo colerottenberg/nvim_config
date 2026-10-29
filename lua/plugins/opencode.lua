@@ -1,7 +1,7 @@
 ---@type LazySpec
 return {
   'sudo-tee/opencode.nvim',
-  ---@type OpencodeConfig
+  ---@type OpencodeConfig|nil
   opts = {
     preferred_picker = 'snacks',
     preferred_completion = 'blink',
@@ -43,7 +43,7 @@ return {
         enabled = true,
       },
       current_file = {
-        enabled = true,
+        enabled = false,
         show_full_path = true,
       },
     },

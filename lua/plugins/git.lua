@@ -319,7 +319,7 @@ return {
       },
       -- Leader-based mappings
       {
-        '<Leader>gL',
+        '<Leader>gB',
         function()
           require('gitsigns').blame()
         end,
