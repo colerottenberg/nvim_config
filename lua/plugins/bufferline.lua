@@ -12,13 +12,13 @@ end
 
 -- Theme-aware highlights: catppuccin integration when available,
 -- otherwise just fix the fill to match the editor background.
-local function build_highlights()
-  local ok, ctp = pcall(require, 'catppuccin.groups.integrations.bufferline')
-  if ok then
-    return ctp.get() -- newer catppuccin renamed this; use get_theme() if get() errors
-  end
-  return { fill = { bg = Snacks.util.color('Normal', 'bg') } }
-end
+-- local function build_highlights()
+--   local ok, ctp = pcall(require, 'catppuccin.groups.integrations.bufferline')
+--   if ok then
+--     return ctp.get() -- newer catppuccin renamed this; use get_theme() if get() errors
+--   end
+--   return { fill = { bg = Snacks.util.color('Normal', 'bg') } }
+-- end
 
 return {
   'akinsho/bufferline.nvim',
@@ -26,12 +26,12 @@ return {
   cond = not vim.g.vscode,
   dependencies = { 'folke/snacks.nvim' },
   keys = {
-    { 'L',  cycle(1),  desc = 'Next buffer' },
-    { 'H',  cycle(-1), desc = 'Previous buffer' },
-    { ']b', cycle(1),  desc = 'Next buffer' },
+    { 'L', cycle(1), desc = 'Next buffer' },
+    { 'H', cycle(-1), desc = 'Previous buffer' },
+    { ']b', cycle(1), desc = 'Next buffer' },
     { '[b', cycle(-1), desc = 'Previous buffer' },
-    { '>b', move(1),   desc = 'Move buffer right' },
-    { '<b', move(-1),  desc = 'Move buffer left' },
+    { '>b', move(1), desc = 'Move buffer right' },
+    { '<b', move(-1), desc = 'Move buffer left' },
     {
       '<Leader>bc',
       function()
@@ -51,22 +51,46 @@ return {
       vim.cmd.BufferLineCloseRight,
       desc = 'Close buffers to the right',
     },
-    { '<Leader>bp',  vim.cmd.BufferLineTogglePin,               desc = 'Toggle pin buffer' },
-    { '<Leader>bb',  vim.cmd.BufferLinePick,                    desc = 'Pick buffer' },
-    { '<Leader>bd',  vim.cmd.BufferLinePickClose,               desc = 'Pick buffer to close' },
-    { '<Leader>bse', vim.cmd.BufferLineSortByExtension,         desc = 'Sort by extension' },
-    { '<Leader>bsr', vim.cmd.BufferLineSortByRelativeDirectory, desc = 'Sort by relative path' },
-    { '<Leader>bsp', vim.cmd.BufferLineSortByDirectory,         desc = 'Sort by full path' },
-    { '<Leader>bsi', vim.cmd.BufferLineSortByTabs,              desc = 'Sort by tab' },
+    { '<Leader>bp', vim.cmd.BufferLineTogglePin, desc = 'Toggle pin buffer' },
+    { '<Leader>bb', vim.cmd.BufferLinePick, desc = 'Pick buffer' },
+    {
+      '<Leader>bd',
+      vim.cmd.BufferLinePickClose,
+      desc = 'Pick buffer to close',
+    },
+    {
+      '<Leader>bse',
+      function()
+        require('bufferline').sort_by('extension')
+      end,
+      desc = 'Sort by extension',
+    },
+    {
+      '<Leader>bsr',
+      function()
+        require('bufferline').sort_by('relative_directory')
+      end,
+      desc = 'Sort by relative path',
+    },
+    { '<Leader>bsp', vim.cmd.BufferLineSortByDirectory, desc = 'Sort by full path' },
+    {
+      '<Leader>bsi',
+      function()
+        require('bufferline').sort_by('tabs')
+      end,
+      desc = 'Sort by tab',
+    },
   },
   opts = function()
+    ---@type bufferline.UserConfig
     return {
-      highlights = build_highlights(),
       options = {
+        themable = true,
         offsets = {
           { filetype = 'neo-tree', text = 'Neo-tree', highlight = 'Directory', text_align = 'left' },
         },
         diagnostics = 'nvim_lsp',
+        separator_style = 'slope',
       },
     }
   end,
