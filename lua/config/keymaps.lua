@@ -96,23 +96,6 @@ map('t', '<C-L>', '<Cmd>wincmd l<CR>', { desc = 'Terminal right window navigatio
 local function notify_toggle(name, value)
   vim.notify(('%s %s'):format(name, value and 'enabled' or 'disabled'), vim.log.levels.INFO)
 end
-map('n', '<Leader>uA', function()
-  vim.o.autochdir = not vim.o.autochdir
-  notify_toggle('autochdir', vim.o.autochdir)
-end, { desc = 'Toggle rooter autochdir' })
-map('n', '<Leader>ub', function()
-  vim.o.background = vim.o.background == 'dark' and 'light' or 'dark'
-  notify_toggle('background ' .. vim.o.background, true)
-end, { desc = 'Toggle background' })
-map('n', '<Leader>ud', function()
-  local enabled = not vim.diagnostic.is_enabled()
-  vim.diagnostic.enable(enabled)
-  notify_toggle('diagnostics', enabled)
-end, { desc = 'Toggle diagnostics' })
-map('n', '<Leader>ug', function()
-  vim.wo.signcolumn = vim.wo.signcolumn == 'no' and 'yes' or 'no'
-  notify_toggle('signcolumn', vim.wo.signcolumn ~= 'no')
-end, { desc = 'Toggle signcolumn' })
 map('n', '<Leader>u>', function()
   vim.wo.foldcolumn = vim.wo.foldcolumn == '0' and '1' or '0'
   notify_toggle('foldcolumn', vim.wo.foldcolumn ~= '0')

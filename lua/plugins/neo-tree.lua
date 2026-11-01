@@ -134,9 +134,10 @@ return {
     },
     window = {
       width = 30,
+      ---@type neotree.Mappings
       mappings = {
         ['<S-CR>'] = 'system_open',
-        ['<Space>'] = false,
+        ['<Space>'] = nil,
         ['[b'] = 'prev_source',
         [']b'] = 'next_source',
         O = 'system_open',

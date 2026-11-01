@@ -334,14 +334,5 @@ return {
     config = function(_, opts)
       require('oasis').setup(opts) -- (see Configuration below for all customization options)
     end,
-    keys = {
-      {
-        '<Leader>uB',
-        function()
-          require('oasis').cycle_intensity(true)
-        end,
-        desc = 'Pick Oasis Intensity',
-      },
-    },
   },
 }

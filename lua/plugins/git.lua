@@ -319,9 +319,9 @@ return {
       },
       -- Leader-based mappings
       {
-        '<Leader>gB',
+        '<Leader>gb',
         function()
-          require('gitsigns').blame()
+          require('gitsigns').blame_line({ full = true }, nil)
         end,
         desc = 'View full blame',
       },
@@ -410,6 +410,29 @@ return {
     },
     ---@type Gitsigns.Config
     opts = {},
+    config = function(self, opts)
+      local gitsigns = require('gitsigns')
+      gitsigns.setup(opts)
+
+      local blame_toggle_state = false
+      local snacks = require('snacks')
+      local blame_toggle = snacks.toggle.new({
+        name = 'Git Blame Toggle',
+        get = function()
+          return blame_toggle_state
+        end,
+        set = function(state)
+          if state then
+            gitsigns.toggle_current_line_blame(true)
+            blame_toggle_state = true
+          else
+            gitsigns.toggle_current_line_blame(false)
+            blame_toggle_state = false
+          end
+        end,
+      })
+      blame_toggle:map('<leader>uB')
+    end,
     dependencies = { 'folke/snacks.nvim' },
   },
   ---@type LazySpec
@@ -454,7 +477,7 @@ return {
         desc = 'Git diff by file',
       },
       {
-        '<leader>gb',
+        '<leader>gB',
         function()
           require('snacks').picker.git_branches({
             all = true,

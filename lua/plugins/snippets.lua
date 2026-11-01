@@ -5,6 +5,30 @@ return {
   lazy = true,
   build = vim.fn.has('win32') == 0 and 'make install_jsregexp' or nil,
   dependencies = { 'rafamadriz/friendly-snippets', 'honza/vim-snippets' },
+  keys = {
+    {
+      '<C-l>',
+      mode = { 'i', 's' },
+      desc = 'LuaSnip: next choice',
+      function()
+        local luasnip = require('luasnip')
+        if luasnip.choice_active() then
+          luasnip.change_choice(1)
+        end
+      end,
+    },
+    {
+      '<C-h>',
+      mode = { 'i', 's' },
+      desc = 'LuaSnip: previous choice',
+      function()
+        local luasnip = require('luasnip')
+        if luasnip.choice_active() then
+          luasnip.change_choice(-1)
+        end
+      end,
+    },
+  },
   config = function()
     local luasnip = require('luasnip')
     luasnip.config.setup({})

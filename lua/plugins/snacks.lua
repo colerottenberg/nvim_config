@@ -487,6 +487,30 @@ return {
     snacks.setup(opts)
     snacks.toggle.dim():map('<Leader>uD')
     snacks.toggle.animate():map('<Leader>uA')
+    snacks.toggle.diagnostics():map('<Leader>ud')
+    local background_toggle = snacks.toggle.new({
+      name = 'Toggle background',
+      get = function()
+        return vim.o.background == 'dark'
+      end,
+      set = function(state)
+        vim.o.background = vim.o.background == 'dark' and 'light' or 'dark'
+      end,
+      wk_desc = 'Toggle background',
+    })
+    background_toggle:map('<Leader>ub')
+
+    snacks.toggle
+      .new({
+        name = 'Sign Column',
+        get = function()
+          return vim.wo.signcolumn == 'yes'
+        end,
+        set = function(_)
+          vim.wo.signcolumn = vim.wo.signcolumn == 'no' and 'yes' or 'no'
+        end,
+      })
+      :map('<leader>ug')
 
     local function backdrop_hl()
       vim.api.nvim_set_hl(0, 'SnacksBackdrop', { bg = Snacks.util.color('Normal', 'bg') })
