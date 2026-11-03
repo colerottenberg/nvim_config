@@ -17,6 +17,7 @@ return {
     'rcarriga/cmp-dap',
     'saghen/blink.compat',
     'Weissle/persistent-breakpoints.nvim',
+    'folke/snacks.nvim',
   },
   keys = {
     {
@@ -446,6 +447,28 @@ return {
     dap.listeners.before.event_exited['dapui'] = function()
       dapui.close()
     end
+
+    local dapui_open = true
+
+    -- Adding Snacks Toggle for DAP UI
+    local snacks = require('snacks')
+    local dapui_toggle = snacks.toggle.new({
+      id = 'dapui',
+      name = 'DAP UI',
+      get = function()
+        return dapui_open
+      end,
+      set = function(state)
+        if state then
+          dap.listeners.after.event_initialized['dapui'] = function()
+            dapui.open()
+          end
+        else
+          dap.listeners.after.event_initialized['dapui'] = nil
+        end
+      end,
+    })
+    dapui_toggle:map('<Leader>uD')
 
     -- ── Completion in dap buffers (cmp-dap via blink.compat) ─────────────
     pcall(function()

@@ -55,7 +55,9 @@ return {
     { '<Leader>bb', vim.cmd.BufferLinePick, desc = 'Pick buffer' },
     {
       '<Leader>bd',
-      vim.cmd.BufferLinePickClose,
+      function()
+        require('bufferline').close_with_pick()
+      end,
       desc = 'Pick buffer to close',
     },
     {
