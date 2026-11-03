@@ -315,7 +315,9 @@ return {
   },
   ---@type snacks.Config
   opts = {
-    bigfile = { enabled = true, line_length = 5000, notify = true },
+    ---@type snacks.bigfile.Config
+    bigfile = { enabled = false
+ },
     quickfile = { enabled = true },
     ---@type snacks.input.Config
     input = { enabled = true },
