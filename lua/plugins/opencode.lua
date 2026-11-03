@@ -59,15 +59,24 @@ return {
     local port = configured_port == nil and 40900 or tonumber(configured_port)
 
     if not port or port < 1 or port > 65535 or port % 1 ~= 0 then
-      vim.notify_once(
-        ('Invalid OPENCODE_PORT: %s'):format(configured_port),
-        vim.log.levels.ERROR
-      )
+      vim.notify_once(('Invalid OPENCODE_PORT: %s'):format(configured_port), vim.log.levels.ERROR)
       return
     end
 
     opts.server.port = port
     require('opencode').setup(opts)
+
+    vim.api.nvim_create_user_command('AICommitMessage', function()
+      ---@type SendMessageOpts
+      local opts = {
+        context = { enabled = true, current_file = { enabled = true }, git_diff = { enabled = true } },
+        new_session = true,
+      }
+
+      require('opencode.api').run('Generate a concise Conventional Commit message from #git_diff', opts)
+    end, {
+      desc = 'Generate a commit message from staged changes',
+    })
   end,
   dependencies = {
     {
