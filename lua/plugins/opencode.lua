@@ -9,7 +9,7 @@ return {
     },
     preferred_picker = 'snacks',
     preferred_completion = 'blink',
-    default_mode = 'plan',
+    default_mode = 'build',
     keymap = {
       session_picker = {
         rename_session = { '<C-r>', mode = { 'i', 'n' } },
@@ -67,16 +67,15 @@ return {
     require('opencode').setup(opts)
 
     vim.api.nvim_create_user_command('AICommitMessage', function()
-      ---@type SendMessageOpts
-      local opts = {
-        context = { enabled = true, current_file = { enabled = true }, git_diff = { enabled = true } },
-        new_session = true,
-      }
+      require('opencode.api').quick_chat('Generate a conventional commit message from #git_diff')
+    end, { desc = 'Generate a commit message on the current line' })
 
-      require('opencode.api').run('Generate a concise Conventional Commit message from #git_diff', opts)
-    end, {
-      desc = 'Generate a commit message from staged changes',
-    })
+    vim.api.nvim_create_user_command('AIAnnotate', function(opts)
+      require('opencode.api').quick_chat('Add type annotations and code comments', {
+        start = opts.line1,
+        stop = opts.line2,
+      })
+    end, { range = true, desc = 'Annotate the selected lines' })
   end,
   dependencies = {
     {
