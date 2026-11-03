@@ -316,8 +316,7 @@ return {
   ---@type snacks.Config
   opts = {
     ---@type snacks.bigfile.Config
-    bigfile = { enabled = false
- },
+    bigfile = { enabled = false },
     quickfile = { enabled = true },
     ---@type snacks.input.Config
     input = { enabled = true },
@@ -332,6 +331,22 @@ return {
     },
     picker = {
       sources = {
+        notifications = {
+          win = {
+            list = {
+              keys = {
+                ['y'] = { 'yank_notification', mode = 'n' },
+                ['<C-y>'] = { 'yank_notification', mode = 'i' },
+              },
+            },
+            input = {
+              keys = {
+                ['y'] = { 'yank_notification', mode = 'n' },
+                ['<C-y>'] = { 'yank_notification', mode = 'i' },
+              },
+            },
+          },
+        },
         lsp_references = {
           focus = 'list',
           formatters = {
@@ -345,6 +360,15 @@ return {
       ui_select = true,
       actions = {
         cycle_focus = cycle_focus,
+        yank_notification = function(_, item)
+          local notification = item and item.item
+          if not notification or not notification.msg then
+            vim.notify('No notification selected', vim.log.levels.WARN)
+            return
+          end
+          vim.fn.setreg('+', notification.msg)
+          vim.notify('Notification copied to clipboard')
+        end,
         focus_preview_normal = function(p)
           focus_normal(p, 'preview')
         end,
