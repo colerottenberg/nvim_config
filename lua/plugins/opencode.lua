@@ -1,8 +1,12 @@
 ---@type LazySpec
 return {
   'sudo-tee/opencode.nvim',
-  ---@type OpencodeConfig|nil
+  ---@type OpencodeConfig
   opts = {
+    ---@type OpencodeServerConfig
+    server = {
+      auto_kill = false,
+    },
     preferred_picker = 'snacks',
     preferred_completion = 'blink',
     default_mode = 'plan',
@@ -48,7 +52,21 @@ return {
       },
     },
   },
+  ---@param _ LazyPlugin
+  ---@param opts OpencodeConfig
   config = function(_, opts)
+    local configured_port = vim.env.OPENCODE_PORT
+    local port = configured_port == nil and 40900 or tonumber(configured_port)
+
+    if not port or port < 1 or port > 65535 or port % 1 ~= 0 then
+      vim.notify_once(
+        ('Invalid OPENCODE_PORT: %s'):format(configured_port),
+        vim.log.levels.ERROR
+      )
+      return
+    end
+
+    opts.server.port = port
     require('opencode').setup(opts)
   end,
   dependencies = {

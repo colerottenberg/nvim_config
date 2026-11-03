@@ -3,10 +3,10 @@ return {
   ---@type LazySpec
   {
     'bullets-vim/bullets.nvim',
-    ft = { 'markdown', 'opencode', 'text', 'gitcommit' },
+    ft = { 'markdown', 'text', 'gitcommit' },
     ---@type bullets.Config
     opts = {
-      enabled_file_types = { 'markdown', 'text', 'gitcommit', 'opencode' },
+      enabled_file_types = { 'markdown', 'text', 'gitcommit' },
     },
   },
   --- Rendering Markdown
