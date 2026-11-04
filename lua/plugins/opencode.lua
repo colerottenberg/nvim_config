@@ -76,6 +76,10 @@ return {
         stop = opts.line2,
       })
     end, { range = true, desc = 'Annotate the selected lines' })
+    local snacks = require('snacks')
+    snacks.keymap.set('n', '<localleader>c', function()
+      require('opencode.api').quick_chat('Generate a conventional commit message from #git_diff')
+    end, { desc = 'Generate a commit message on the current line', ft = 'gitcommit' })
   end,
   dependencies = {
     {
