@@ -82,6 +82,23 @@ return {
       end,
     })
     view_toggle:map('<LocalLeader>t')
+
+    -- Add Find Lines Keymap that disable view first
+    snacks.keymap.set('n', '<LocalLeader>s', function()
+      local bufnr = vim.api.nvim_get_current_buf()
+      if csvview.is_enabled(bufnr) then
+        csvview.disable()
+      end
+      snacks.picker.lines({
+        layout = 'dropdown',
+        on_close = function(picker)
+          csvview.enable(bufnr)
+        end,
+      })
+    end, {
+      desc = 'Search',
+      ft = { 'csv', 'tsv' },
+    })
   end,
   dependencies = { 'folke/snacks.nvim' },
 }
