@@ -21,6 +21,162 @@ return {
   },
   keys = {
     {
+      '<Leader>fB',
+      function()
+        local items = {}
+
+        for bufnr, breakpoints in pairs(require('dap.breakpoints').get()) do
+          local file = vim.api.nvim_buf_get_name(bufnr)
+          local display_file = file ~= '' and vim.fn.fnamemodify(file, ':~:.') or '[No Name]'
+
+          for _, breakpoint in ipairs(breakpoints) do
+            local details = {}
+
+            if breakpoint.condition then
+              table.insert(details, 'condition: ' .. breakpoint.condition)
+            end
+            if breakpoint.hitCondition then
+              table.insert(details, 'hit: ' .. breakpoint.hitCondition)
+            end
+            if breakpoint.logMessage then
+              table.insert(details, 'log: ' .. breakpoint.logMessage)
+            end
+            if breakpoint.state and breakpoint.state.verified == false then
+              table.insert(details, 'unverified')
+            end
+
+            local suffix = #details > 0 and ' [' .. table.concat(details, ', ') .. ']' or ''
+            local icon = '●'
+            local icon_hl = 'DiagnosticError'
+
+            if breakpoint.condition then
+              icon = ''
+              icon_hl = 'DiagnosticWarn'
+            elseif breakpoint.logMessage then
+              icon = ''
+              icon_hl = 'DiagnosticInfo'
+            end
+
+            if breakpoint.state and breakpoint.state.verified == false then
+              icon = ''
+              icon_hl = 'DiagnosticError'
+            end
+
+            table.insert(items, {
+              text = string.format('%s:%d%s', display_file, breakpoint.line, suffix),
+              icon = icon,
+              icon_hl = icon_hl,
+              file = file,
+              pos = { breakpoint.line, 1 },
+              buf = bufnr,
+            })
+          end
+        end
+
+        if #items == 0 then
+          vim.notify('No breakpoints set', vim.log.levels.INFO)
+          return
+        end
+
+        local function selected_items(picker)
+          return picker:selected({ fallback = true })
+        end
+
+        local function with_breakpoint(item, fn)
+          vim.api.nvim_set_current_buf(item.buf)
+          vim.api.nvim_win_set_cursor(0, item.pos)
+          fn()
+        end
+
+        local function delete_breakpoint(picker)
+          local selected = selected_items(picker)
+          picker:close()
+          for _, item in ipairs(selected) do
+            with_breakpoint(item, function()
+              require('persistent-breakpoints.api').toggle_breakpoint()
+            end)
+          end
+        end
+
+        local function edit_breakpoint(picker)
+          local item = selected_items(picker)[1]
+          if item then
+            picker:close()
+            with_breakpoint(item, function()
+              require('persistent-breakpoints.api').set_conditional_breakpoint()
+            end)
+          end
+        end
+
+        local function clear_breakpoints(picker)
+          picker:close()
+          require('persistent-breakpoints.api').clear_all_breakpoints()
+        end
+
+        local function yank_breakpoint(picker)
+          local item = selected_items(picker)[1]
+          if item then
+            vim.fn.setreg('+', string.format('%s:%d', item.file, item.pos[1]))
+            vim.notify('Copied breakpoint location', vim.log.levels.INFO)
+          end
+        end
+
+        local function yank_breakpoint_details(picker)
+          local item = selected_items(picker)[1]
+          if item then
+            vim.fn.setreg('+', item.text)
+            vim.notify('Copied breakpoint details', vim.log.levels.INFO)
+          end
+        end
+
+        require('snacks').picker.pick({
+          title = 'DAP Breakpoints',
+          items = items,
+          format = function(item)
+            return {
+              { item.icon .. ' ', item.icon_hl or 'SnacksPickerIcon' },
+              { item.text, item.text_hl },
+            }
+          end,
+          preview = 'file',
+          actions = {
+            delete_breakpoint = delete_breakpoint,
+            edit_breakpoint = edit_breakpoint,
+            clear_breakpoints = clear_breakpoints,
+            yank_breakpoint = yank_breakpoint,
+            yank_breakpoint_details = yank_breakpoint_details,
+          },
+          win = {
+            input = {
+              keys = {
+                ['x'] = { 'delete_breakpoint', mode = { 'n' }, desc = 'Delete breakpoint' },
+                ['e'] = { 'edit_breakpoint', mode = { 'n' }, desc = 'Edit condition' },
+                ['X'] = { 'clear_breakpoints', mode = { 'n' }, desc = 'Clear all breakpoints' },
+                ['y'] = { 'yank_breakpoint', mode = { 'n' }, desc = 'Copy location' },
+                ['Y'] = { 'yank_breakpoint_details', mode = { 'n' }, desc = 'Copy details' },
+                ['s'] = { 'edit_split', mode = { 'n' }, desc = 'Open in split' },
+                ['v'] = { 'edit_vsplit', mode = { 'n' }, desc = 'Open in vertical split' },
+                ['t'] = { 'edit_tab', mode = { 'n' }, desc = 'Open in tab' },
+              },
+            },
+            list = {
+              keys = {
+                ['x'] = { 'delete_breakpoint', mode = { 'n' }, desc = 'Delete breakpoint' },
+                ['e'] = { 'edit_breakpoint', mode = { 'n' }, desc = 'Edit condition' },
+                ['X'] = { 'clear_breakpoints', mode = { 'n' }, desc = 'Clear all breakpoints' },
+                ['y'] = { 'yank_breakpoint', mode = { 'n' }, desc = 'Copy location' },
+                ['Y'] = { 'yank_breakpoint_details', mode = { 'n' }, desc = 'Copy details' },
+                ['s'] = { 'edit_split', mode = { 'n' }, desc = 'Open in split' },
+                ['v'] = { 'edit_vsplit', mode = { 'n' }, desc = 'Open in vertical split' },
+                ['t'] = { 'edit_tab', mode = { 'n' }, desc = 'Open in tab' },
+              },
+            },
+          },
+        })
+      end,
+      desc = 'Find Breakpoints',
+    },
+    {
       '<Leader>d<CR>',
       function()
         require('dap').focus_frame()
