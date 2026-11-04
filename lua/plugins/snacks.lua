@@ -53,6 +53,108 @@ local function add_workspace_folder(p, item)
   end
 end
 
+-- Show outgoing calls in source order, using each call's `fromRanges` instead
+-- of the callee definition returned by Snacks' default call-hierarchy picker.
+-- This is lexical/source order, not runtime execution order.
+local function lsp_outgoing_call_sites()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local win = vim.api.nvim_get_current_win()
+  local client = vim.lsp.get_clients({ bufnr = bufnr, method = 'callHierarchy/outgoingCalls' })[1]
+
+  if not client then
+    vim.notify('No LSP client supports outgoing calls', vim.log.levels.WARN)
+    return
+  end
+
+  local params = vim.lsp.util.make_position_params(win, client.offset_encoding)
+  client.request('textDocument/prepareCallHierarchy', params, function(err, result)
+    if err or not result or #result == 0 then
+      vim.notify('No call hierarchy found at the cursor', vim.log.levels.INFO)
+      return
+    end
+
+    local hierarchy_item = result[1]
+    client.request('callHierarchy/outgoingCalls', { item = hierarchy_item }, function(call_err, calls)
+      if call_err or not calls or #calls == 0 then
+        vim.notify('No outgoing calls found', vim.log.levels.INFO)
+        return
+      end
+
+      local file = vim.uri_to_fname(hierarchy_item.uri)
+      local display_file = vim.fn.fnamemodify(file, ':t')
+      local items = {}
+
+      for _, call in ipairs(calls) do
+        for _, range in ipairs(call.fromRanges or {}) do
+          local line = range.start.line + 1
+          local column = range.start.character
+          local target = call.to
+          local detail = target.detail and (' — ' .. target.detail) or ''
+
+          table.insert(items, {
+            line = range.start.line,
+            column = column,
+            name = target.name,
+            display_file = display_file,
+            display_line = line,
+            display_column = column + 1,
+            detail = detail,
+            text = string.format('%s  %s:%d:%d%s', target.name, display_file, line, column + 1, detail),
+            file = file,
+            pos = { line, column },
+            buf = bufnr,
+          })
+        end
+      end
+
+      table.sort(items, function(a, b)
+        if a.line == b.line then
+          return a.column < b.column
+        end
+        return a.line < b.line
+      end)
+
+      for index, item in ipairs(items) do
+        item.index = index
+        item.text = string.format('%02d  %s', index, item.text)
+      end
+
+      if #items == 0 then
+        vim.notify('No outgoing call sites found', vim.log.levels.INFO)
+        return
+      end
+
+      require('snacks').picker.pick({
+        title = 'Outgoing Calls (source order)',
+        items = items,
+        format = function(item)
+          return {
+            { string.format('%02d ', item.index), 'Number' },
+            { '→ ', 'Special' },
+            { item.name, 'Function' },
+            { '  ', 'Normal' },
+            { item.display_file, 'Directory' },
+            { string.format(':%d:%d', item.display_line, item.display_column), 'LineNr' },
+            { item.detail, 'Comment' },
+          }
+        end,
+        preview = 'file',
+        focus = 'list',
+      })
+    end)
+  end)
+end
+
+local function set_lsp_call_hierarchy_keys()
+  local keys = require('snacks.keymap')
+  keys.set(
+    { 'n' },
+    'gao',
+    lsp_outgoing_call_sites,
+    { desc = 'Outgoing calls (source order)', lsp = { method = 'callHierarchy/outgoingCalls' } }
+  )
+end
+
 ---@type LazySpec
 return {
   'folke/snacks.nvim',
@@ -146,7 +248,6 @@ return {
     { '<C-q>', picker('qflist', { focus = 'list' }), desc = 'Quickfix/Lists' },
     -- LSP pickers / hierarchy
     { 'gai', picker('lsp_incoming_calls', { focus = 'list' }), desc = 'Incoming calls' },
-    { 'gao', picker('lsp_outgoing_calls', { focus = 'list' }), desc = 'Outgoing calls' },
     {
       'gaI',
       function()
@@ -511,6 +612,7 @@ return {
   config = function(_, opts)
     local snacks = require('snacks')
     snacks.setup(opts)
+    set_lsp_call_hierarchy_keys()
     snacks.toggle.dim():map('<Leader>uD')
     snacks.toggle.animate():map('<Leader>uA')
     snacks.toggle.diagnostics():map('<Leader>ud')
