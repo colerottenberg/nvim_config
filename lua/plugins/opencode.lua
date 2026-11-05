@@ -69,9 +69,25 @@ return {
     opts.server.port = port
     require('opencode').setup(opts)
 
+    local function ai_commit_message_with_context()
+      vim.ui.input({ prompt = 'Additional commit context: ' }, function(context)
+        if not context or context == '' then
+          return
+        end
+
+        require('opencode.api').quick_chat(
+          ('Generate a conventional commit message from #git_diff. Additional context: %s'):format(context)
+        )
+      end)
+    end
+
     vim.api.nvim_create_user_command('AICommitMessage', function()
       require('opencode.api').quick_chat('Generate a conventional commit message from #git_diff')
     end, { desc = 'Generate a commit message on the current line' })
+
+    vim.api.nvim_create_user_command('AICommitMessageContext', ai_commit_message_with_context, {
+      desc = 'Generate a commit message with additional context',
+    })
 
     vim.api.nvim_create_user_command('AIAnnotate', function(opts)
       require('opencode.api').quick_chat('Add type annotations and code comments', {
@@ -83,6 +99,10 @@ return {
     snacks.keymap.set('n', '<localleader>c', function()
       require('opencode.api').quick_chat('Generate a conventional commit message from #git_diff')
     end, { desc = 'Generate a commit message on the current line', ft = 'gitcommit' })
+    snacks.keymap.set('n', '<localleader>C', ai_commit_message_with_context, {
+      desc = 'Generate a commit message with additional context',
+      ft = 'gitcommit',
+    })
   end,
   dependencies = {
     {
