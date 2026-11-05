@@ -11,6 +11,11 @@ local function not_large(bufnr)
   return not (ok and stats and stats.size > 1024 * 256)
 end
 
+local terminal_env = vim.fn.has('win32') == 1 and {
+  TERM = 'xterm-256color',
+  COLORTERM = 'truecolor',
+} or nil
+
 local edit_config = function()
   local init_dir = vim.fn.stdpath('config')
   vim.cmd.cd(init_dir)
@@ -430,6 +435,9 @@ return {
     input = { enabled = true },
     ---@type snacks.image.Config
     image = { enabled = true, doc = { enabled = false } },
+    lazygit = {
+      env = terminal_env,
+    },
     styles = {
       input = {
         b = {
