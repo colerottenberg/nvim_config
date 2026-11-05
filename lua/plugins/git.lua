@@ -325,13 +325,7 @@ return {
         end,
         desc = 'View full blame',
       },
-      {
-        '<Leader>gp',
-        function()
-          require('gitsigns').preview_hunk_inline()
-        end,
-        desc = 'Preview git hunk',
-      },
+
       {
         '<Leader>gr',
         function()
@@ -361,7 +355,7 @@ return {
         desc = 'Stage git buffer',
       },
       {
-        '<Leader>gd',
+        '<Leader>gp',
         function()
           require('gitsigns').diffthis(nil, { unified = true })
         end,
@@ -437,8 +431,9 @@ return {
   },
   ---@type LazySpec
   {
-    'sindrets/diffview.nvim',
-    cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory' },
+    'dlyongemallo/diffview-plus.nvim',
+    version = '*',
+    cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory', 'DiffviewToggle', 'DiffviewLog', 'DiffviewFiles' },
     dependencies = { 'folke/snacks.nvim' },
     ---@type LazyKeysSpec[]
     keys = {
@@ -518,6 +513,13 @@ return {
         desc = 'Git File History',
         mode = { 'x' },
       },
+      {
+        '<leader>gd',
+        function()
+          require('diffview').toggle()
+        end,
+        desc = 'Diffview Toggle',
+      },
     },
     ---@type DiffviewConfig
     opts = {
@@ -590,11 +592,5 @@ return {
         },
       },
     },
-  },
-  ---@type LazySpec
-  {
-    'esmuellert/codediff.nvim',
-    cmd = 'CodeDiff',
-    opts = {},
   },
 }
