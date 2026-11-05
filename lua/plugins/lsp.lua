@@ -2,7 +2,21 @@
 -- hand-written engine in config/lsp.lua (on-attach mappings, format-on-save,
 -- feature toggles, server enablement).
 
+---@type LazySpec[]
 return {
+  {
+    'onsails/lspkind.nvim',
+    lazy = true,
+    ---@type LspkindOpts
+    opts = {
+      preset = 'default',
+      mode = 'symbol_text',
+    },
+    config = function(_, opts)
+      local lspkind = require('lspkind')
+      lspkind.init(opts)
+    end,
+  },
   {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
