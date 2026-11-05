@@ -137,17 +137,16 @@ return {
       ---@type neotree.Mappings
       mappings = {
         ['<S-CR>'] = 'system_open',
-        ['<Space>'] = nil,
         ['[b'] = 'prev_source',
         [']b'] = 'next_source',
         O = 'system_open',
         Y = 'copy_selector',
         h = 'parent_or_close',
         l = 'child_or_open',
-        P = {
+        ['<Space>'] = {
           'toggle_preview',
           config = {
-            use_float = false,
+            use_float = true,
           },
         },
         -- ['T'] = 'none',
