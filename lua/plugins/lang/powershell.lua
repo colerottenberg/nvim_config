@@ -7,7 +7,7 @@ return {
   ft = 'ps1',
   ---@type powershell.user_config
   opts = {
-    bundle_path = vim.fn.stdpath('data'),
+    bundle_path = vim.fn.stdpath('data') .. '/PowerShellEditorServices',
   },
   keys = {
     {
