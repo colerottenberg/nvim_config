@@ -5,18 +5,11 @@ return {
   cmd = { 'AerialToggle', 'AerialOpen', 'AerialNavToggle' },
   keys = {
     {
-      '<Leader>ls',
+      '<Leader>lS',
       function()
         require('aerial').snacks_picker()
       end,
       desc = 'Symbols outline',
-    },
-    {
-      '<Leader>lS',
-      function()
-        require('aerial').toggle({ direction = 'right', focus = true })
-      end,
-      desc = 'Symbols navigation',
     },
   },
   opts = {

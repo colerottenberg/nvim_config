@@ -11,7 +11,8 @@
   },
     "completion.autoRequire": false,
     "diagnostics.disable": [
-        "unused-function"
+        "unused-function",
+        "missing-fields"
     ]
 }
 

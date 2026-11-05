@@ -276,6 +276,13 @@ return {
       end,
       desc = 'LSP references',
     },
+    {
+      '<leader>ls',
+      function()
+        require('snacks.picker').lsp_symbols()
+      end,
+      desc = 'Symbols outline',
+    },
 
     {
       '<Leader>lR',
@@ -456,6 +463,20 @@ return {
             },
           },
         },
+        lsp_symbols = {
+          win = {
+            input = {
+              keys = {
+                ['<c-w>s'] = 'opencode_send_symbol',
+              },
+            },
+            list = {
+              keys = {
+                ['<c-w>s'] = 'opencode_send_symbol',
+              },
+            },
+          },
+        },
       },
       enabled = true,
       ui_select = true,
@@ -492,6 +513,35 @@ return {
               context.add_file(file)
             end
           end
+        end,
+        opencode_send_symbol = function(picker)
+          local selected = picker:selected({ fallback = true })
+          local item = selected and selected[1]
+          local range = item and (item.range or (item.item and item.item.range))
+
+          if not range or not range.start or not range['end'] then
+            vim.notify('No symbol range available', vim.log.levels.WARN)
+            return
+          end
+
+          local main_buf = picker.main and vim.api.nvim_win_get_buf(picker.main)
+          picker:close()
+
+          vim.schedule(function()
+            if main_buf and vim.api.nvim_buf_is_valid(main_buf) then
+              vim.api.nvim_set_current_buf(main_buf)
+            end
+
+            local added = require('opencode.context').add_visual_selection({
+              -- LSP lines are 0-based; OpenCode expects 1-based lines.
+              start = range.start.line + 1,
+              stop = range['end'].line + 1,
+            })
+
+            if added then
+              require('opencode.api').open_input()
+            end
+          end)
         end,
       },
       win = {

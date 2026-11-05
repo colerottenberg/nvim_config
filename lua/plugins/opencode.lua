@@ -35,6 +35,9 @@ return {
         max_height = 0.40,
         auto_hide = false,
       },
+      icons = {
+        preset = 'nerdfonts',
+      },
     },
     context = {
       enabled = true,
