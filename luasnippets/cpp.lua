@@ -22,6 +22,14 @@ local function filename()
 end
 
 return {
+  -- Comments
+  s(
+    { trig = 'todo', desc = 'TODO-style comment' },
+    fmt('// <>: <>', {
+      c(1, { t('TODO'), t('INFO'), t('WARN'), t('ERROR'), t('FIXME') }),
+      i(2),
+    }, { delimiters = '<>' })
+  ),
   -- Custom ------------------------------------------------------------------
   s(
     { trig = 'sce', desc = 'Static Constexpr' },

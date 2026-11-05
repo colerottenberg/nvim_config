@@ -25,7 +25,7 @@ return {
   -- Comments ------------------------------------------------------------------
   s(
     { trig = 'todo', desc = 'TODO-style comment' },
-    fmt('// <> <>', {
+    fmt('// <>: <>', {
       c(1, { t('TODO'), t('INFO'), t('WARN'), t('ERROR'), t('FIXME') }),
       i(2),
     }, { delimiters = '<>' })
