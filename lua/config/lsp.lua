@@ -46,6 +46,11 @@ do
   vim.lsp.config('*', { capabilities = caps })
 end
 
+-- clangd remains Mason-managed, but its executable comes from PATH. Mason's
+-- bin directory is appended (see plugins/lsp.lua), so a toolchain activated
+-- by the user's shell, such as Vitis clangd, takes precedence when present.
+vim.lsp.config('clangd', require('config.lsp.clangd'))
+
 -- ── Toggle helpers (formerly astrolsp.toggles) ────────────────────────────
 local function notify(msg, value)
   vim.notify(('%s %s'):format(msg, value and 'on' or 'off'), vim.log.levels.INFO)
@@ -299,27 +304,20 @@ if features.linked_editing_range and vim.lsp.linked_editing_range and vim.lsp.li
   vim.lsp.linked_editing_range.enable(true)
 end
 
--- ── Servers enabled without mason ─────────────────────────────────────────
--- (formerly astrolsp `servers = { "ruff" }`). mason-installed servers are
--- enabled by mason-lspconfig automatic_enable (see plugins/lsp.lua).
+-- ── Servers enabled without Mason ─────────────────────────────────────────
+-- Mason-installed servers are enabled by mason-lspconfig's
+-- `automatic_enable` (see plugins/lsp.lua). Servers without a Mason package
+-- are configured and enabled here instead.
 vim.lsp.enable('ruff')
 
--- buck2 has no Mason package -- the `buck2` binary itself is the server (see
--- after/lsp/buck2.lua), so it is enabled explicitly here.
+-- Buck2 has no Mason package: the `buck2` binary itself is the server. Keep
+-- its native LSP configuration in Lua rather than runtime `lsp/` overrides.
+vim.lsp.config('buck2', require('config.lsp.buck2'))
+vim.lsp.enable('buck2')
+
 --
 -- `bzl` buffers deliberately run three servers at once, because no single one
 -- covers Buck2: buck2 resolves labels/targets, starpls supplies hover docs +
 -- signature help (it embeds Bazel's builtin doc corpus; see
 -- after/lsp/starpls.lua), and starlark_rust contributes lint diagnostics.
 -- The latter two are Mason-installed and auto-enabled by mason-lspconfig.
--- Adding filetypes for buck2.
-vim.filetype.add({
-  extension = {
-    bxl = 'bzl',
-  },
-  filename = {
-    ['BUCK'] = 'bzl',
-    ['TARGETS'] = 'bzl',
-  },
-})
-vim.lsp.enable('buck2')

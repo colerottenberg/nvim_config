@@ -21,7 +21,12 @@ return {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
-      'mason-org/mason.nvim',
+      {
+        'mason-org/mason.nvim',
+        -- Prefer tools already supplied by the user's environment (such as
+        -- Vitis clangd), while retaining Mason as the fallback.
+        opts = { PATH = 'append' },
+      },
       'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       'saghen/blink.cmp', -- capabilities merged by config/lsp.lua

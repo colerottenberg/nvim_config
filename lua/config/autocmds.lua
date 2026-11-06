@@ -11,7 +11,7 @@ local autocmd = vim.api.nvim_create_autocmd
 
 -- Buck2 build files: BUCK/TARGETS have no extension, and *.bxl is Buck's
 -- extension-language dialect of Starlark, so neither is auto-detected as
--- `bzl` (the filetype after/lsp/buck2.lua attaches to).
+-- `bzl` (the filetype configured by config/lsp/buck2.lua).
 vim.filetype.add({
   extension = { bxl = 'bzl' },
   filename = { BUCK = 'bzl', TARGETS = 'bzl' },
