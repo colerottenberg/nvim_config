@@ -74,6 +74,33 @@ return {
       system_open = function(state)
         vim.ui.open(state.tree:get_node():get_id())
       end,
+      git_diffview = function(state)
+        local node = state.tree:get_node()
+        if node.type ~= 'file' then
+          vim.notify('Select a file', vim.log.levels.WARN)
+          return
+        end
+
+        require('diffview').open({ '--', node:get_id() })
+      end,
+      git_difftool = function(state)
+        local node = state.tree:get_node()
+        if node.type ~= 'file' then
+          vim.notify('Select a file', vim.log.levels.WARN)
+          return
+        end
+
+        local path = node:get_id()
+        vim.system({
+          'git',
+          '-C',
+          vim.fn.fnamemodify(path, ':h'),
+          'difftool',
+          '--no-prompt',
+          '--',
+          path,
+        }, { detach = true })
+      end,
       parent_or_close = function(state)
         local node = state.tree:get_node()
         if node:has_children() and node:is_expanded() then
@@ -137,13 +164,16 @@ return {
       ---@type neotree.Mappings
       mappings = {
         ['<S-CR>'] = 'system_open',
+        ['<Space>'] = nil,
         ['[b'] = 'prev_source',
         [']b'] = 'next_source',
+        g = 'git_diffview',
+        ['<S-g>'] = 'git_difftool',
         O = 'system_open',
         Y = 'copy_selector',
         h = 'parent_or_close',
         l = 'child_or_open',
-        ['<Space>'] = {
+        P = {
           'toggle_preview',
           config = {
             use_float = true,
