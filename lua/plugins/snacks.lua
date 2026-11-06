@@ -281,13 +281,6 @@ return {
       end,
       desc = 'LSP references',
     },
-    {
-      '<leader>ls',
-      function()
-        require('snacks.picker').lsp_symbols()
-      end,
-      desc = 'Symbols outline',
-    },
 
     {
       '<Leader>lR',
