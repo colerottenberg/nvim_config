@@ -331,11 +331,6 @@ return {
       desc = 'Disable UI',
     },
     {
-      '<Leader>uI',
-      '<Cmd>DapVirtualTextToggle<CR>',
-      desc = 'Toggle DAP inline values',
-    },
-    {
       '<Leader>de',
       function()
         require('dapui').eval()
@@ -440,8 +435,9 @@ return {
     })
 
     -- Inline variable values (virtual text) during a debug session.
-    require('nvim-dap-virtual-text').setup({
-      enabled = true,
+    local dap_vt = require('nvim-dap-virtual-text')
+    dap_vt.setup({
+      enabled = false,
       enabled_commands = true,
       highlight_changed_variables = true,
       show_stop_reason = true,
@@ -625,6 +621,21 @@ return {
       end,
     })
     dapui_toggle:map('<Leader>uD')
+
+    local dap_virtual_text_toggle = snacks.toggle.new({
+      name = 'DAP virtual text',
+      get = function()
+        return dap_vt.is_enabled()
+      end,
+      set = function(state)
+        if state then
+          dap_vt.enable()
+        else
+          dap_vt.disable()
+        end
+      end,
+    })
+    dap_virtual_text_toggle:map('<leader>dI')
 
     -- ── Completion in dap buffers (cmp-dap via blink.compat) ─────────────
     pcall(function()
