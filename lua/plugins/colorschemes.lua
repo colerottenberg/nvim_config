@@ -12,12 +12,41 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
+      local function write_cache(path, value)
+        pcall(function()
+          local f = io.open(path, 'w')
+          if f then
+            f:write(value)
+            f:close()
+          end
+        end)
+      end
+
+      local function read_cache(path)
+        local f = io.open(path, 'r')
+        if not f then
+          return nil
+        end
+        local value = vim.trim(f:read('*a') or '')
+        f:close()
+        return value ~= '' and value or nil
+      end
+
+      -- Restore the cached background before configuring Catppuccin so its
+      -- automatic flavour selection can honor it.
+      local background = read_cache(cache_background)
+      if background == 'dark' or background == 'light' then
+        vim.o.background = background
+      end
+
       local catppuccin = require('catppuccin')
-      local c = require('catppuccin.palettes').get_palette()
+      local flavour = vim.o.background == 'light' and 'latte' or 'macchiato'
+      local c = require('catppuccin.palettes').get_palette(flavour)
       local transparent_bg = false
+      local lualine_bg = transparent_bg and 'NONE' or c.base
       ---@type CatppuccinOptions
       local opts = {
-        flavour = 'macchiato',
+        flavour = 'auto',
         background = { dark = 'macchiato', light = 'latte' },
         float = { transparent = true, solid = true },
         transparent_background = false,
@@ -69,24 +98,20 @@ return {
           snacks = true,
           treesitter = true,
           which_key = true,
-          -- transparent_bg = opts.transparent_background and "NONE" or C.mantle
           lualine = {
             normal = {
               a = { bg = c.blue, fg = c.mantle, gui = 'bold' },
               b = { bg = c.surface0, fg = c.blue },
-              c = { bg = transparent_bg, fg = c.text },
+              c = { bg = lualine_bg, fg = c.text },
             },
-
             insert = {
               a = { bg = c.green, fg = c.base, gui = 'bold' },
               b = { bg = c.surface0, fg = c.green },
             },
-
             terminal = {
               a = { bg = c.green, fg = c.base, gui = 'bold' },
               b = { bg = c.surface0, fg = c.green },
             },
-
             command = {
               a = { bg = c.peach, fg = c.base, gui = 'bold' },
               b = { bg = c.surface0, fg = c.peach },
@@ -100,34 +125,14 @@ return {
               b = { bg = c.surface0, fg = c.red },
             },
             inactive = {
-              a = { bg = transparent_bg, fg = c.blue },
-              b = { bg = transparent_bg, fg = c.surface1, gui = 'bold' },
-              c = { bg = transparent_bg, fg = c.overlay0 },
+              a = { bg = lualine_bg, fg = c.blue },
+              b = { bg = lualine_bg, fg = c.surface1, gui = 'bold' },
+              c = { bg = lualine_bg, fg = c.overlay0 },
             },
           },
         },
       }
       catppuccin.setup(opts)
-
-      local function write_cache(path, value)
-        pcall(function()
-          local f = io.open(path, 'w')
-          if f then
-            f:write(value)
-            f:close()
-          end
-        end)
-      end
-
-      local function read_cache(path)
-        local f = io.open(path, 'r')
-        if not f then
-          return nil
-        end
-        local value = vim.trim(f:read('*a') or '')
-        f:close()
-        return value ~= '' and value or nil
-      end
 
       -- Persist the colorscheme and background on change.
       local group = vim.api.nvim_create_augroup('user_cache_colorscheme', { clear = true })
@@ -146,24 +151,15 @@ return {
         end,
       })
 
-      -- Restore the cached background before the colorscheme so themes that
-      -- pick a variant from 'background' (e.g. plain `catppuccin`) honor it.
-      local background = read_cache(cache_background)
-      if background == 'dark' or background == 'light' then
-        vim.o.background = background
-      end
-
       -- Apply the cached colorscheme, falling back to the default.
-      local colorscheme = read_cache(cache_file) or 'catppuccin-macchiato'
+      local colorscheme = read_cache(cache_file) or 'catppuccin'
       if not pcall(vim.cmd.colorscheme, colorscheme) then
-        pcall(vim.cmd.colorscheme, 'catppuccin-macchiato')
+        pcall(vim.cmd.colorscheme, 'catppuccin')
       end
     end,
   },
   {
     'razcoen/fleet.nvim',
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       require('fleet').setup({
         undercurl = true,
@@ -191,7 +187,6 @@ return {
   {
     'rose-pine/neovim',
     name = 'rose-pine',
-    lazy = false,
     config = function()
       local rosepine = require('rose-pine')
       rosepine.setup({
@@ -264,7 +259,6 @@ return {
   -- Using Lazy
   {
     'navarasu/onedark.nvim',
-    priority = 1000,
     config = function()
       -- Lua
       require('onedark').setup({
@@ -310,8 +304,6 @@ return {
   },
   {
     'uhs-robert/oasis.nvim',
-    lazy = false,
-    priority = 1000,
     ---@type OasisConfig
     opts = {
       -- transparent = true,
