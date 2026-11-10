@@ -222,7 +222,11 @@ return {
     {
       '<Leader>fc',
       function()
-        require('snacks.picker').grep_word({ buffers = true })
+        require('snacks.picker').grep_word({
+          hidden = true,
+          ignored = true,
+          show_empty = true,
+        })
       end,
       mode = { 'n', 'x' },
       desc = 'Find word under cursor',
