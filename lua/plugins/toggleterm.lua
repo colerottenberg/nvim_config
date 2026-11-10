@@ -2,11 +2,6 @@
 
 -- Cached tool terminals so each toggles the same instance.
 local terms = {}
-local terminal_env = vim.fn.has('win32') == 1 and {
-  TERM = 'xterm-256color',
-  COLORTERM = 'truecolor',
-} or nil
-
 local function toggle_cmd(key, opts)
   return function()
     local Terminal = require('toggleterm.terminal').Terminal
@@ -84,7 +79,6 @@ return {
       -- The lazy.nvim key entries above ensure the plugin loads on demand.
       open_mapping = { '<F7>', "<C-'>" },
       direction = 'float',
-      env = terminal_env,
       size = function(term)
         if term.direction == 'horizontal' then
           return vim.o.lines * 0.3
