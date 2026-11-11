@@ -70,15 +70,64 @@ return {
     require('opencode').setup(opts)
 
     local function ai_commit_message_with_context()
-      vim.ui.input({ prompt = 'Additional commit context: ' }, function(context)
-        if not context or context == '' then
+      local Popup = require('nui.popup')
+
+      local popup = Popup({
+        enter = true,
+        focusable = true,
+        border = {
+          style = 'rounded',
+          text = { top = ' Additional commit context ', top_align = 'center' },
+        },
+        position = '50%',
+        size = { width = '80%', height = '40%' },
+        buf_options = {
+          buftype = 'nofile',
+          bufhidden = 'wipe',
+          filetype = 'markdown',
+          swapfile = false,
+        },
+        win_options = {
+          cursorline = true,
+          number = true,
+          relativenumber = false,
+          signcolumn = 'no',
+          wrap = true,
+          linebreak = true,
+        },
+      })
+
+      local finished = false
+      local function close()
+        if not finished then
+          finished = true
+          popup:unmount()
+        end
+      end
+
+      local function submit()
+        if finished then
           return
         end
 
-        require('opencode.api').quick_chat(
-          ('Generate a conventional commit message from #git_diff. Additional context: %s'):format(context)
-        )
-      end)
+        local context = vim.trim(table.concat(vim.api.nvim_buf_get_lines(popup.bufnr, 0, -1, false), '\n'))
+        close()
+        if context ~= '' then
+          require('opencode.api').quick_chat(
+            ('Generate a conventional commit message from #git_diff. Additional context:\n%s'):format(context)
+          )
+        end
+      end
+
+      popup:map('i', '<C-s>', submit, { noremap = true })
+      popup:map('n', '<C-s>', submit, { noremap = true })
+      popup:map('n', '<CR>', submit, { noremap = true })
+      popup:map('i', '<C-c>', function()
+        vim.cmd.stopinsert()
+      end, { noremap = true })
+      popup:map('n', '<C-c>', close, { noremap = true })
+      popup:mount()
+      vim.cmd.startinsert()
     end
 
     vim.api.nvim_create_user_command('AICommitMessage', function()
@@ -115,5 +164,6 @@ return {
     },
     'saghen/blink.cmp',
     'folke/snacks.nvim',
+    'MunifTanjim/nui.nvim',
   },
 }
