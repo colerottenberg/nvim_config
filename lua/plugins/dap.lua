@@ -275,17 +275,12 @@ return {
     {
       '<Leader>dC',
       function()
-        local width = vim.o.columns
-        local height = vim.o.lines
-        local float_width = math.ceil(0.7 * width)
-        local float_height = math.ceil(0.7 * height)
-
         require('dapui').float_element('console', {
           position = 'center',
           enter = true,
           title = 'DAP Console',
-          width = float_width,
-          height = float_height,
+          width = vim.o.columns,
+          height = vim.o.lines - vim.o.cmdheight - 1,
         })
       end,
       desc = 'toggle Console',

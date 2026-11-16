@@ -56,7 +56,7 @@ local function launch(extra)
   return vim.tbl_extend('error', {
     type = 'python',
     request = 'launch',
-    console = 'internalConsole', -- keep the debuggee inside the DAP client
+    console = 'integratedTerminal', -- gives the debuggee a real TTY via runInTerminal
     cwd = '${workspaceFolder}',
     justMyCode = false, -- step into library code too; flip to true to stay in your code
   }, extra)
@@ -66,7 +66,7 @@ local function launch_dir(extra)
   return vim.tbl_extend('error', {
     type = 'python',
     request = 'launch',
-    console = 'internalConsole', -- keep the debuggee inside the DAP client
+    console = 'integratedTerminal', -- gives the debuggee a real TTY via runInTerminal
     justMyCode = false, -- step into library code too; flip to true to stay in your code
   }, extra)
 end
