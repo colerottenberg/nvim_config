@@ -137,6 +137,18 @@ local function open_commit_files(picker, item)
   )
 end
 
+---@class GitCommitItem: snacks.picker.Item
+---@field commit string
+---@field idx integer
+
+---@param commits GitCommitItem[]
+local function sort_commits_oldest_first(commits)
+  -- git_log lists newest first, so the higher idx is the older commit.
+  table.sort(commits, function(a, b)
+    return a.idx > b.idx
+  end)
+end
+
 ---@type table<string, snacks.picker.Action.spec>
 local dv_actions = {
   open_commit_files = open_commit_files,
@@ -172,29 +184,26 @@ local dv_actions = {
 
   -- range between two multi-selected commits (Tab to select)
   dv_range = function(picker)
+    ---@type GitCommitItem[]
     local sel = picker:selected({ fallback = false })
     if #sel ~= 2 then
       vim.notify('Select exactly two commits (<Tab>)', vim.log.levels.WARN)
       return
     end
-    -- git_log lists newest first, so the higher idx is the older commit
-    table.sort(sel, function(a, b)
-      return a.idx > b.idx
-    end)
+    sort_commits_oldest_first(sel)
     picker:close()
     dv({ sel[1].commit .. '^..' .. sel[2].commit })
   end,
 
   -- same range, but against the merge base (three-dot)
   dv_range_base = function(picker)
+    ---@type GitCommitItem[]
     local sel = picker:selected({ fallback = false })
     if #sel ~= 2 then
       vim.notify('Select exactly two commits (<Tab>)', vim.log.levels.WARN)
       return
     end
-    table.sort(sel, function(a, b)
-      return a.idx > b.idx
-    end)
+    sort_commits_oldest_first(sel)
     picker:close()
     dv({ sel[1].commit .. '...' .. sel[2].commit })
   end,
