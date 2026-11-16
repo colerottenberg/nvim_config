@@ -215,6 +215,14 @@ return {
       desc = 'Find lines',
     },
     {
+      '<Leader>fl',
+      function()
+        require('snacks.picker').grep_word({ buffers = true })
+      end,
+      mode = 'x',
+      desc = 'Find selection in buffer',
+    },
+    {
       '<Leader>fc',
       function()
         require('snacks.picker').grep_word({
