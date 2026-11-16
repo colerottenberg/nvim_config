@@ -160,6 +160,7 @@ return {
   },
   {
     'razcoen/fleet.nvim',
+    lazy = true,
     config = function()
       require('fleet').setup({
         undercurl = true,
@@ -181,11 +182,12 @@ return {
     end,
   },
 
-  { 'folke/tokyonight.nvim', opts = {} },
-  { 'rebelot/kanagawa.nvim' },
-  { 'thesimonho/kanagawa-paper.nvim', opts = {} },
+  { 'folke/tokyonight.nvim', lazy = true, opts = {} },
+  { 'rebelot/kanagawa.nvim', lazy = true },
+  { 'thesimonho/kanagawa-paper.nvim', lazy = true, opts = {} },
   {
     'rose-pine/neovim',
+    lazy = true,
     name = 'rose-pine',
     config = function()
       local rosepine = require('rose-pine')
@@ -200,9 +202,10 @@ return {
       })
     end,
   },
-  { 'ellisonleao/gruvbox.nvim' },
+  { 'ellisonleao/gruvbox.nvim', lazy = true },
   {
     'EdenEast/nightfox.nvim',
+    lazy = true,
     opts = {
       options = {
         module_default = false,
@@ -225,40 +228,42 @@ return {
       groups = { all = { NormalFloat = { link = 'Normal' } } },
     },
   },
-  { 'savq/melange-nvim' },
-  { 'zootedb0t/citruszest.nvim' },
-  { 'uloco/bluloco.nvim', dependencies = { 'rktjmp/lush.nvim' }, opts = {} },
+  { 'savq/melange-nvim', lazy = true },
+  { 'zootedb0t/citruszest.nvim', lazy = true },
+  { 'uloco/bluloco.nvim', lazy = true, dependencies = { 'rktjmp/lush.nvim' }, opts = {} },
 
   -- Muted / low-contrast
-  { 'sainnhe/gruvbox-material' },
-  { 'sainnhe/everforest' },
-  { 'vague2k/vague.nvim', opts = {} },
-  { 'slugbyte/lackluster.nvim' },
-  { 'datsfilipe/vesper.nvim' },
-  { 'mcchrish/zenbones.nvim', dependencies = { 'rktjmp/lush.nvim' } },
+  { 'sainnhe/gruvbox-material', lazy = true },
+  { 'sainnhe/everforest', lazy = true },
+  { 'vague2k/vague.nvim', lazy = true, opts = {} },
+  { 'slugbyte/lackluster.nvim', lazy = true },
+  { 'datsfilipe/vesper.nvim', lazy = true },
+  { 'mcchrish/zenbones.nvim', lazy = true, dependencies = { 'rktjmp/lush.nvim' } },
 
   -- Bold / high-contrast
-  { 'scottmckendry/cyberdream.nvim', opts = {} },
-  { 'bluz71/vim-moonfly-colors', name = 'moonfly' },
-  { 'bluz71/vim-nightfly-colors', name = 'nightfly' },
-  { 'dgox16/oldworld.nvim' },
+  { 'scottmckendry/cyberdream.nvim', lazy = true, opts = {} },
+  { 'bluz71/vim-moonfly-colors', lazy = true, name = 'moonfly' },
+  { 'bluz71/vim-nightfly-colors', lazy = true, name = 'nightfly' },
+  { 'dgox16/oldworld.nvim', lazy = true },
 
   -- Cool / blue
-  { 'AlexvZyl/nordic.nvim' },
-  { 'gbprod/nord.nvim' },
+  { 'AlexvZyl/nordic.nvim', lazy = true },
+  { 'gbprod/nord.nvim', lazy = true },
   {
     'craftzdog/solarized-osaka.nvim',
+    lazy = true,
     opts = {},
   },
-  { 'ribru17/bamboo.nvim' },
+  { 'ribru17/bamboo.nvim', lazy = true },
 
   -- All-rounders
-  { 'projekt0n/github-nvim-theme', name = 'github-theme' },
-  { 'marko-cerovac/material.nvim' },
-  { 'miikanissi/modus-themes.nvim' },
+  { 'projekt0n/github-nvim-theme', lazy = true, name = 'github-theme' },
+  { 'marko-cerovac/material.nvim', lazy = true },
+  { 'miikanissi/modus-themes.nvim', lazy = true },
   -- Using Lazy
   {
     'navarasu/onedark.nvim',
+    lazy = true,
     config = function()
       -- Lua
       require('onedark').setup({
@@ -304,6 +309,7 @@ return {
   },
   {
     'uhs-robert/oasis.nvim',
+    lazy = true,
     ---@type OasisConfig
     opts = {
       -- transparent = true,
