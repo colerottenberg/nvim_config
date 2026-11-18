@@ -45,17 +45,6 @@ local keys = {
   },
 }
 
-if vim.fn.executable('lazygit') == 1 and vim.fn.executable('git') == 1 then
-  local lazygit = toggle_cmd('lazygit', { cmd = 'lazygit', direction = 'float' })
-  table.insert(keys, { '<Leader>tl', lazygit, desc = 'ToggleTerm lazygit' })
-  table.insert(keys, { '<Leader>gg', lazygit, desc = 'ToggleTerm lazygit' })
-end
-if vim.fn.executable('node') == 1 then
-  table.insert(
-    keys,
-    { '<Leader>tn', toggle_cmd('node', { cmd = 'node', direction = 'float' }), desc = 'ToggleTerm node' }
-  )
-end
 if vim.fn.executable('ptpython') == 1 or vim.fn.executable('python') == 1 or vim.fn.executable('python3') == 1 then
   local py = vim.fn.executable('ptpython') == 1 and 'ptpython'
     or (vim.fn.executable('python') == 1 and 'python' or 'python3')
