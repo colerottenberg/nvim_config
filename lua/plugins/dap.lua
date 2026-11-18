@@ -585,6 +585,10 @@ return {
 
     -- ── dap-ui ───────────────────────────────────────────────────────────
     dapui.setup()
+    -- The console buffer is persistent, so it remains useful after the DAP
+    -- session exits.  Allow <Leader>dC to show that previous output instead
+    -- of making dap-ui require a currently active session.
+    dapui.elements.console.allow_without_session = true
     dap.listeners.after.event_initialized['dapui'] = function()
       dapui.open()
     end
