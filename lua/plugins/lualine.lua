@@ -1,7 +1,7 @@
 -- Statusline (replaces the AstroNvim heirline bar).
 --
 -- `theme = "auto"` recolors from the active colorscheme. Git diff is sourced
--- from gitsigns; symbols breadcrumb from aerial; task status from overseer.
+-- from gitsigns; task status from overseer.
 
 local function macro_recording()
   local rec = vim.fn.reg_recording()
@@ -61,7 +61,6 @@ return {
       },
       lualine_c = {
         { 'filename', colored = true, icon_only = true, icon = { align = 'right' } },
-        { 'aerial' },
       },
       lualine_x = {
         { macro_recording, color = { gui = 'italic,bold' } },
@@ -78,7 +77,6 @@ return {
       'toggleterm',
       'quickfix',
       'man',
-      'aerial',
       'nvim-dap-ui',
       'overseer',
       'lazy',

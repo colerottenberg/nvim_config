@@ -316,6 +316,13 @@ return {
       desc = 'Search workspace symbols',
     },
     { '<Leader>ld', picker('diagnostics', { focus = 'list' }), desc = 'Search diagnostics' },
+    {
+      '<Leader>ls',
+      function()
+        require('snacks.picker').lsp_symbols({ filter = { default = true, lua = true } })
+      end,
+      desc = 'Get Symbols',
+    },
     -- Github Keybindings
     {
       '<Leader>ghi',
