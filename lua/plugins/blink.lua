@@ -59,8 +59,8 @@ return {
       ['<C-e>'] = { 'hide', 'fallback' },
       ['<CR>'] = { 'accept', 'fallback' },
       ['<Tab>'] = {
-        'select_next',
         'snippet_forward',
+        'select_next',
         function(cmp)
           if has_words_before() or vim.api.nvim_get_mode().mode == 'c' then
             return cmp.show()
@@ -69,8 +69,8 @@ return {
         'fallback',
       },
       ['<S-Tab>'] = {
-        'select_prev',
         'snippet_backward',
+        'select_prev',
         function(cmp)
           if vim.api.nvim_get_mode().mode == 'c' then
             return cmp.show()

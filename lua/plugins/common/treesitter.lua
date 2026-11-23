@@ -11,6 +11,7 @@ local ensure = {
   'c',
   'cpp',
   'cuda',
+  'doxygen',
   'html',
   'java',
   'javascript',

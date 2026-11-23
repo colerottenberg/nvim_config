@@ -104,7 +104,6 @@ local has_snacks = pcall(require, 'snacks')
 
 local mappings = {
   n = {
-    ['<Leader>la'] = { vim.lsp.buf.code_action, desc = 'LSP code action', cond = 'textDocument/codeAction' },
     ['<Leader>lA'] = {
       function()
         vim.lsp.buf.code_action({ context = { only = { 'source' }, diagnostics = {} } })
@@ -183,7 +182,6 @@ local mappings = {
     },
   },
   x = {
-    ['<Leader>la'] = { vim.lsp.buf.code_action, desc = 'LSP code action', cond = 'textDocument/codeAction' },
     ['<Leader>lf'] = {
       function()
         vim.lsp.buf.format({ timeout_ms = formatting.timeout_ms })
