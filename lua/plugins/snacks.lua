@@ -175,7 +175,7 @@ return {
       desc = 'Find TODO comments',
     },
     {
-      '<Leader>fb',
+      '<Leader>fB',
       picker('grep', { buffers = true }),
       desc = 'Find word in buffers',
     },

@@ -21,7 +21,7 @@ return {
   },
   keys = {
     {
-      '<Leader>fB',
+      '<Leader>fb',
       function()
         local items = {}
 
